@@ -4,9 +4,11 @@ namespace Modules\Jetstream\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Modules\Core\Services\SmsIr;
 use Modules\Jetstream\External\Repositories\Contract\OtpRepositoryInterface;
 use Modules\Jetstream\Rules\LoginCheckCodeRules;
+use Modules\Jetstream\Rules\LoginRules;
 use Modules\Jetstream\Rules\LoginSendCodeRules;
 use Modules\Jetstream\Rules\RegisterCheckCodeRules;
 use Modules\Jetstream\Rules\RegisterSendCodeRules;
@@ -15,8 +17,29 @@ use Modules\User\Services\UserService;
 
 class JetstreamController
 {
-    public function __construct(protected OtpRepositoryInterface $otpRepository) {}
+    public function __construct(
+        protected OtpRepositoryInterface $otpRepository,
+        protected UserService $userService
+    ) {
+    }
 
+    public function login(LoginRules $request)
+    {
+        $data = $request->all();
+        $user = $this->userService->findByColumn('mobile', $data['mobile']);
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['message' => 'کاربر مورد نظر یافت نشد لطفا از طریق فرم ثبت نام اقدام نمایید.']);
+        }
+        if (Hash::check($data['password'], $user->password)) {
+            return redirect()->route('login')->withErrors(['message' => 'رمز عبور وارد شده صحیح نیست.']);
+        }
+        Auth::loginUsingId($user->id);
+        if ($user->level == "admin") {
+            return redirect()->route('admin.dashboard');
+        } else {
+            return redirect()->route('user.dashboard');
+        }
+    }
     public function loginSendCode(LoginSendCodeRules $request)
     {
         $data = $request->all();
@@ -41,8 +64,6 @@ class JetstreamController
         }
 
         return redirect()->route('login.check.code.form')->with('mobile', $data['mobile']);
-
-        return view('Jetstream::auth.login-check-code', compact('data'));
     }
 
     public function showCheckCode()

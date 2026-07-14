@@ -15,6 +15,8 @@ export default defineConfig({
                 'Modules/Core/resources/assets/css/tailwind.css',
                 'resources/js/app.js',
                 'Modules/Core/resources/assets/js/utils.js',
+                'Modules/Jetstream/resources/assets/css/login.css',
+                'Modules/Jetstream/resources/assets/js/login.js',
             ],
             refresh: true,
         }),
@@ -44,6 +46,10 @@ export default defineConfig({
                     src: 'Modules/Warehouse/resources/assets/icons/sidebar/*',
                     dest: 'images/icons/sidebar'
                 },
+                // {
+                //     src: 'Modules/Jetstream/resources/assets/**/*',
+                //     dest: 'jetstream'
+                // },
             ],
             silent: true,
             failOnError: false

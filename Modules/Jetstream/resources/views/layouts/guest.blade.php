@@ -14,22 +14,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite(['Modules/Core/resources/assets/css/tailwind.css', 'resources/js/app.js'])
+    @vite(['Modules/Jetstream/resources/assets/css/login.css'])
 
     <!-- Styles -->
     @livewireStyles
-    <script src="{{ asset('assets/scripts/alpine.min.js') }}" defer></script>
+    {{--
+    <script src="{{ asset('assets/scripts/alpine.min.js') }}" defer></script> --}}
 </head>
 
-<body
-    class="max-w-[1536px] bg-gray-50 text-gray-800 flex flex-col md:flex-row items-center md:justify-center md:justify-self-center gap-12 min-h-screen">
+<body>
+    <div id="container">
 
+        {{ $slot }}
 
-    {{ $slot }}
-
-
+    </div>
     @livewireScripts
-
+    @vite(['Modules/Jetstream/resources/assets/js/login.js'])
 </body>
 
 </html>

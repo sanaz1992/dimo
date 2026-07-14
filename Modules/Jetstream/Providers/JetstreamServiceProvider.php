@@ -33,25 +33,15 @@ class JetstreamServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerCommandSchedules();
         $this->registerTranslations();
+
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
 
-        // $this->mergeConfigFrom(
-        //     module_path($this->name, 'config/captcha.php'),
-        //     'jetstreamcaptcha.captcha'
-        // );
 
-        // Register the lowercase "jetstream" view namespace for anonymous
-        // components (<x-jetstream::layouts.master> etc.). This MUST run in
-        // console too, otherwise `artisan view:cache` / `optimize` cannot
-        // resolve the component and fails the deploy.
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'jetstream');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'jetstream');
 
-        // Component aliases and view-namespace prepends used when compiling
-        // Blade (e.g. <x-guest-layout> on the auth pages). These MUST run in
-        // console too, otherwise `artisan view:cache` / `optimize` cannot
-        // resolve them and the deploy fails.
+
         Blade::component('jetstream::layouts.guest', 'guest-layout');
         View::prependNamespace('auth', base_path('Modules/Jetstream/resources/views/auth'));
         View::prependNamespace('components', base_path('Modules/Jetstream/resources/views/components'));
@@ -97,7 +87,7 @@ class JetstreamServiceProvider extends ServiceProvider
         $this->app->singleton(LoginResponse::class, RedirectAfterLogin::class);
         $this->app['config']->set(
             'captcha',
-            require __DIR__.'/../config/captcha.php'
+            require __DIR__ . '/../config/captcha.php'
         );
 
         $this->app->bind(OtpRepositoryInterface::class, OtpRepository::class);
@@ -128,7 +118,6 @@ class JetstreamServiceProvider extends ServiceProvider
     public function registerTranslations(): void
     {
         $productLangPath = module_path($this->name, 'resources/lang');
-
         if (is_dir($productLangPath)) {
             $this->loadTranslationsFrom($productLangPath, $this->nameLower);
             $this->loadJsonTranslationsFrom($productLangPath);
@@ -147,9 +136,9 @@ class JetstreamServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $config = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $config_key = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $config);
-                    $segments = explode('.', $this->nameLower.'.'.$config_key);
+                    $segments = explode('.', $this->nameLower . '.' . $config_key);
 
                     // Remove duplicated adjacent segments
                     $normalized = [];
@@ -184,14 +173,14 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/'.$this->nameLower);
+        $viewPath = resource_path('views/modules/' . $this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->name);
 
-        Blade::componentNamespace(config('modules.namespace').'\\'.$this->name.'\\view\\components', $this->nameLower);
+        Blade::componentNamespace(config('modules.namespace') . '\\' . $this->name . '\\view\\components', $this->nameLower);
     }
 
     /**
@@ -206,8 +195,8 @@ class JetstreamServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->nameLower)) {
-                $paths[] = $path.'/modules/'.$this->nameLower;
+            if (is_dir($path . '/modules/' . $this->nameLower)) {
+                $paths[] = $path . '/modules/' . $this->nameLower;
             }
         }
 

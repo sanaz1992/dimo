@@ -17,7 +17,7 @@ class SettingSeeder extends Seeder
             [
                 'title' => 'عنوان سایت',
                 'key' => 'site_title',
-                'value' => 'سیستم مدیریت تولید کارخانه ونوس',
+                'value' => 'فروشگاه گلاب',
                 'type' => SettingType::TEXT->value,
                 'group' => 'general',
             ],

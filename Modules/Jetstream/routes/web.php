@@ -9,8 +9,8 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware(['guest'])
     ->name('login');
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware(['guest']);
+Route::post('/login', [JetstreamController::class, 'login'])
+    ->middleware(['guest'])->name('login.post');
 
 Route::post('/login/send-code', [JetstreamController::class, 'loginSendCode'])
     ->middleware(['guest'])->name('login.send.code');
