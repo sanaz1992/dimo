@@ -24,6 +24,8 @@ class User extends Authenticatable
     use SoftDeletes;
     use Filterable;
 
+    protected $guard_name = 'web';
+
     protected $fillable = [
         'name',
         'mobile',
