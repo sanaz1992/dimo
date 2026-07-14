@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/acl",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "require": {
+        "spatie/laravel-permission": "^6.20"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\ACL\\": "",
+            "Modules\\ACL\\Database\\Factories\\": "Database/factories/",
+            "Modules\\ACL\\Database\\Seeders\\": "Database/Seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\ACL\\Tests\\": "tests/"
+        }
+    }
+}

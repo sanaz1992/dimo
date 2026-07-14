@@ -1,0 +1,146 @@
+@font-face {
+    font-family: "IRANSansFaNum";
+    src: url("../fonts/IRANSansWeb(FaNum).woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "IRANSansFaNum";
+    src: url("../fonts/IRANSansWeb(FaNum)_Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "IRANSansFaNum";
+    src: url("../fonts/IRANSansWeb(FaNum)_UltraLight.woff2") format("woff2");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "IRANSansFaNum";
+    src: url("../fonts/IRANSansWeb(FaNum)_Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "IRANSansFaNum";
+    src: url("../fonts/IRANSansWeb(FaNum)_Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "IRANSansFaNum";
+    src: url("../fonts/IRANSansWeb(FaNum)_Black.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Lahzeh Font Faces */
+@font-face {
+    font-family: "Lahzeh-Thin";
+    src: url("../fonts/lahzeh/Lahzeh-Thin.woff2") format("woff2");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-ExtraLight";
+    src: url("../fonts/lahzeh/Lahzeh-ExtraLight.woff2") format("woff2");
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-Light";
+    src: url("../fonts/lahzeh/Lahzeh-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-Regular";
+    src: url("../fonts/lahzeh/Lahzeh-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-Medium";
+    src: url("../fonts/lahzeh/Lahzeh-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-SemiBold";
+    src: url("../fonts/lahzeh/Lahzeh-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-Bold";
+    src: url("../fonts/lahzeh/Lahzeh-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-ExtraBold";
+    src: url("../fonts/lahzeh/Lahzeh-ExtraBold.woff2") format("woff2");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Lahzeh-Black";
+    src: url("../fonts/lahzeh/Lahzeh-Black.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        font-family: "IRANSansFaNum", sans-serif;
+        background-color: #f7f8f8;
+    }
+}
+
+/* @layer components {
+    select {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background-image: none !important;
+        background-repeat: no-repeat !important;
+        background-position: right 0.5rem center !important;
+        background-size: 0 !important;
+        padding-right: 1rem !important;
+    }
+
+    select::-ms-expand {
+        display: none;
+    }
+} */
+
+:root {
+    --shadow: rgba(3, 12, 19, 0.07);
+}

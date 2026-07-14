@@ -1,0 +1,1 @@
+<img src="{{ $captchaSrc }}" alt="captcha" style="max-width: 150px;" wire:click="refreshCaptcha" class="cursor-pointer">

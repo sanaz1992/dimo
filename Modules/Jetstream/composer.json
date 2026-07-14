@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/jetstream",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Jetstream\\": "",
+            "Modules\\Jetstream\\Database\\Factories\\": "Database/factories/",
+            "Modules\\Jetstream\\Database\\Seeders\\": "Database/Seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Jetstream\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "mews/captcha": "^3.4"
+    }
+}

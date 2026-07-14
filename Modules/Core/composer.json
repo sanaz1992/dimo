@@ -1,0 +1,31 @@
+{
+    "name": "nwidart/core",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "require": {
+        "hekmatinasser/verta": "*",
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\": "",
+            "Modules\\Core\\Database\\Factories\\": "Database/factories/",
+            "Modules\\Core\\Database\\Seeders\\": "Database/Seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Core\\Tests\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Jetstream",
+    "alias": "jetstream",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Jetstream\\Providers\\JetstreamServiceProvider"
+    ],
+    "files": []
+}

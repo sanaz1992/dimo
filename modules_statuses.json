@@ -1,0 +1,13 @@
+{
+    "User": true,
+    "Dashboard": true,
+    "Core": true,
+    "UI": true,
+    "Media": true,
+    "ACL": true,
+    "Jetstream": true,
+    "Category": true,
+    "Product": true,
+    "Order": true,
+    "Transactions": true
+}

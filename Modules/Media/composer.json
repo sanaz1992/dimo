@@ -1,0 +1,32 @@
+{
+    "name": "nwidart/media",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "require": {
+        "league/flysystem-aws-s3-v3": "^3.29",
+        "intervention/image": "^3.11"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Media\\": "",
+            "Modules\\Media\\Database\\Factories\\": "Database/factories/",
+            "Modules\\Media\\Database\\Seeders\\": "Database/Seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Media\\Tests\\": "tests/"
+        }
+    }
+}
