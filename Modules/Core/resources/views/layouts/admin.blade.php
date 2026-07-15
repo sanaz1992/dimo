@@ -13,166 +13,106 @@
         href="{{$settingHelper->setting('favicon')?->main_image?->getThumbnailUrl('small') ?? asset('build/images/fav2.jpg')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     @livewireStyles
-    @vite(['Modules/Core/resources/assets/css/tailwind.css', 'resources/js/app.js'])
 
+    @vite(['Modules/Dashboard/resources/assets/css/index.css'])
 
-
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-
-        .bg-darkGray {
-            background-color: #3E3E3B;
-        }
-    </style>
     @stack('styles')
 </head>
 
-<body class="!bg-[#F7F8F8] text-gray-800 overflow-x-hidden">
+<body class="min-h-screen overflow-x-hidden pb-safe">
 
-    <div class="flex flex-col gap-8 p-8 relative min-h-screen">
-        <!-- نوار ناوبری -->
-        {{-- <div x-init="fetch('/src/components/navbar.html').then(r=>r.text()).then(html=>$el.innerHTML=html)"></div>
-        --}}
-        <x-Core::admin.navbar />
+    <div class="ambient" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
 
-        <div class="flex gap-8">
-            <!-- نوار کناری -->
-            <x-Core::admin.sidebar />
+    <div
+        class="app-layout relative z-10 mx-auto min-h-screen w-full max-w-[1600px] pt-4 sm:pt-6 lg:px-6 lg:pb-6 lg:pt-12">
+        <x-Core::admin.sidebar />
 
+        <div class="main-column flex min-w-0 flex-1 flex-col gap-3 p-3 sm:gap-4 sm:p-4 lg:gap-5 lg:p-6">
+            <x-Core::admin.navbar />
 
-            <!-- محتوای اصلی -->
-            <main class="flex-1 overflow-x-hidden max-w-full">
-                {{-- <div x-html="content"></div> --}}
-                {{ $slot }}
-            </main>
+            {{ $slot }}
         </div>
+    </div>
 
-        @stack('modals')
 
-        {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
-        @livewireScripts
+    @stack('modals')
 
-        <script src="{{ asset('build/plugins/sweetalert2/sweetalert2@11.js') }}"></script>
+    @livewireScripts
 
-        {{-- sidebar scripts --}}
-        <script>
-            (function () {
-                // Wait for DOM to be ready
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', initSidebar);
-                } else {
-                    initSidebar();
-                }
+    {{-- @vite(['Modules/Dashboard/resources/assets/js/index.js']) --}}
 
-                function initSidebar() {
-                    // Constants
-                    const LG_BREAKPOINT = 1024;
+    @stack('scripts')
 
-                    // Sidebar elements
-                    const sidebar = document.getElementById("sidebar");
-                    const overlay = document.getElementById("sidebar-overlay");
-                    const closeBtn = document.getElementById("sidebar-close-btn");
-                    const closeLinks = document.querySelectorAll(".sidebar-close-link");
-                    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownButtons = document.querySelectorAll('.dropdown-wrap [aria-controls]');
 
-                    // Early return if essential elements don't exist
-                    if (!sidebar) {
-                        console.warn("Sidebar element not found");
-                        return;
+            function closeAllDropdowns(exceptPanel = null, exceptButton = null) {
+                dropdownButtons.forEach((button) => {
+                    const panelId = button.getAttribute('aria-controls');
+                    const panel = panelId ? document.getElementById(panelId) : null;
+
+                    if (!panel) return;
+
+                    const isExceptPanel = exceptPanel && panel === exceptPanel;
+                    const isExceptButton = exceptButton && button === exceptButton;
+
+                    if (!isExceptPanel && !isExceptButton) {
+                        panel.classList.add('hidden');
+                        button.setAttribute('aria-expanded', 'false');
+                        button.classList.remove('btn-ghost--active', 'profile-btn--active');
                     }
+                });
+            }
 
-                    let isOpen = false;
+            dropdownButtons.forEach((button) => {
+                const panelId = button.getAttribute('aria-controls');
+                const panel = panelId ? document.getElementById(panelId) : null;
 
-                    function openSidebar() {
-                        if (!sidebar || !overlay) return;
+                if (!panel) return;
 
-                        isOpen = true;
-                        sidebar.classList.remove("translate-x-full");
-                        sidebar.classList.add("translate-x-0");
-                        overlay.classList.remove("opacity-0", "pointer-events-none");
-                        overlay.classList.add("opacity-100");
-                        document.body.style.overflow = "hidden";
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();
+
+                    const isHidden = panel.classList.contains('hidden');
+
+                    closeAllDropdowns(panel, button);
+
+                    panel.classList.toggle('hidden', !isHidden);
+                    button.setAttribute('aria-expanded', String(isHidden));
+
+                    if (isHidden) {
+                        button.classList.add('btn-ghost--active');
+
+                        const input = panel.querySelector('input, textarea, select');
+                        if (input) input.focus();
+                    } else {
+                        button.classList.remove('btn-ghost--active', 'profile-btn--active');
                     }
+                });
 
-                    function closeSidebar() {
-                        if (!sidebar || !overlay) return;
-
-                        isOpen = false;
-                        sidebar.classList.remove("translate-x-0");
-                        sidebar.classList.add("translate-x-full");
-                        overlay.classList.remove("opacity-100");
-                        overlay.classList.add("opacity-0", "pointer-events-none");
-                        document.body.style.overflow = "";
-                    }
-
-                    function toggleSidebar() {
-                        if (isOpen) {
-                            closeSidebar();
-                        } else {
-                            openSidebar();
-                        }
-                    }
-
-                    // Mobile menu button click
-                    if (mobileMenuButton) {
-                        mobileMenuButton.addEventListener("click", toggleSidebar);
-                    }
-
-                    // Close button click
-                    if (closeBtn) {
-                        closeBtn.addEventListener("click", closeSidebar);
-                    }
-
-                    // Overlay click
-                    if (overlay) {
-                        overlay.addEventListener("click", closeSidebar);
-                    }
-
-                    // Close links click
-                    closeLinks.forEach((link) => {
-                        link.addEventListener("click", closeSidebar);
-                    });
-
-                    // Close on escape key
-                    document.addEventListener("keydown", function (e) {
-                        if (e.key === "Escape" && isOpen) {
-                            closeSidebar();
-                        }
-                    });
-
-                    // Close on window resize if desktop
-                    window.addEventListener("resize", function () {
-                        if (window.innerWidth >= LG_BREAKPOINT && isOpen) {
-                            closeSidebar();
-                        }
-                    });
-                }
-            })();
-        </script>
-        <script>
-
-            Livewire.on('notify', (data) => {
-                Swal.fire({
-                    toast: true,
-                    position: 'bottom-start',
-                    icon: data.type,
-                    title: data.message,
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    customClass: {
-                        popup: 'swal-toast'
-                    }
+                panel.addEventListener('click', function (event) {
+                    event.stopPropagation();
                 });
             });
 
-        </script>
+            document.addEventListener('click', function () {
+                closeAllDropdowns();
+            });
 
-        @stack('scripts')
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+            });
+        });
 
-        @livewireScripts
+
+    </script>
 
 </body>
 

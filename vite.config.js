@@ -17,6 +17,8 @@ export default defineConfig({
                 'Modules/Core/resources/assets/js/utils.js',
                 'Modules/Jetstream/resources/assets/css/login.css',
                 'Modules/Jetstream/resources/assets/js/login.js',
+                'Modules/Dashboard/resources/assets/css/index.css',
+
             ],
             refresh: true,
         }),

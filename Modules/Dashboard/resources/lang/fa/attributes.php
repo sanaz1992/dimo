@@ -2,24 +2,20 @@
 
 return [
 
-    'orders' => 'سفارشات',
-    'awaiting_approved_orders' => ' در انتظار بررسی',
+    'dashboard' => 'داشبورد',
+    'search' => 'جتسجو',
+    'clear' => 'پاک کردن',
+    'notifications' => 'اعلان ها',
+    'profile' => 'پروفایل',
+    'setting' => 'تنظیمات',
+    'reports' => 'گزارش‌ها',
+    'logout' => 'خروج از حساب',
 
-    'received_orders' => ' دریافت شده',
-    'products_awaiting_approved' => 'محصول در انتظار تایید',
-
-    'awaiting_production_orders' => ' در انتظار تولید',
-    'awaiting_production_products' => 'محصول در انتظار تولید',
-
-    'in_production_orders' => ' در جریان تولید',
-    'in_production_products' => 'محصول ارسال شده ',
-
-    'produced_orders' => ' تکمیل شده',
-
-    'collection_orders' => 'سفارشات مجموعه',
-
-    'factory_warehouses' => 'انبار کارخانه',
-    'custome_fabric' => 'پارچه سفارشی',
-    'show_more' => 'نمایش بیشتر'
+    'menu' => 'منو',
+    'admin_panel' => 'پنل مدیریت',
+    'close' => 'بستن',
+    'users' => 'کاربران',
+    'transactions' => 'تراکنش ها',
+    'analytics' => 'تحلیل ها',
 
 ];
