@@ -218,7 +218,8 @@ span.copy {
 }
 
 button,
-a.btn {
+a.btn,
+a.button {
     display: block;
     margin: 1em auto;
     border-radius: 40px;
@@ -234,6 +235,10 @@ a.btn {
     text-transform: none;
     transition: transform 80ms ease-in;
     font-family: 'Vazirmatn', sans-serif;
+}
+
+a.border-white {
+    border: 1px solid white;
 }
 
 button svg {
@@ -324,7 +329,8 @@ button:focus {
     transition: animation 1s linear, -webkit-animation 1s linear;
 }
 
-.page button {
+.page button,
+.page a .button {
     border-color: #fff;
     background: transparent;
 }
@@ -372,7 +378,7 @@ button:focus {
 .error-text {
     color: red;
     font-size: 11px;
-    margin:2px 0px;
+    margin: 2px 0px;
 }
 
 @-webkit-keyframes rot-front {

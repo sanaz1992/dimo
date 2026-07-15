@@ -33,7 +33,6 @@ class User extends Authenticatable
         'level',
         'unique_code',
         'active',
-        'expired_at'
     ];
 
     protected $hidden = [

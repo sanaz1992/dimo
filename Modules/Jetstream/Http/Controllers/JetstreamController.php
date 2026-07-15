@@ -11,6 +11,7 @@ use Modules\Jetstream\Rules\LoginCheckCodeRules;
 use Modules\Jetstream\Rules\LoginRules;
 use Modules\Jetstream\Rules\LoginSendCodeRules;
 use Modules\Jetstream\Rules\RegisterCheckCodeRules;
+use Modules\Jetstream\Rules\RegisterRules;
 use Modules\Jetstream\Rules\RegisterSendCodeRules;
 use Modules\User\Enums\UserLevel;
 use Modules\User\Services\UserService;
@@ -20,8 +21,7 @@ class JetstreamController
     public function __construct(
         protected OtpRepositoryInterface $otpRepository,
         protected UserService $userService
-    ) {
-    }
+    ) {}
 
     public function login(LoginRules $request)
     {
@@ -143,8 +143,7 @@ class JetstreamController
 
         return view('Jetstream::auth.register-check-code', compact('data'));
     }
-
-    public function register(RegisterCheckCodeRules $request)
+    public function registerWithOtp(RegisterCheckCodeRules $request)
     {
         $data = $request->all();
         $otps = $this->otpRepository->all(null, [], [], [
@@ -172,5 +171,28 @@ class JetstreamController
         Auth::loginUsingId($user->id);
 
         return redirect()->route('admin.admins.edit', $user);
+    }
+    public function register(RegisterRules $request)
+    {
+        $data = $request->all();
+        $user = $this->userService->findByColumn('mobile', $data['mobile']);
+        if ($user) {
+            return redirect()->back()->withErrors(['message' => 'شماره موبایل مورد نظر قبلا ثبت شده است. لطفا از طریق فرم ورود وارد شوید.']);
+        }
+        $user = resolve(UserService::class)->create([
+            'name' => $data['name'],
+            'mobile' => $data['mobile'],
+            'password' => $data['mobile'],
+            'level' => UserLevel::USER->value,
+            'active' => true,
+        ]);
+        $user->assignRole(['super_admin']);
+        Auth::loginUsingId($user->id);
+
+        if ($user->level == "admin") {
+            return redirect()->route('admin.dashboard');
+        } else {
+            return redirect()->route('user.dashboard');
+        }
     }
 }

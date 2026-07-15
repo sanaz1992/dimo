@@ -23,11 +23,11 @@
 </head>
 
 <body>
-    <div id="container">
+
 
         {{ $slot }}
 
-    </div>
+
     @livewireScripts
     @vite(['Modules/Jetstream/resources/assets/js/login.js'])
 </body>

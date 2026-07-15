@@ -34,10 +34,14 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
 // })->middleware(['guest'])
 //     ->name('register');
 
-Route::post('/register', [JetstreamController::class, 'sendCode'])
-    ->middleware(['guest'])
-    ->name('register.send_code');
+// Route::post('/register', [JetstreamController::class, 'sendCode'])
+//     ->middleware(['guest'])
+//     ->name('register.send_code');
 
-Route::post('/register/check', [JetstreamController::class, 'register'])
+// Route::post('/register/check', [JetstreamController::class, 'register'])
+//     ->middleware(['guest'])
+//     ->name('register');
+
+Route::post('/register', [JetstreamController::class, 'register'])
     ->middleware(['guest'])
-    ->name('register');
+    ->name('register.post');
