@@ -21,7 +21,8 @@ class JetstreamController
     public function __construct(
         protected OtpRepositoryInterface $otpRepository,
         protected UserService $userService
-    ) {}
+    ) {
+    }
 
     public function login(LoginRules $request)
     {
@@ -186,7 +187,7 @@ class JetstreamController
             'level' => UserLevel::USER->value,
             'active' => true,
         ]);
-        $user->assignRole(['super_admin']);
+        // $user->assignRole(['super_admin']);
         Auth::loginUsingId($user->id);
 
         if ($user->level == "admin") {
