@@ -18,7 +18,7 @@ class UserList extends AdminBaseComponent
     public $type;
     public function mount(string $type = null)
     {
-        // $this->authorize('users_list');
+        $this->authorize('users_list');
         $this->type = $type;
         $this->columns = [
             ['key' => 'avatar', 'label' =>  __('user::attributes.avatar')],

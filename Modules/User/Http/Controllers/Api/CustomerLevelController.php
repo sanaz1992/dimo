@@ -9,7 +9,6 @@ use Modules\User\Entities\CustomerLevel;
 use Modules\User\Filters\CustomerLevelFilter;
 use Modules\User\Http\Resources\CustomerLevelResource;
 use Modules\User\Requests\StoreCustomerLevelRequests;
-use Modules\User\Services\CustomerLevelService;
 
 class CustomerLevelController extends Controller
 {

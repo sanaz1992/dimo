@@ -12,9 +12,10 @@
     <link rel="icon" type="image/x-icon"
         href="{{$settingHelper->setting('favicon')?->main_image?->getThumbnailUrl('small') ?? asset('build/images/fav2.jpg')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    @livewireStyles
 
-    @vite(['Modules/Dashboard/resources/assets/css/index.css'])
+
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'Modules/Dashboard/resources/assets/css/index.css'])
+    @livewireStyles
 
     @stack('styles')
 </head>
@@ -38,13 +39,10 @@
         </div>
     </div>
 
-
     @stack('modals')
 
-    @livewireScripts
-
     {{-- @vite(['Modules/Dashboard/resources/assets/js/index.js']) --}}
-
+  @livewireScripts
     @stack('scripts')
 
     <script>
@@ -113,6 +111,26 @@
 
 
     </script>
+
+    <script>
+
+        Livewire.on('notify', (data) => {
+            Swal.fire({
+                toast: true,
+                position: 'bottom-start',
+                icon: data.type,
+                title: data.message,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                customClass: {
+                    popup: 'swal-toast'
+                }
+            });
+        });
+
+    </script>
+
 
 </body>
 

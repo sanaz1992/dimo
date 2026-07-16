@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\User\Http\Controllers\Api\AdminController;
 use Modules\User\Http\Controllers\Api\CityController;
-use Modules\User\Http\Controllers\Api\CustomerLevelController;
 use Modules\User\Http\Controllers\Api\ProvinceController;
 use Modules\User\Http\Controllers\UserController;
 
@@ -24,7 +23,6 @@ Route::prefix('/admin')
 
         Route::get('/get-admin-levels', [AdminController::class, 'getAdminLevels']);
 
-        Route::apiResource('/customer-levels', CustomerLevelController::class);
     });
 
 Route::get('/provinces', [ProvinceController::class, 'index']);

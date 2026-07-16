@@ -10,9 +10,10 @@ use Modules\User\Services\UserService;
 
 class AdminEdit extends AdminBaseComponent
 {
+    use EditsUser;
+
     // use Authorizable;
     use LivewireNotify;
-    use EditsUser;
 
     public function mount(User $user)
     {
@@ -35,7 +36,7 @@ class AdminEdit extends AdminBaseComponent
     {
         return $this->renderView('User::livewire.admin.admin.admin-edit')
             ->layoutData([
-                'title' => __('user::attributes.admins_edit')
+                'title' => __('user::attributes.admins_edit'),
             ]);
     }
 }

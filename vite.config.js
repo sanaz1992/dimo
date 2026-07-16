@@ -28,10 +28,7 @@ export default defineConfig({
                     src: 'Modules/Core/resources/assets/fonts/**/*',
                     dest: 'fonts'
                 },
-                {
-                    src: 'Modules/Core/resources/assets/icons/*',
-                    dest: 'images/icons'
-                },
+
                 {
                     src: 'Modules/Core/resources/assets/images/*',
                     dest: 'images'
@@ -40,18 +37,7 @@ export default defineConfig({
                     src: 'Modules/Core/resources/assets/plugins/persian-datepicker/*',
                     dest: 'plugins/persian-datepicker'
                 },
-                {
-                    src: 'Modules/Core/resources/assets/plugins/sweetalert2/*',
-                    dest: 'plugins/sweetalert2'
-                },
-                {
-                    src: 'Modules/Warehouse/resources/assets/icons/sidebar/*',
-                    dest: 'images/icons/sidebar'
-                },
-                // {
-                //     src: 'Modules/Jetstream/resources/assets/**/*',
-                //     dest: 'jetstream'
-                // },
+
             ],
             silent: true,
             failOnError: false

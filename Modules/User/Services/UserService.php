@@ -23,8 +23,7 @@ class UserService
         protected UserRepositoryInterface $userRepository,
         protected MediaService $mediaService,
         protected AddressRepositoryInterface $addressRepository,
-    ) {
-    }
+    ) {}
 
     public function list(string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], QueryFilter $filter = null)
     {
@@ -89,12 +88,6 @@ class UserService
                     $user,
                     ['selectedRoles' => 'sales_operator']
                 );
-                if (isset($data['process']) && $data['process']) {
-                    $process = resolve(ProcessService::class)->findByColumn('slug', $data['process']);
-                } else {
-                    $process = resolve(ProcessService::class)->list(conditions: ['where' => ['type' => ['=', ProcessType::MARKETING->value]]])->first();
-                }
-                resolve(ProcessService::class)->attachAssignment($process, $user->unique_code);
             }
 
             if ($image) {

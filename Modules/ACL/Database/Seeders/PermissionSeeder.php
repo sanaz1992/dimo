@@ -18,11 +18,29 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-
-
             [
                 'name' => 'settings_edit',
                 'title' => 'تنظیمات سایت',
+            ],
+            [
+                'name' => 'users_list',
+                'title' => 'لیست کاربران',
+            ],
+            [
+                'name' => 'users_show',
+                'title' => 'مشاهده کاربر',
+            ],
+            [
+                'name' => 'users_create',
+                'title' => 'ایجاد کاربر',
+            ],
+            [
+                'name' => 'users_edit',
+                'title' => 'ویرایش کاربر',
+            ],
+            [
+                'name' => 'users_delete',
+                'title' => 'حذف کاربر',
             ],
 
         ];
@@ -36,8 +54,6 @@ class PermissionSeeder extends Seeder
                 ]
             );
         }
-
-
 
         $role = Role::firstOrCreate(
             ['name' => 'super_admin'],

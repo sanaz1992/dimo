@@ -1,15 +1,22 @@
 <header class="header-bar enter-header">
     @php
         $authUser = auth()->user();
+        $settingHelper = app(\Modules\Core\Helpers\SettingHelper::class);
     @endphp
     <div class="header-inner relative z-[1] flex w-full flex-wrap items-center gap-2 sm:gap-3">
         <button id="menu-btn" type="button" class="btn-ghost shrink-0 lg:hidden" aria-expanded="false"
             aria-controls="sidebar">
-            <span id="icon-menu"></span>
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    class="icon-svg shrink-0" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    </path>
+                </svg>
+            </span>
         </button>
         <div class="min-w-0 flex-1">
             <h1 class="truncate text-lg font-bold text-ink sm:text-xl" data-page-title>
-                @lang('dashboard::attributes.dashboard')
+                {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.venus_company_title')}}
             </h1>
             <p class="truncate text-[11px] text-ink-faint sm:text-[12px]" data-page-subtitle>{{$authUser->name}}</p>
         </div>
@@ -116,7 +123,7 @@
                         </p>
                         <p class="text-[11px] text-ink-faint">{{$authUser->level}}</p>
                     </div>
-                    <div class="avatar">ع</div>
+                    <div class="avatar">{{ substr($authUser->name, 0, 1) }}</div>
                 </button>
                 <div id="dropdown-profile" class="dropdown-profile dropdown-panel hidden" role="menu">
                     <button type="button" class="dropdown-item" data-goto="settings">

@@ -8,7 +8,6 @@ use Modules\Core\Filters\QueryFilter;
 use Modules\Core\Helpers\CodeGeneratorHelper;
 use Modules\Core\Helpers\ConvertDatesHelper;
 use Modules\Factory\Enums\ProductionOrderItemStatus;
-use Modules\Factory\External\Contracts\ProductionOrderItemRepositoryInterface;
 use Modules\Order\Entities\Order;
 use Modules\Order\Enums\OrderItemStatus;
 use Modules\Order\Enums\OrderStatus;
@@ -17,16 +16,14 @@ use Modules\Order\External\Contracts\OrderRepositoryInterface;
 use Modules\Product\Entities\Product;
 use Modules\User\Entities\User;
 use Modules\User\Services\UserService;
-use Modules\Warehouse\Services\InventoryService;
 
 class OrderService
 {
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
         protected OrderItemService $orderItemService,
-        protected ProductionOrderItemRepositoryInterface $productionOrderItemRepository,
-        protected InventoryService $inventoryService
-    ) {}
+    ) {
+    }
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
@@ -70,7 +67,7 @@ class OrderService
             'user_id' => $user ? $user->id : null,
             'seller_id' => auth()->id(),
             'code' => ($raw === null || $raw === '')
-                ? CodeGeneratorHelper::generate(get_class(new Order))
+                ? CodeGeneratorHelper::generate(get_class(new Order()))
                 : $raw,
             'description' => $orderData['description'] ?? null,
             'status' => OrderStatus::DRAFT->value,
@@ -165,7 +162,7 @@ class OrderService
                 if ($this->isFabricItem($orderItem->product)) {
                     continue;
                 }
-                $this->inventoryService->transferToPendingProductionWarehouse($orderItem);
+                // $this->inventoryService->transferToPendingProductionWarehouse($orderItem);
             }
 
             return $order;
@@ -263,15 +260,15 @@ class OrderService
                         //     $sort = 1;
                         // }
 
-                        $parent = $this->productionOrderItemRepository->create([
-                            'order_item_id' => $orderItem->id,
-                            'qty' => 1,
-                            'status' => ProductionOrderItemStatus::PENDING->value,
-                            'product_hall_difination_id' => $productHallDifination->id,
-                            'parent_id' => $parentId,
-                            'sort' => $productHallDifination->sort,
-                            'group_name' => $groupName,
-                        ]);
+                        // $parent = $this->productionOrderItemRepository->create([
+                        //     'order_item_id' => $orderItem->id,
+                        //     'qty' => 1,
+                        //     'status' => ProductionOrderItemStatus::PENDING->value,
+                        //     'product_hall_difination_id' => $productHallDifination->id,
+                        //     'parent_id' => $parentId,
+                        //     'sort' => $productHallDifination->sort,
+                        //     'group_name' => $groupName,
+                        // ]);
 
                         // if ($productHallDifination->hall->slug == "cutting-and-sewing") {
                         //     $parentId = $parent->id;
@@ -305,7 +302,7 @@ class OrderService
             $this->orderItemService->updateItemsStatus($order, OrderItemStatus::CANCELED->value);
             // بازگرداندن مواد اولیه به انبار
             foreach ($order->items as $orderItem) {
-                $this->inventoryService->restoreToRawMaterialWarehouse($orderItem);
+                // $this->inventoryService->restoreToRawMaterialWarehouse($orderItem);
             }
 
             return [

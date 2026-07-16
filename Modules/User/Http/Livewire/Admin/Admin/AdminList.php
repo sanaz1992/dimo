@@ -39,7 +39,6 @@ class AdminList extends AdminBaseComponent
         $conditions = [
             'where' => [
                 'level' => ['=', UserLevel::ADMIN->value],
-                'id' => ['!=', 1]
             ],
         ];
         if ($this->type == "with-expire") {

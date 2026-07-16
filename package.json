@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.1.11",
-        "@toolwind/corner-shape": "^0.0.8-3"
+        "@toolwind/corner-shape": "^0.0.8-3",
+        "sweetalert2": "^11.26.25"
     }
 }

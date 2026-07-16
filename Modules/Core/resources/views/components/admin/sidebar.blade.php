@@ -51,22 +51,24 @@
             </span>
             <span>@lang('dashboard::attributes.dashboard')</span>
         </a>
-        <a href="#" data-nav="users" class="nav-link">
-            <span class="nav-ico">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    class="icon-svg shrink-0" aria-hidden="true">
-                    <circle cx="9" cy="8" r="3.5" fill="currentColor" fill-opacity="0.2"></circle>
-                    <path d="M3 20v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1" fill="currentColor" fill-opacity="0.15"></path>
-                    <circle cx="9" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5"></circle>
-                    <path d="M3 20v-1a5 5 0 0 1 5-5h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                    </path>
-                    <circle cx="17.5" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"></circle>
-                    <path d="M15 20v-.5a3.5 3.5 0 0 1 5 0V20" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round"></path>
-                </svg>
-            </span>
-            <span>@lang('dashboard::attributes.users')</span>
-        </a>
+        @can('users_list')
+            <a href="{{route('admin.users.index')}}" data-nav="users" class="nav-link">
+                <span class="nav-ico">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        class="icon-svg shrink-0" aria-hidden="true">
+                        <circle cx="9" cy="8" r="3.5" fill="currentColor" fill-opacity="0.2"></circle>
+                        <path d="M3 20v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1" fill="currentColor" fill-opacity="0.15"></path>
+                        <circle cx="9" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5"></circle>
+                        <path d="M3 20v-1a5 5 0 0 1 5-5h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        </path>
+                        <circle cx="17.5" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"></circle>
+                        <path d="M15 20v-.5a3.5 3.5 0 0 1 5 0V20" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round"></path>
+                    </svg>
+                </span>
+                <span>@lang('dashboard::attributes.users')</span>
+            </a>
+        @endcan
         <a href="#" data-nav="transactions" class="nav-link">
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
