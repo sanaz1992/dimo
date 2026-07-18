@@ -14,7 +14,7 @@ use Modules\Warehouse\Entities\RawMaterialWarehouse;
 
 class Category extends Model
 {
-    protected $fillable = ['title', 'slug', 'parent_id', 'type',];
+    protected $fillable = ['name', 'slug', 'parent_id', 'type',];
 
     protected $casts = [
         'type' => CategoryType::class

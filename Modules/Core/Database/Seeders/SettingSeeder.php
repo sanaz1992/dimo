@@ -5,6 +5,7 @@ namespace Modules\Core\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Modules\Core\Entities\Setting;
 use Modules\Core\Enums\SettingType;
+use Modules\User\Entities\User;
 
 class SettingSeeder extends Seeder
 {
@@ -13,6 +14,8 @@ class SettingSeeder extends Seeder
      */
     public function run(): void
     {
+        $adminId = User::where('mobile', '09358364707')->value('id');
+
         $settings = [
             [
                 'title' => 'عنوان سایت',
@@ -50,6 +53,15 @@ class SettingSeeder extends Seeder
                 'type' => SettingType::BOOL->value,
                 'group' => 'login',
                 'value' => true
+            ],
+            [
+                'title' => 'واحد پول',
+                'key' => 'currency',
+                'type' => SettingType::TEXT->value,
+                'group' => 'general',
+                'value' => 'rial',
+                'is_public' => false,
+                'user_id' => $adminId,
             ],
         ];
 

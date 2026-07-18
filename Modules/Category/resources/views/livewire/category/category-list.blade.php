@@ -9,7 +9,7 @@
             <tr>
                 <th class="px-4 py-2">#</th>
                 <th class="px-4 py-2">{{__('product::attributes.image')}} </th>
-                <th class="px-4 py-2">{{__('product::attributes.title')}} </th>
+                <th class="px-4 py-2">{{__('product::attributes.name')}} </th>
                 <th class="px-4 py-2">{{__('product::attributes.actions')}}</th>
             </tr>
         </thead>
@@ -20,7 +20,7 @@
                 <td class="px-4 py-2">
                     <img src="{{ $category->main_image?->getThumbnailUrl('small') }}" class="h-32" />
                 </td>
-                <td class="px-4 py-2">{{ $category->title }}</td>
+                <td class="px-4 py-2">{{ $category->name }}</td>
                 <td class="px-4 py-2">
                     @can('categories_edit')
                     <a href="{{ route('admin.categories.edit', $category) }}"
@@ -75,7 +75,7 @@
                                 </th>
                                 <th
                                     class="px-4 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{__('category::attributes.title')}}
+                                    {{__('category::attributes.name')}}
                                 </th>
                                 <th
                                         class="px-4 py-2 sm:px-6 sm:py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -87,7 +87,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" x-data="{ 
+                        <tbody class="bg-white divide-y divide-gray-200" x-data="{
                             expanded: {},
                             isShown(ancestors) {
                                 return ancestors.every(id => this.expanded[id] !== false);
@@ -95,8 +95,8 @@
                         }">
                             @php $pathStack = []; @endphp
                             @forelse($categories as $category)
-                                @php 
-                                    $depth = (int) ($category->treeDepth ?? 0); 
+                                @php
+                                    $depth = (int) ($category->treeDepth ?? 0);
                                     $hasChildren = $category->children->count() > 0;
                                     if ($depth === 0) {
                                         $pathStack = [];
@@ -131,21 +131,21 @@
                                                     <path d="M12 0v10a4 4 0 0 1-4 4H2" />
                                                 </svg>
                                             @endif
-                                            
+
                                             @if($hasChildren)
                                                 <!-- Collapse/Expand indicator button for parent category -->
-                                                <button type="button" @click="expanded[{{ $category->id }}] = expanded[{{ $category->id }}] === false ? true : false" 
+                                                <button type="button" @click="expanded[{{ $category->id }}] = expanded[{{ $category->id }}] === false ? true : false"
                                                     class="ml-2 focus:outline-none transition-all duration-300 flex items-center justify-center w-7 h-7 rounded-lg bg-[#3E3E3B]/10 border border-[#3E3E3B]/20 hover:bg-[#3E3E3B] hover:border-[#3E3E3B] text-[#3E3E3B] hover:text-white shadow-sm font-bold"
                                                     :class="expanded[{{ $category->id }}] === false ? 'rotate-0' : 'rotate-90'">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                                         <path d="M15 19l-7-7 7-7" />
                                                     </svg>
                                                 </button>
-                                                <span class="text-sm {{ $depth === 0 ? 'font-bold text-gray-800' : 'font-medium text-gray-500' }}">{{ $category->title }}</span>
+                                                <span class="text-sm {{ $depth === 0 ? 'font-bold text-gray-800' : 'font-medium text-gray-500' }}">{{ $category->name }}</span>
                                             @else
                                                 <!-- Empty space matching toggle button width for alignment -->
                                                 <div class="w-9"></div>
-                                                <span class="text-sm {{ $depth === 0 ? 'font-bold text-gray-800' : 'font-medium text-gray-500' }}">{{ $category->title }}</span>
+                                                <span class="text-sm {{ $depth === 0 ? 'font-bold text-gray-800' : 'font-medium text-gray-500' }}">{{ $category->name }}</span>
                                             @endif
                                         </div>
                                     </td>
@@ -166,7 +166,7 @@
                                                  selectedReplacementCategory: null,
                                                  categories: @js(resolve(\Modules\Category\Services\CategoryService::class)->list(
                                                                 conditions: ['where' => ['type' => ['=', $category->type]]]
-                                                            )->reject(fn ($cat) => $cat->id == $category->id)->pluck('title', 'id')),
+                                                            )->reject(fn ($cat) => $cat->id == $category->id)->pluck('name', 'id')),
                                                  errorMessage: @entangle('errorMessage'),
                                                  showActions: false,
                                                  showDeleteModal: @entangle("showDeleteModal.$category->id"),

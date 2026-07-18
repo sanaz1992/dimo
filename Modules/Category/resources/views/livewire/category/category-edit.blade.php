@@ -2,7 +2,7 @@
     <section class="rounded-xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm">
 
         <h2 class="mb-4 text-xl font-bold">
-            @lang('category::attributes.edit') {{$category->title}}
+            @lang('category::attributes.edit') {{$category->name}}
         </h2>
         @if ($message)
             <div class="mb-4 text-green-600">{{ $message }}</div>
@@ -108,7 +108,7 @@
                                     @if(!empty($categories[$i]))
                                         @foreach ($categories[$i] as $category)
                                             <option value="{{ $category->id }}">
-                                                {{ $category->title }}
+                                                {{ $category->name }}
                                             </option>
                                         @endforeach
                                     @endif
@@ -119,10 +119,10 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm font-medium">@lang('category::attributes.title')</label>
-                        <input wire:model="form.title" type="text" class="w-full rounded-lg border-gray-300"
-                               placeholder="@lang('category::messages.enter_title')" />
-                        @error('form.title')
+                        <label class="mb-2 block text-sm font-medium">@lang('category::attributes.name')</label>
+                        <input wire:model="form.name" type="text" class="w-full rounded-lg border-gray-300"
+                               placeholder="@lang('category::messages.enter_name')" />
+                        @error('form.name')
                         <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>

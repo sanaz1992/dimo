@@ -11,7 +11,7 @@ class LocalUploadStrategy implements FileUploadStrategyInterface
 {
     public function upload(UploadedFile $file, string $path): string
     {
-        return $file->store($path, 'public_html');
+        return $file->store($path, 'public');
     }
 
     public function uploadMultiple(array $imagesBinary, string $dir, string $baseFilename, string $extension, string $disk)

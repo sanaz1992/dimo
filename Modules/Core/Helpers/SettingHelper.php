@@ -24,4 +24,16 @@ class SettingHelper
         });
         return $settings->where('key', $key)->first();
     }
+    public function currency(): string
+    {
+        return $this->setting('currency')?->value ?? 'rial';
+    }
+
+    public function currencyLabel(): string
+    {
+        return match ($this->currency()) {
+            'toman' => 'تومان',
+            default => 'ریال',
+        };
+    }
 }

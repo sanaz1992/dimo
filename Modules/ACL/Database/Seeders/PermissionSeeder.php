@@ -43,6 +43,27 @@ class PermissionSeeder extends Seeder
                 'title' => 'حذف کاربر',
             ],
 
+            [
+                'name' => 'products_list',
+                'title' => 'لیست محصولات',
+            ],
+            [
+                'name' => 'products_show',
+                'title' => 'مشاهده محصول',
+            ],
+            [
+                'name' => 'products_create',
+                'title' => 'ایجاد محصول',
+            ],
+            [
+                'name' => 'products_edit',
+                'title' => 'ویرایش محصول',
+            ],
+            [
+                'name' => 'products_delete',
+                'title' => 'حذف محصول',
+            ],
+
         ];
 
         foreach ($permissions as $permission) {

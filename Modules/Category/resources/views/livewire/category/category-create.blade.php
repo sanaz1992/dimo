@@ -24,7 +24,7 @@
                             @if(!empty($categories[$i]))
                                 @foreach ($categories[$i] as $category)
                                     <option value="{{ $category->id }}">
-                                        {{ $category->title }}
+                                        {{ $category->name }}
                                     </option>
                                 @endforeach
                             @endif
@@ -35,10 +35,10 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label class="block mb-1 text-sm">{{ __('category::attributes.title') }}:</label>
-                <input type="text" wire:model.defer="form.title"
+                <label class="block mb-1 text-sm">{{ __('category::attributes.name') }}:</label>
+                <input type="text" wire:model.defer="form.name"
                     class="border border-gray-300 rounded px-3 py-1 w-full" />
-                @error('form.title')
+                @error('form.name')
                     <span class="text-red-500 text-xs">{{ $message }}</span>
                 @enderror
             </div>
@@ -47,7 +47,7 @@
                 <select wire:model="form.parent_id" class="w-full pr-10 pl-3 text-right rounded-lg border-gray-300">
                     <option value="">@lang('category::messages.choose')</option>
                     @foreach ($categories as $category)
-                    <option value="{{ $category->id }}"> {{ $category->title }}</option>
+                    <option value="{{ $category->id }}"> {{ $category->name }}</option>
                     @endforeach
                 </select>
                 @error('form.parent_id')

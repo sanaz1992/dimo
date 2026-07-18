@@ -69,6 +69,14 @@
                 <span>@lang('dashboard::attributes.users')</span>
             </a>
         @endcan
+        @can('products_list')
+            <a href="{{route('admin.products.index')}}" data-nav="products" class="nav-link">
+                <span class="nav-ico">
+                    <img src="{{ asset('icons\sidebar\products.svg') }}" alt="products"/>
+                </span>
+                <span>@lang('product::attributes.products')</span>
+            </a>
+        @endcan
         <a href="#" data-nav="transactions" class="nav-link">
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"

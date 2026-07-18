@@ -18,7 +18,7 @@ class CategoryCreate extends AdminBaseComponent
 
     public $message;
     public $form = [
-        'title' => '',
+        'name' => '',
         'type' => '',
         'image' => null,
         'parent_id' => null

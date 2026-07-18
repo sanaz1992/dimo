@@ -1,13 +1,11 @@
 <?php
 
-namespace Modules\Product\Http\Livewire\Product;
+namespace Modules\Product\Http\Livewire\Admin\Product;
 
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use Modules\Category\Enums\CategoryType;
-use Modules\Category\Services\CategoryService;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
@@ -59,32 +57,11 @@ class ProductList extends AdminBaseComponent
 
         $this->currency = app(SettingHelper::class)->currencyLabel();
 
-        $this->categories = resolve(CategoryService::class)->list(
-            orderBy: 'title',
-            conditions: [
-                'where' => ['type' => ['=', CategoryType::PRODUCT->value]],
-            ]
-        );
-        $this->activeTab = 'all_products';
-        $this->allTabs['all_products'] = 'همه محصولات';
-        foreach ($this->categories as $category) {
-            $this->allTabs[$category->id] = $category->title;
-        }
-        $this->columns = [
-            ['key' => 'image', 'label' => __('product::attributes.image')],
-            ['key' => 'code', 'label' => __('product::attributes.code')],
-            ['key' => 'title', 'label' => __('product::attributes.title')],
-            ['key' => 'category', 'label' => __('product::attributes.category')],
-            // ['key' => 'stock', 'label' => __('product::attributes.stock')],
-            ['key' => 'price', 'label' => __('product::attributes.price').' ('.$this->currency.')'],
-            ['key' => 'status', 'label' => __('product::attributes.status')],
-            ['key' => 'actions', 'label' => ''],
-        ];
         $this->sortOptions = [
             'created_at:desc' => __('core::attributes.newest'),
             'created_at:asc' => __('core::attributes.oldest'),
-            'title:asc' => __('core::attributes.title_asc'),
-            'title:desc' => __('core::attributes.title_desc'),
+            'name:asc' => __('core::attributes.name_asc'),
+            'name:desc' => __('core::attributes.name_desc'),
             'price:asc' => __('core::attributes.price_asc'),
             'price:desc' => __('core::attributes.price_desc'),
         ];
@@ -97,17 +74,7 @@ class ProductList extends AdminBaseComponent
         $this->resetPage();
     }
 
-    public function updatedActiveTab()
-    {
-        $this->resetPage();
-    }
 
-    #[On('tabChanged')]
-    public function setTab($categoryId)
-    {
-        $this->activeTab = $categoryId;
-        $this->resetPage(); // refresh category items
-    }
 
     public function publishProduct($productId)
     {
@@ -135,38 +102,20 @@ class ProductList extends AdminBaseComponent
         $request = new Request($this->filterData ?? []);
         $filter = new ProductFilter($request);
 
-        $conditions = [
-            'where' => ['is_intermediate' => ['=', false]],
-        ];
-        if ($this->activeTab != 'all_products') {
-            $conditions = array_merge($conditions, [
-                'where' => ['category_id' => ['=', $this->activeTab]],
-            ]);
-        }
-        // if ($this->search) {
-        //     $conditions = array_merge($conditions, [
-        //         'where' => [
-        //             'title' => ['LIKE', $this->search],
-        //         ],
-        //         'orWhere' => [
-        //             'code' => ['LIKE', $this->search],
-        //         ],
-        //     ]);
-        // }
+
 
         $products = $productService->list(
             $this->sortBy ?? null,
             [10, true],
-            ['category', 'mainImageRelation', 'cost_items'],
-            $conditions,
-            $filter
+            ['category', 'mainImageRelation'],
+            filter: $filter
         );
 
         return $this->renderView(
-            'Product::livewire.product.product-list',
+            'Product::livewire.admin.product.product-list',
             compact('products')
         )->layoutData([
-            'title' => __('product::attributes.product_list'),
+            'title' => __('product::attributes.products'),
         ]);
     }
 }

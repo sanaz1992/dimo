@@ -18,4 +18,6 @@ return [
     'transactions' => 'تراکنش ها',
     'analytics' => 'تحلیل ها',
 
+    'products' => 'محصولات',
+
 ];

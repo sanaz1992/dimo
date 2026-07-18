@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Product\Http\Livewire\Product;
+namespace Modules\Product\Http\Livewire\Admin\Product;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;

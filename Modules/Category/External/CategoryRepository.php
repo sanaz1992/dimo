@@ -18,8 +18,8 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function create(array $data): Model
     {
         return Category::create([
-            'title' => $data['title'],
-            'slug'  => SlugHelper::generate(get_class(new Category()), $data['title']),
+            'name' => $data['name'],
+            'slug'  => SlugHelper::generate(get_class(new Category()), $data['name']),
             'parent_id' => $data['parent_id'] ?? null,
             'type' => $data['type']
         ]);
@@ -28,7 +28,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function update(Model $category, array $data): ?Model
     {
         $category->update([
-            'title' => $data['title'],
+            'name' => $data['name'],
             'parent_id' => $data['parent_id'] ?? null,
             'type' => $data['type'],
         ]);

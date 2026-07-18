@@ -1,0 +1,187 @@
+<?php
+
+namespace Modules\Product\Http\Livewire\Concerns;
+
+use Livewire\WithFileUploads;
+use Modules\Category\Services\CategoryService;
+use Modules\Core\Traits\LivewireNotify;
+use Modules\Product\Enums\ProductExtractionMethod;
+use Modules\Product\Enums\ProductGradeEnum;
+use Modules\Product\Services\ProductService;
+use Illuminate\Validation\Rules\Enum;
+use Modules\Core\Helpers\SettingHelper;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+
+trait CreatesProduct
+{
+    use WithFileUploads;
+    use LivewireNotify;
+
+    public $form = [
+        'image' => '',
+        'name' => '',
+        'grade' => '',
+        'category_id' => null,
+        'description' => '',
+        'extraction_method' => '',
+        'is_active' => true,
+    ];
+
+    public $categories;
+    public $gardes;
+    public $extractionMethods;
+    public $imageConfig;
+    public string $currentStep = 'basic';
+    public array $steps = [
+        'basic' => 'اطلاعات پایه',
+        'sku' => 'تنوع',
+    ];
+    public $currency;
+    public $initialImage;
+    public $product = null;
+    protected function loadInitialData($product = null)
+    {
+        $this->categories = resolve(CategoryService::class)->list(conditions: ['where' => ['is_active' => ['=', true]]]);
+        $this->gardes = ProductGradeEnum::labels();
+        $this->extractionMethods = ProductExtractionMethod::labels();
+        $this->imageConfig = config('media.validations.image');
+
+        $settingHelper = app(SettingHelper::class);
+        $this->currency = $settingHelper->currencyLabel();
+
+        if ($product) {
+            $product->load('mainImageRelation');
+            $this->product = $product;
+            $this->form['name'] = $product->name;
+            $this->form['description'] = $product->description;
+            $this->form['category_id'] = $product->category_id;
+            $this->form['grade'] = $product->grade;
+            $this->form['extraction_method'] = $product->extraction_method;
+            $this->form['is_active'] = $product->is_active;
+
+            $this->initialImage = $product->main_image?->getThumbnailUrl('original');
+        }
+    }
+
+    public function nextStep(): void
+    {
+        $this->storeDetail();
+
+        $currentIndex = array_search($this->currentStep, $this->steps, true);
+
+        if ($currentIndex === false) {
+            return;
+        }
+
+        $nextIndex = $currentIndex + 1;
+
+        if (isset($this->steps[$nextIndex])) {
+            $this->currentStep = $this->steps[$nextIndex];
+        }
+    }
+
+    public function previousStep(): void
+    {
+        $currentIndex = array_search($this->currentStep, $this->steps, true);
+
+        if ($currentIndex === false) {
+            return;
+        }
+
+        $previousIndex = $currentIndex - 1;
+
+        if (isset($this->steps[$previousIndex])) {
+            $this->currentStep = $this->steps[$previousIndex];
+        }
+    }
+    protected function validateCurrentStep(): array
+    {
+        if ($this->currentStep === 'basic') {
+            return [
+                'form.image' => ['nullable', 'image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
+                'form.name' => ['required', 'string', 'max:255'],
+                'form.grade' => ['required', new Enum(ProductGradeEnum::class)],
+                'form.category_id' => ['required', 'exists:categories,id'],
+                'form.extraction_method' => ['required', new Enum(ProductExtractionMethod::class)],
+                'form.description' => ['nullable', 'string'],
+                'form.is_active' => ['required', 'in:0,1'],
+            ];
+        }
+
+        if ($this->currentStep === 'sku') {
+            return [];
+        }
+        return [];
+    }
+
+    protected function validateProduct()
+    {
+        $this->validate(
+            $this->validateCurrentStep(),
+            trans('user::validation'),
+            trans('user::attributes')
+        );
+    }
+
+    protected function storeDetail()
+    {
+        $this->validateProduct();
+        if ($this->currentStep === 'basic') {
+            if ($this->product) {
+                $product = resolve(ProductService::class)->update($this->product, $this->form);
+            } else {
+                $product = resolve(ProductService::class)->create($this->form);
+            }
+
+            $this->notify('success', __('core::messages.create.success'));
+
+            return redirect()->route('admin.products.edit', ['product' => $product, 'currentStep' => 'sku']);
+        }
+        if ($this->currentStep === 'sku') {
+            return [];
+        }
+    }
+
+    public function updatedFormImage()
+    {
+        $this->validate(
+            [
+                'form.image' => ['image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
+            ],
+            trans('product::validation'),
+            trans('product::attributes')
+        );
+    }
+    public int $imageUploadKey = 0;
+    public function removeImage()
+    {
+        $this->form['image'] = null;
+        $this->imageUploadKey++;
+        $this->initialImage = null;
+    }
+
+    public function getImagePreviewProperty(): ?string
+    {
+        $image = $this->form['image'] ?? null;
+
+        if ($image instanceof TemporaryUploadedFile) {
+            return $image->temporaryUrl();
+        }
+
+        return $this->initialImage;
+    }
+    public function getClientOriginalNameProperty(): ?string
+    {
+        $image = $this->form['image'] ?? null;
+
+        if ($image instanceof TemporaryUploadedFile) {
+            return $image->getClientOriginalName();
+        }
+
+        if ($this->initialImage) {
+            return basename(parse_url($this->initialImage, PHP_URL_PATH));
+        }
+
+        return null;
+    }
+}

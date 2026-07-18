@@ -11,6 +11,7 @@ class UploadStrategyFactory
                 return app(LiaraUploadStrategy::class);
             case 'public':
             case 'public_html':
+            case 'local':
                 return  new LocalUploadStrategy();
             default:
                 throw new \Exception("Unsupported disk");

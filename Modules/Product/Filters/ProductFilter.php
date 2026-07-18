@@ -22,17 +22,6 @@ class ProductFilter extends QueryFilter
         });
     }
 
-    // public function price_min($value)
-    // {
-    //     dd($value);
-
-    //     return;
-    // }
-    // public function price_max($value)
-    // {
-    //     dd($value);
-    //     return;
-    // }
 
     public function published($value)
     {

@@ -27,7 +27,7 @@ class CategoryEdit extends AdminBaseComponent
     public $message;
 
     public $form = [
-        'title' => '',
+        'name' => '',
         'image' => null,
         'parent_id' => '',
         'type' => '',
@@ -44,7 +44,7 @@ class CategoryEdit extends AdminBaseComponent
         // $this->authorize('categories_edit');
         $category->load('mainImageRelation');
         $this->category = $category;
-        $this->form['title'] = $category->title;
+        $this->form['name'] = $category->name;
         $this->form['parent_id'] = $category->parent_id;
         $this->form['type'] = $category->type?->value;
         // dd($this->form);

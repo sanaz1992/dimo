@@ -14,7 +14,7 @@
         </span>
     @endif
 
-    <select {{ $attributes->merge(['class' => 'input-field']) }}>
+    <select {{ $attributes->merge(['class' => 'input-field left-3']) }}>
         @if($placeholder)
             <option value="">
                 @lang($placeholder)
