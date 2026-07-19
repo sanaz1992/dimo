@@ -15,9 +15,9 @@
             <div class="menu">
                 <a class="active" href="{{ route('home') }}">@lang('shop::attributes.home_page')</a>
                 <a href="{{ route('products.index') }}">@lang('product::attributes.products')</a>
-                <a href="#">درباره ما</a>
-                <a href="#">وبلاگ</a>
-                <a href="#">تماس با ما</a>
+                <a href="{{ route('about.index') }}">@lang('pages::attributes.about')</a>
+                <a href="#">@lang('pages::attributes.blog')</a>
+                <a href="{{route('contactus.index')}}">@lang('pages::attributes.contactus')</a>
             </div>
 
             <div class="actions">

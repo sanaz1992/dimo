@@ -12,5 +12,6 @@
     "Transactions": true,
     "Inventory": true,
     "Shop": true,
-    "Pages": true
+    "Pages": true,
+    "Blog": true
 }

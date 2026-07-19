@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pages\Providers;
+namespace Modules\Blog\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -8,20 +8,21 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
+use Modules\Shop\Http\Livewire\HomePage;
 
-class PagesServiceProvider extends ServiceProvider
+class BlogServiceProvider extends ServiceProvider
 {
     use PathNamespace;
     protected $defer = true;
     /**
      * The name of the module.
      */
-    protected string $name = 'Pages';
+    protected string $name = 'Blog';
 
     /**
      * The lowercase version of the module name.
      */
-    protected string $nameLower = 'pages';
+    protected string $nameLower = 'blog';
 
     /**
      * Boot the application events.
@@ -34,6 +35,8 @@ class PagesServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
+
+        Livewire::component('shop::home-page', HomePage::class);
     }
 
     /**

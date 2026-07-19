@@ -2,7 +2,7 @@
 
 namespace Modules\Shop\Providers;
 
-use Nwidart\Modules\Support\ModuleServiceProvider;
+use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
 use Modules\Shop\Http\Livewire\HomePage;
 
-class ShopServiceProvider extends ModuleServiceProvider
+class ShopServiceProvider extends ServiceProvider
 {
     use PathNamespace;
     protected $defer = true;
