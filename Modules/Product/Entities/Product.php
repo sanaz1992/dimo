@@ -83,4 +83,9 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function skus(): HasMany
+    {
+        return $this->hasMany(ProductSku::class);
+    }
 }

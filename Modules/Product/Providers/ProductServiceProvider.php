@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Modules\Product\Console\CleanDuplicateCostItemsCommand;
-use Modules\Product\External\Contracts\CostItemRepositoryInterface;
 use Modules\Product\External\Contracts\ProductRepositoryInterface;
-use Modules\Product\External\CostItemRepository;
+use Modules\Product\External\Contracts\ProductSkuRepositoryInterface;
 use Modules\Product\External\ProductRepository;
+use Modules\Product\External\ProductSkuRepository;
 use Modules\Product\Http\Livewire\Admin\Product\ProductCreate;
 use Modules\Product\Http\Livewire\Admin\Product\ProductEdit;
 use Modules\Product\Http\Livewire\Admin\Product\ProductImport;
@@ -61,7 +61,7 @@ class ProductServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
 
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
-        $this->app->bind(CostItemRepositoryInterface::class, CostItemRepository::class);
+        $this->app->bind(ProductSkuRepositoryInterface::class, ProductSkuRepository::class);
 
         $this->app->singleton(ProductPriceResolver::class, function ($app) {
             return new ProductPriceResolver([

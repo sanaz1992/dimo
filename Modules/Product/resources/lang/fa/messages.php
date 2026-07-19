@@ -28,4 +28,10 @@ return [
     'this_product_need_more_details_for_publish' => 'قبل از انتشار محصول اطلاعات را تکمیل کنید.',
     'select_category' => 'گروه بندی را انتخاب کنید',
     'select_grade' => 'عیار را انتخاب کنید',
+    'enter_base_sale_price' => 'قیمت فروش پایه محصول را وارد کنید ',
+    'enter_volume_ml' => 'حجم محصول را وارد کنید',
+    'select_packaging_type' => 'نوع بسته‌بندی را انتخاب کنید',
+
+    'the_selected_variation_is_not_available_for_this_product' => 'متأسفانه این تنوع برای محصول انتخابی شما در دسترس نیست',
+
 ];

@@ -3,12 +3,16 @@
     'name' => null,
     'type' => 'text',
     'placeholder' => null,
+    'suffix'=>null
 ])
 
 <label class="block">
     @if($label)
         <span class="mb-1 block text-[12px] text-ink-faint">
             @lang($label)
+             @if(isset($suffix))
+                <span class="text-muted small">({{$suffix}})</span>
+            @endif
         </span>
     @endif
 

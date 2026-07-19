@@ -4,7 +4,8 @@
         <x-slot:icon>
             <img src="{{ asset('icons\sidebar\products.svg') }}" alt="products" />
         </x-slot:icon>
-        <x-dashboard::buttons.primary-action id="btn-add-product" tag="a" href="{{ route('admin.products.create') }}">
+        <x-dashboard::buttons.primary-action id="btn-add-product" tag="a" class="btn-fill btn-new-tx shrink-0"
+            href="{{ route('admin.products.create') }}">
             <x-slot:icon>
                 <img src="{{ asset('icons/header/add.svg') }}" alt="products" />
             </x-slot:icon>
@@ -36,8 +37,9 @@
                         {{$product->code}}
                     </x-dashboard::table.cell>
 
-                    <x-dashboard::table.cell :label="__('product::attributes.title')">
-                        <span class="user-dot bg-blue-100 text-brand-blue">س</span>
+                    <x-dashboard::table.cell :label="__('product::attributes.title')" class="flex items-center gap-2">
+                        <img alt="{{$product->title}}" class="h-10 w-10 rounded-full object-cover"
+                            src="{{ $product->main_image?->getThumbnailUrl('small') }}">
                         {{$product->name}}
                     </x-dashboard::table.cell>
 
@@ -50,17 +52,25 @@
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('product::attributes.status')">
-                        <span class="chip chip-ok">موفق</span>
+                        @if($product->is_active)
+                            <span class="chip chip-ok">@lang('product::attributes.active')</span>
+                        @else
+                            <span class="chip chip-fail">@lang('product::attributes.inactive')</span>
+                        @endif
                     </x-dashboard::table.cell>
 
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                         <div class="flex gap-1">
-                            <a class="row-btn mt-3 justify-center" href="{{ route('admin.products.edit', $product) }}">
+                            {{-- <a class="row-btn mt-3 justify-center" href="{{ route('admin.products.edit', $product) }}">
                                 <span>
                                     <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add"
                                         class="w-5" />
                                 </span>
-                            </a>
+                            </a> --}}
+                            <x-dashboard::buttons.primary-action id="btn-edit-product-{{$product->id}}" tag="a"
+                                href="{{ route('admin.products.edit', $product) }}" size="sm">
+                                <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
+                            </x-dashboard::buttons.primary-action>
                         </div>
                     </td>
                 </tr>

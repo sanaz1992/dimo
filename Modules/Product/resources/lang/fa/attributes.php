@@ -19,4 +19,10 @@ return [
     'inactive' => 'غیرفعال',
     'image' => 'تصویر',
 
+    'packaging_type' => 'نوع بسته‌بندی',
+    'volume_ml' => 'حجم محصول',
+    'base_sale_price' => 'قیمت فروش پایه',
+
+    'ml' => 'میلی لیتر',
+
 ];

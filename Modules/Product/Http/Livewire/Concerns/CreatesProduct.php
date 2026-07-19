@@ -3,6 +3,7 @@
 namespace Modules\Product\Http\Livewire\Concerns;
 
 use Livewire\WithFileUploads;
+use Illuminate\Validation\ValidationException;
 use Modules\Category\Services\CategoryService;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Product\Enums\ProductExtractionMethod;
@@ -11,6 +12,7 @@ use Modules\Product\Services\ProductService;
 use Illuminate\Validation\Rules\Enum;
 use Modules\Core\Helpers\SettingHelper;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Modules\Product\Enums\ProductPackagingType;
 
 trait CreatesProduct
 {
@@ -27,6 +29,14 @@ trait CreatesProduct
         'is_active' => true,
     ];
 
+    public $skuForm = [
+        'packaging_type' => '',
+        'volume_ml' => '',
+        'price' => '',
+        'is_active' => ''
+    ];
+
+
     public $categories;
     public $gardes;
     public $extractionMethods;
@@ -39,6 +49,7 @@ trait CreatesProduct
     public $currency;
     public $initialImage;
     public $product = null;
+    public $packagingType;
     protected function loadInitialData($product = null)
     {
         $this->categories = resolve(CategoryService::class)->list(conditions: ['where' => ['is_active' => ['=', true]]]);
@@ -50,7 +61,7 @@ trait CreatesProduct
         $this->currency = $settingHelper->currencyLabel();
 
         if ($product) {
-            $product->load('mainImageRelation');
+            $product->load('mainImageRelation', 'skus');
             $this->product = $product;
             $this->form['name'] = $product->name;
             $this->form['description'] = $product->description;
@@ -60,6 +71,8 @@ trait CreatesProduct
             $this->form['is_active'] = $product->is_active;
 
             $this->initialImage = $product->main_image?->getThumbnailUrl('original');
+
+            $this->packagingType = ProductPackagingType::labels();
         }
     }
 
@@ -121,7 +134,12 @@ trait CreatesProduct
         }
 
         if ($this->currentStep === 'sku') {
-            return [];
+            return [
+                'skuForm.volume_ml' => ['required', 'numeric'],
+                'skuForm.packaging_type' => ['required', new Enum(ProductPackagingType::class)],
+                'skuForm.price' => ['required', 'numeric'],
+                'skuForm.is_active' => ['required', 'in:0,1'],
+            ];
         }
         return [];
     }
@@ -164,6 +182,29 @@ trait CreatesProduct
         }
         if ($url) {
             return $url;
+        }
+    }
+
+    public function storeProductSku()
+    {
+        try {
+            $this->validateProduct();
+            $productSku = resolve(ProductService::class)->createProductSku($this->product, $this->skuForm);
+            $this->product->load('skus');
+            $this->notify('success', __('core::messages.create.success'));
+        } catch (ValidationException $e) {
+            $this->notify('error', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->notify('error', __('core::messages.edit.error'));
+        }
+    }
+
+    public function deleteProductSku(int $skuId)
+    {
+        try {
+            resolve(ProductService::class)->removeProductSku($this->product, $skuId);
+        } catch (\Exception $e) {
+            $this->notify('error', __('core::messages.edit.error'));
         }
     }
 

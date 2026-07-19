@@ -22,7 +22,7 @@ class ProductEdit extends AdminBaseComponent
     {
         return $this->renderView('Product::livewire.admin.product.product-edit')
             ->layoutData([
-                'title' => __('product::attributes.edit_product'),
+                'title' => __('product::attributes.edit_product') . ' ' . $this->product->name,
             ]);
     }
 }
