@@ -2,6 +2,7 @@
     'label' => null,
     'name' => null,
     'type' => 'text',
+    'placeholder' => null,
 ])
 
 <label class="block">
@@ -14,6 +15,9 @@
     <input
         type="{{ $type }}"
         {{ $attributes->merge(['class' => 'input-field']) }}
+        @if($placeholder)
+            placeholder="{{ __($placeholder) }}"
+        @endif
     >
 
     @if($name)
