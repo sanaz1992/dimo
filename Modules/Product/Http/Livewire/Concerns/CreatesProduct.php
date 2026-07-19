@@ -67,7 +67,13 @@ trait CreatesProduct
     {
         $this->storeDetail();
 
-        $currentIndex = array_search($this->currentStep, $this->steps, true);
+        $stepKeys = array_keys($this->steps);
+
+        $currentIndex = array_search(
+            $this->currentStep,
+            $stepKeys,
+            true
+        );
 
         if ($currentIndex === false) {
             return;
@@ -75,23 +81,29 @@ trait CreatesProduct
 
         $nextIndex = $currentIndex + 1;
 
-        if (isset($this->steps[$nextIndex])) {
-            $this->currentStep = $this->steps[$nextIndex];
+        if (isset($stepKeys[$nextIndex])) {
+            $this->currentStep = $stepKeys[$nextIndex];
         }
     }
 
     public function previousStep(): void
     {
-        $currentIndex = array_search($this->currentStep, $this->steps, true);
+        $stepKeys = array_keys($this->steps);
+
+        $currentIndex = array_search(
+            $this->currentStep,
+            $stepKeys,
+            true
+        );
 
         if ($currentIndex === false) {
             return;
         }
 
-        $previousIndex = $currentIndex - 1;
+        $nextIndex = $currentIndex - 1;
 
-        if (isset($this->steps[$previousIndex])) {
-            $this->currentStep = $this->steps[$previousIndex];
+        if (isset($stepKeys[$nextIndex])) {
+            $this->currentStep = $stepKeys[$nextIndex];
         }
     }
     protected function validateCurrentStep(): array
@@ -100,9 +112,9 @@ trait CreatesProduct
             return [
                 'form.image' => ['nullable', 'image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
                 'form.name' => ['required', 'string', 'max:255'],
-                'form.grade' => ['required', new Enum(ProductGradeEnum::class)],
+                'form.grade' => ['nullable', new Enum(ProductGradeEnum::class)],
                 'form.category_id' => ['required', 'exists:categories,id'],
-                'form.extraction_method' => ['required', new Enum(ProductExtractionMethod::class)],
+                'form.extraction_method' => ['nullable', new Enum(ProductExtractionMethod::class)],
                 'form.description' => ['nullable', 'string'],
                 'form.is_active' => ['required', 'in:0,1'],
             ];
@@ -125,20 +137,33 @@ trait CreatesProduct
 
     protected function storeDetail()
     {
-        $this->validateProduct();
-        if ($this->currentStep === 'basic') {
-            if ($this->product) {
-                $product = resolve(ProductService::class)->update($this->product, $this->form);
-            } else {
-                $product = resolve(ProductService::class)->create($this->form);
+        $url = null;
+        $message = '';
+        try {
+            $this->validateProduct();
+
+            if ($this->currentStep === 'basic') {
+                if ($this->product) {
+                    $product = resolve(ProductService::class)->update($this->product, $this->form);
+                    $message = __('core::messages.edit.success');
+                } else {
+                    $product = resolve(ProductService::class)->create($this->form);
+                    $url = redirect()->route('admin.products.edit', ['product' => $product, 'currentStep' => 'sku']);
+                    $message = __('core::messages.create.success');
+                }
             }
-
-            $this->notify('success', __('core::messages.create.success'));
-
-            return redirect()->route('admin.products.edit', ['product' => $product, 'currentStep' => 'sku']);
+            if ($this->currentStep === 'sku') {
+                return [];
+            }
+        } catch (\Exception $e) {
+            $this->notify('error', __('core::messages.edit.error'));
         }
-        if ($this->currentStep === 'sku') {
-            return [];
+
+        if ($message) {
+            $this->notify('success', $message);
+        }
+        if ($url) {
+            return $url;
         }
     }
 

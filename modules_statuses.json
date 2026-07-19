@@ -9,5 +9,6 @@
     "Category": true,
     "Product": true,
     "Order": true,
-    "Transactions": true
+    "Transactions": true,
+    "Inventory": true
 }
