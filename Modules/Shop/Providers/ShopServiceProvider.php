@@ -7,7 +7,8 @@ use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Illuminate\Support\Facades\Blade;
-
+use Livewire\Livewire;
+use Modules\Shop\Http\Livewire\HomePage;
 
 class ShopServiceProvider extends ModuleServiceProvider
 {
@@ -34,6 +35,8 @@ class ShopServiceProvider extends ModuleServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
+
+        Livewire::component('shop::home-page', HomePage::class);
     }
 
     /**
