@@ -31,7 +31,7 @@
     <x-Core::guest.header />
 
     
-        {{ $slot }}
+    {{ $slot }}
   
 
     @stack('modals')

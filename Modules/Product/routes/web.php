@@ -6,6 +6,8 @@ use Modules\Product\Http\Livewire\Admin\Product\ProductEdit;
 use Modules\Product\Http\Livewire\Admin\Product\ProductImport;
 use Modules\Product\Http\Livewire\Admin\Product\ProductList;
 
+use Modules\Product\Http\Livewire\Guest\Product\ProductList as GuestProductList;
+
 Route::middleware(['auth', 'verified', 'admin.panel'])
     ->name('admin.')
     ->prefix('/admin')
@@ -18,3 +20,5 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
         Route::get('/products/{product}/edit', ProductEdit::class)
             ->middleware(['can:products_edit'])->name('products.edit');
     });
+
+Route::get('/products', GuestProductList::class)->name('products.index');

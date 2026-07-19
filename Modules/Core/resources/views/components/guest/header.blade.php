@@ -1,17 +1,20 @@
 <header class="topbar">
+    @php
+        $settingHelper = app(\Modules\Core\Helpers\SettingHelper::class);
+    @endphp
     <div class="container">
         <nav class="nav">
             <div class="brand">
                 <div class="logo" aria-hidden="true"></div>
                 <div class="brand-text">
-                    <strong>محمد</strong>
-                    <span>گلاب و عرقیات طبیعی</span>
+                    <strong>{{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : ''}}</strong>
+                    <span>{{$settingHelper->setting('sub_title') ? $settingHelper->setting('sub_title')?->value : ''}}</span>
                 </div>
             </div>
 
             <div class="menu">
-                <a class="active" href="#">صفحه اصلی</a>
-                <a href="#">محصولات</a>
+                <a class="active" href="{{ route('home') }}">صفحه اصلی</a>
+                <a href="{{ route('products.index') }}">محصولات</a>
                 <a href="#">درباره ما</a>
                 <a href="#">وبلاگ</a>
                 <a href="#">تماس با ما</a>
