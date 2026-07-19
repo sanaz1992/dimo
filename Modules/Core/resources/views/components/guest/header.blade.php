@@ -13,8 +13,8 @@
             </div>
 
             <div class="menu">
-                <a class="active" href="{{ route('home') }}">صفحه اصلی</a>
-                <a href="{{ route('products.index') }}">محصولات</a>
+                <a class="active" href="{{ route('home') }}">@lang('shop::attributes.home_page')</a>
+                <a href="{{ route('products.index') }}">@lang('product::attributes.products')</a>
                 <a href="#">درباره ما</a>
                 <a href="#">وبلاگ</a>
                 <a href="#">تماس با ما</a>
