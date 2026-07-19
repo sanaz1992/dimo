@@ -18,15 +18,16 @@ class SettingEdit extends AdminBaseComponent
     public array $form = [];
     public $settings;
     public array $initialImage = [];
+    public $imageConfig;
 
     public function mount()
     {
         // $this->authorize('settings_edit');
 
+        $this->imageConfig = config('media.validations.image');
+
         $settingService = resolve(SettingService::class);
-        $this->settings = $settingService->list(null, [], ['mainImageRelation'], [
-            'whereNotIn' => ['key' => [['login_with_password', 'user_can_register']]]
-        ]);
+        $this->settings = $settingService->list('created_at:asc', [], ['mainImageRelation']);
 
         foreach ($this->settings as $setting) {
 

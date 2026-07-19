@@ -18,9 +18,16 @@ class SettingSeeder extends Seeder
 
         $settings = [
             [
-                'title' => 'عنوان سایت',
+                'title' => 'برند',
                 'key' => 'site_title',
                 'value' => 'فروشگاه گلاب',
+                'type' => SettingType::TEXT->value,
+                'group' => 'general',
+            ],
+            [
+                'title' => 'حوزه فعالیت',
+                'key' => 'sub_title',
+                'value' => 'گلاب و عرقیات طبیعی',
                 'type' => SettingType::TEXT->value,
                 'group' => 'general',
             ],
@@ -39,13 +46,6 @@ class SettingSeeder extends Seeder
                 'type' => SettingType::IMAGE->value,
                 'group' => 'general',
                 'description' => 'سایز 20*20 px'
-            ],
-            [
-                'title' => 'امکان ثبت نام توسط کاربر',
-                'key' => 'user_can_register',
-                'type' => SettingType::BOOL->value,
-                'group' => 'login',
-                'value' => null
             ],
             [
                 'title' => 'ورود با پسورد',

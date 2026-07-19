@@ -72,7 +72,7 @@
         @can('products_list')
             <a href="{{route('admin.products.index')}}" data-nav="products" class="nav-link">
                 <span class="nav-ico">
-                    <img src="{{ asset('icons\sidebar\products.svg') }}" alt="products"/>
+                    <img src="{{ asset('icons\sidebar\products.svg') }}" alt="products" />
                 </span>
                 <span>@lang('product::attributes.products')</span>
             </a>
@@ -109,19 +109,21 @@
             </span>
             <span>@lang('dashboard::attributes.analytics')</span>
         </a>
-        <a href="#" data-nav="settings" class="nav-link">
-            <span class="nav-ico">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    class="icon-svg shrink-0" aria-hidden="true">
-                    <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.2"></circle>
-                    <path
-                        d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
-                </svg>
-            </span>
-            <span>@lang('dashboard::attributes.setting')</span>
-        </a>
+        @can('settings_edit')
+            <a href="{{route('admin.settings.edit')}}" data-nav="settings" class="nav-link">
+                <span class="nav-ico">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        class="icon-svg shrink-0" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.2"></circle>
+                        <path
+                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
+                    </svg>
+                </span>
+                <span>@lang('dashboard::attributes.setting')</span>
+            </a>
+        @endcan
     </nav>
 
     <div class="status-box relative z-[1]">
