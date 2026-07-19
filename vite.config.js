@@ -29,7 +29,10 @@ export default defineConfig({
                     src: 'Modules/Core/resources/assets/fonts/**/*',
                     dest: 'fonts'
                 },
-
+                {
+                    src: 'Modules/Shop/resources/assets/fonts/**/*',
+                    dest: 'fonts'
+                },
                 {
                     src: 'Modules/Core/resources/assets/images/*',
                     dest: 'images'

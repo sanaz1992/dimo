@@ -16,19 +16,19 @@
                 <a class="active" href="{{ route('home') }}">@lang('shop::attributes.home_page')</a>
                 <a href="{{ route('products.index') }}">@lang('product::attributes.products')</a>
                 <a href="{{ route('about.index') }}">@lang('pages::attributes.about')</a>
-                <a href="#">@lang('pages::attributes.blog')</a>
+                <a href="{{ route('blogs.index') }}">@lang('blog::attributes.blog')</a>
                 <a href="{{route('contactus.index')}}">@lang('pages::attributes.contactus')</a>
             </div>
 
             <div class="actions">
-                <button class="icon-btn" aria-label="جستجو">
+                <button class="icon-btn" aria-label="@lang('core::attributes.search')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="7"></circle>
                         <path d="M20 20l-3.5-3.5"></path>
                     </svg>
                 </button>
-                <button class="icon-btn" aria-label="سبد خرید">
+                <button class="icon-btn" aria-label="@lang('shop::attributes.cart')">
                     <span class="badge">2</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
