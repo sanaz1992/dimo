@@ -61,12 +61,6 @@
 
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                         <div class="flex gap-1">
-                            {{-- <a class="row-btn mt-3 justify-center" href="{{ route('admin.products.edit', $product) }}">
-                                <span>
-                                    <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add"
-                                        class="w-5" />
-                                </span>
-                            </a> --}}
                             <x-dashboard::buttons.primary-action id="btn-edit-product-{{$product->id}}" tag="a"
                                 href="{{ route('admin.products.edit', $product) }}" size="sm">
                                 <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
