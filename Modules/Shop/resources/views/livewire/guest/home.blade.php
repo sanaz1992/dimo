@@ -1,7 +1,7 @@
 <main>
     <section class="hero">
         <div class="container">
-            <div class="hero-grid">
+            <div class="" style="background-image:url('{{ asset('img/slider.jpg') }}');">
                 <div class="hero-copy">
                     <div class="eyebrow">گلاب و عرقیات طبیعی</div>
                     <h1 class="hero-title">محمد</h1>
@@ -12,35 +12,13 @@
                     </p>
 
                     <div class="cta-row">
-                        <a class="btn btn-primary" href="#">
-                            مشاهده محصولات
+                        <a class="btn btn-primary" href="{{ route('products.index') }}">
+                            @lang('product::attributes.show_products')
                             <span aria-hidden="true">←</span>
                         </a>
-                        <a class="btn btn-ghost" href="#">
-                            درباره ما
+                        <a class="btn btn-ghost" href="{{ route('about.index') }}">
+                            @lang('pages::attributes.about')
                         </a>
-                    </div>
-                </div>
-
-                <div class="hero-art" aria-label="تصویر محصول">
-                    <div class="art-glow"></div>
-                    <div class="bottle-scene">
-                        <div class="bottle-backdrop"></div>
-                        <div class="rose"></div>
-                        <div class="flower"></div>
-                        <div class="pot"></div>
-
-                        <div class="bottle">
-                            <div class="bottle-neck"></div>
-                            <div class="bottle-body">
-                                <div class="label">
-                                    <h3>محمد</h3>
-                                    <p>گلاب محمد</p>
-                                    <div class="mini">100% طبیعی · 1000 ml</div>
-                                    <div class="seal">M</div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
