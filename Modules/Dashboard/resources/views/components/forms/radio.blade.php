@@ -2,6 +2,7 @@
     'label' => null,
     'name' => null,
     'options' => [],
+    'orientation' => 'horizontal', // horizontal | vertical
 ])
 
 <div class="block">
@@ -11,9 +12,9 @@
         </span>
     @endif
 
-    <div class="space-y-2">
+    <div class="{{ $orientation === 'horizontal' ? 'flex flex-row items-center gap-4 mt-3' : 'flex flex-col gap-3 mt-3' }}">
         @foreach($options as $value => $text)
-            <label class="flex items-center gap-2">
+            <label class="{{ $orientation === 'horizontal' ? 'flex items-center gap-2' : 'flex items-start gap-2' }}">
                 <input
                     type="radio"
                     value="{{ $value }}"
@@ -39,6 +40,7 @@
     label="product::attributes.status"
     name="form.status"
     wire:model.defer="form.status"
+    orientation="horizontal"
     :options="[
         'draft' => 'product::attributes.draft',
         'active' => 'product::attributes.active',
