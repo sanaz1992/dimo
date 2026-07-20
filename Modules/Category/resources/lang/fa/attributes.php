@@ -1,31 +1,16 @@
 <?php
 
 return [
-    'category_list' => 'لیست گروه بندی ها',
-    'category_create' => 'ایجاد گروه بندی',
-    'category_store' => '  ذخیره گروه بندی',
-    'category_edit' => 'ویرایش گروه بندی',
-    'category_update' => 'ویرایش گروه بندی',
-    'category_delete' => 'حذف گروه بندی',
-    'list' => 'لیست',
-    'create' => 'ایجاد',
-    'store' => 'ذخیره',
-    'edit' => 'ویرایش',
-    'update' => 'ویرایش',
-    'delete' => 'حذف',
-    'actions' => 'عملیات',
-    'name' => 'عنوان',
-    'form.name' => 'عنوان',
+    'categories' => 'گروه بندی',
+    'create_category' => 'افزودن گروه بندی',
+    'edit_category' => 'ویرایش گروه بندی',
+    'status' => 'وضعیت',
+    'created_at' => 'تاریخ',
     'image' => 'تصویر',
-    'form.image' => 'تصویر',
-    'code' => 'کد',
-    'form.code' => 'کد',
-    'category' => 'گروه بندی',
-    'form.category' => 'گروه بندی',
-    'form.category_id' => 'گروه بندی',
-    'form.type' => 'نوع',
-    'stock' => 'موجودی',
-    'rial' => 'ریال',
-    'add' => 'افزودن',
+    'name' => 'عنوان',
+    'row' => 'ردیف',
+    'active' => 'فعال',
+    'inactive' => 'غیرفعال',
 
-    ];
+
+];

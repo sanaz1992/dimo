@@ -63,6 +63,26 @@ class PermissionSeeder extends Seeder
                 'name' => 'products_delete',
                 'title' => 'حذف محصول',
             ],
+            [
+                'name' => 'product_categories_list',
+                'title' => 'لیست گروه بندی محصولات',
+            ],
+            [
+                'name' => 'product_categories_show',
+                'title' => 'مشاهده گروه بندی محصول',
+            ],
+            [
+                'name' => 'product_categories_create',
+                'title' => 'ایجاد گروه بندی محصول',
+            ],
+            [
+                'name' => 'product_categories_edit',
+                'title' => 'ویرایش گروه بندی محصول',
+            ],
+            [
+                'name' => 'product_categories_delete',
+                'title' => 'حذف گروه بندی محصول',
+            ],
 
         ];
 

@@ -11,6 +11,10 @@
             </x-slot:icon>
             @lang('product::attributes.create_product')
         </x-dashboard::buttons.primary-action>
+        <x-dashboard::buttons.primary-action id="btn-add-product" tag="a" class="btn-fill btn-new-tx shrink-0"
+            href="{{ route('admin.product.categories.index') }}">
+            @lang('product::attributes.product_categories')
+        </x-dashboard::buttons.primary-action>
     </x-dashboard::card.card-header>
 
 

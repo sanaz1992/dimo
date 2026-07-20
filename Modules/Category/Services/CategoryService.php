@@ -7,13 +7,15 @@ use Modules\Media\Entities\Media;
 use Modules\Media\Services\MediaService;
 use Modules\Category\Entities\Category;
 use Modules\Category\External\Contracts\CategoryRepositoryInterface;
+use Modules\Core\Helpers\SlugHelper;
 
 class CategoryService
 {
     public function __construct(
         protected CategoryRepositoryInterface $categoryRepository,
         protected MediaService $mediaService
-    ) {}
+    ) {
+    }
 
     public function list(string $orderBy = null, array $limit = [], array $with = [], array $conditions = [])
     {
@@ -29,7 +31,8 @@ class CategoryService
     {
         $image = $data['image'] ?? null;
         unset($data['image']);
-        $data['parent_id'] = strlen($data['parent_id']) ? $data['parent_id'] : null;
+        $data['slug']  = SlugHelper::generate(get_class(new Category()), $data['name']);
+        // $data['parent_id'] = strlen($data['parent_id']) ? $data['parent_id'] : null;
         return DB::transaction(function () use ($data, $image) {
             $category = $this->categoryRepository->create($data);
             if ($image) {
@@ -67,14 +70,5 @@ class CategoryService
     public function delete(Category $category): bool
     {
         return $this->categoryRepository->delete($category->id);
-    }
-
-    public function getSubCategories(Category $category)
-    {
-        return $this->list(
-            conditions: [
-                'where' => ['parent_id' => ['=', $category->id]]
-            ]
-        );
     }
 }

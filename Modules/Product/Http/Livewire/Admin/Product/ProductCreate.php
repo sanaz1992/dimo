@@ -15,7 +15,6 @@ class ProductCreate extends AdminBaseComponent
         $this->loadInitialData();
     }
 
-
     public function render()
     {
         return $this->renderView(

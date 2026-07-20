@@ -1,19 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Category\Http\Livewire\Category\CategoryCreate;
-use Modules\Category\Http\Livewire\Category\CategoryEdit;
-use Modules\Category\Http\Livewire\Category\CategoryList;
+use Modules\Category\Http\Livewire\Admin\Category\CategoryCreate;
+use Modules\Category\Http\Livewire\Admin\Category\CategoryEdit;
+use Modules\Category\Http\Livewire\Admin\Category\CategoryList;
 
 Route::middleware(['auth', 'verified', 'admin.panel'])
     ->name('admin.')
     ->prefix('/admin')
     ->group(function () {
-
-        Route::get('/categories', CategoryList::class)
-            ->middleware(['can:categories_list'])->name('categories.index');
-        Route::get('/categories/create', CategoryCreate::class)
-            ->middleware(['can:categories_create'])->name('categories.create');
-        Route::get('/categories/{category}/edit', CategoryEdit::class)
-            ->middleware(['can:categories_edit'])->name('categories.edit');
+        Route::get('/product-categories', CategoryList::class)
+            ->middleware(['can:product_categories_list'])->name('product.categories.index');
+        Route::get('/product-categories/create', CategoryCreate::class)
+            ->middleware(['can:product_categories_create'])->name('product.categories.create');
+        Route::get('/product-categories/{category}/edit', CategoryEdit::class)
+            ->middleware(['can:product_categories_edit'])->name('product.categories.edit');
     });

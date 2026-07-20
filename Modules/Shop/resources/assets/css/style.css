@@ -278,14 +278,14 @@
       margin-bottom: 20px;
     }
 
-    .eyebrow::before {
+    /* .eyebrow::before {
       content: "";
       width: 42px;
       height: 2px;
       border-radius: 999px;
       background: var(--accent-2);
       display: inline-block;
-    }
+    } */
 
     .hero-title {
       font-size: clamp(3rem, 7vw, 6rem);

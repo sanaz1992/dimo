@@ -1,0 +1,68 @@
+<section class="table-panel anim-fade-up">
+
+    <x-dashboard::card.card-header :title="__('category::attributes.categories')">
+        <x-slot:icon>
+            <img src="{{ asset('icons\sidebar\products.svg') }}" alt="categories" />
+        </x-slot:icon>
+        <x-dashboard::buttons.primary-action id="btn-add-category" tag="a" class="btn-fill btn-new-tx shrink-0"
+            href="{{ route('admin.product.categories.create') }}">
+            <x-slot:icon>
+                <img src="{{ asset('icons/header/add.svg') }}" alt="categories" />
+            </x-slot:icon>
+            @lang('category::attributes.create_category')
+        </x-dashboard::buttons.primary-action>
+    </x-dashboard::card.card-header>
+
+
+    <x-dashboard::table.table>
+        <x-slot:head>
+            <tr>
+                <th>@lang('core::attributes.row')</th>
+                <th>@lang('category::attributes.image')</th>
+                <th>@lang('category::attributes.name')</th>
+                <th>@lang('category::attributes.status')</th>
+                <th>@lang('category::attributes.created_at')</th>
+                <th class="col-actions"></th>
+            </tr>
+        </x-slot:head>
+        <x-slot:body>
+            @foreach ($categories as $category)
+                <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
+                    <x-dashboard::table.cell :label="__('core::attributes.row')">
+                        {{ $loop->index + 1 }}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('category::attributes.image')">
+                        <img alt="{{$category->title}}" class="h-10 w-10 rounded-full object-cover"
+                            src="{{ $category->main_image?->getThumbnailUrl('small') }}">
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('category::attributes.name')" class="flex items-center gap-2">
+                        {{$category->name}}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('category::attributes.status')">
+                        @if($category->is_active)
+                            <span class="chip chip-ok">@lang('category::attributes.active')</span>
+                        @else
+                            <span class="chip chip-fail">@lang('category::attributes.inactive')</span>
+                        @endif
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('category::attributes.created_at')">
+                        {{$category->created_at_jalali_date}}
+                    </x-dashboard::table.cell>
+
+                    <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
+                        <div class="flex gap-1">
+                            <x-dashboard::buttons.primary-action id="btn-edit-category-{{$category->id}}" tag="a"
+                                href="{{ route('admin.product.categories.edit', $category) }}" size="sm">
+                                <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
+                            </x-dashboard::buttons.primary-action>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </x-slot:body>
+    </x-dashboard::table.table>
+</section>
