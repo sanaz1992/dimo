@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Category\Http\Livewire\Admin\Category\CategoryCreate;
 use Modules\Category\Http\Livewire\Admin\Category\CategoryEdit;
 use Modules\Category\Http\Livewire\Admin\Category\CategoryList;
+use Modules\Product\Http\Livewire\Guest\Product\ProductList;
 
 Route::middleware(['auth', 'verified', 'admin.panel'])
     ->name('admin.')
@@ -16,3 +17,5 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
         Route::get('/product-categories/{category}/edit', CategoryEdit::class)
             ->middleware(['can:product_categories_edit'])->name('product.categories.edit');
     });
+
+Route::get('/categories/{category}/products', ProductList::class)->name('categories.products.index');

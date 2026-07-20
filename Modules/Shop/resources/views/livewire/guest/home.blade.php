@@ -71,65 +71,18 @@
             </div>
 
             <div class="categories-grid">
-                <article class="category-card">
-                    <div class="cat-illus">
-                        <div class="shape"></div>
-                        <div class="drop"></div>
-                    </div>
-                    <h3>پک هدیه</h3>
-                    <a href="#">مشاهده <span>←</span></a>
-                </article>
-
-                <article class="category-card">
-                    <div class="cat-illus">
-                        <div class="shape"></div>
-                        <div class="drop" style="height:96px;background:linear-gradient(180deg,#cfc1a5,#7f5b36);">
+                @foreach ($categories as $category)
+                    <article class="category-card">
+                        <div class="cat-illus">
+                            <img src="{{ $category->main_image?->getThumbnailUrl('small') }}" />
                         </div>
-                        <div class="leaf" style="left:8px;transform:rotate(-18deg);"></div>
-                    </div>
-                    <h3>دمنوش ها</h3>
-                    <a href="#">مشاهده <span>←</span></a>
-                </article>
-
-                <article class="category-card">
-                    <div class="cat-illus">
-                        <div class="shape"></div>
-                        <div class="drop" style="background:linear-gradient(180deg,#c7b08a,#8d6845);"></div>
-                        <div class="leaf" style="background:linear-gradient(135deg,#47a35e,#2a6b40);"></div>
-                    </div>
-                    <h3>عرق کاسنی</h3>
-                    <a href="#">مشاهده <span>←</span></a>
-                </article>
-
-                <article class="category-card">
-                    <div class="cat-illus">
-                        <div class="shape"></div>
-                        <div class="drop" style="background:linear-gradient(180deg,#d9c2a0,#7f5731);"></div>
-                        <div class="leaf" style="background:linear-gradient(135deg,#3da05f,#1f5e36);"></div>
-                    </div>
-                    <h3>عرق بیدمشک</h3>
-                    <a href="#">مشاهده <span>←</span></a>
-                </article>
-
-                <article class="category-card">
-                    <div class="cat-illus">
-                        <div class="shape"></div>
-                        <div class="drop" style="background:linear-gradient(180deg,#d4b98b,#8c5f32);"></div>
-                        <div class="leaf" style="background:linear-gradient(135deg,#3aa25d,#184d2e);"></div>
-                    </div>
-                    <h3>عرق نعناع</h3>
-                    <a href="#">مشاهده <span>←</span></a>
-                </article>
-
-                <article class="category-card">
-                    <div class="cat-illus">
-                        <div class="shape"></div>
-                        <div class="drop" style="background:linear-gradient(180deg,#ecd6af,#8e6537);"></div>
-                        <div class="leaf" style="background:linear-gradient(135deg,#46ab62,#22583b);"></div>
-                    </div>
-                    <h3>گلاب</h3>
-                    <a href="#">مشاهده <span>←</span></a>
-                </article>
+                        <h3>{{$category->name}}</h3>
+                        <a href="{{ route('categories.products.index', $category) }}">
+                            @lang('shop::attributes.show')
+                            <span>←</span>
+                        </a>
+                    </article>
+                @endforeach
             </div>
         </div>
     </section>
