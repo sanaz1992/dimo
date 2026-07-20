@@ -17,12 +17,12 @@ class UserFilter extends QueryFilter
 
     public function name($value)
     {
-        return $this->builder->where('name', 'LIKE', '%' . $value . '%');
+        return $this->builder->where('name', 'LIKE', '%'.$value.'%');
     }
 
     public function mobile($value)
     {
-        return $this->builder->where('mobile', 'LIKE', '%' . $value . '%');
+        return $this->builder->where('mobile', 'LIKE', '%'.$value.'%');
     }
 
     public function level($value)

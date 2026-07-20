@@ -13,5 +13,4 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
     public function firstOrCreate(array $condition, array $data): Product;
 
     public function update(Model $product, array $data): ?Model;
-
 }

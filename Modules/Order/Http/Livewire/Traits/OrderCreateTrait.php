@@ -12,6 +12,7 @@ trait OrderCreateTrait
     use LivewireNotify;
 
     public $count = 0;
+
     public $form = [];
 
     #[On('first-product-added')]
@@ -25,6 +26,7 @@ trait OrderCreateTrait
         } else {
             $redirectRoute = 'seller.orders.edit';
         }
+
         return redirect()->route($redirectRoute, ['order' => $order]);
     }
 
@@ -32,7 +34,7 @@ trait OrderCreateTrait
     {
         return $this->renderView('Order::livewire.order.order-create')
             ->layoutData([
-                'title' => __('order::attributes.new_order')
+                'title' => __('order::attributes.new_order'),
             ]);
     }
 }

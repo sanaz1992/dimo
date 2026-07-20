@@ -3,9 +3,7 @@
 namespace Modules\Order\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Modules\Factory\Enums\ProductionOrderItemStatus;
-use Modules\Factory\Services\HallService;
-use Modules\Factory\Services\ProductionOrderItemService;
+use Modules\Order\Entities\Order;
 use Modules\Order\Enums\OrderStatus;
 use Modules\Order\Services\OrderService;
 
@@ -13,8 +11,7 @@ class OrderController extends Controller
 {
     public function __construct(
         protected OrderService $orderService,
-    ) {
-    }
+    ) {}
 
     public function doneAllOrders()
     {
@@ -40,7 +37,7 @@ class OrderController extends Controller
         // dd($orders);
     }
 
-    public function invoice(\Modules\Order\Entities\Order $order)
+    public function invoice(Order $order)
     {
         $order->load(
             'user',

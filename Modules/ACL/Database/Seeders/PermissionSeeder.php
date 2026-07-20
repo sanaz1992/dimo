@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Hash;
 use Modules\ACL\Entities\Permission;
 use Modules\ACL\Entities\Role;
 use Modules\Core\Helpers\CodeGeneratorHelper;
-use Modules\Order\Enums\OrderListTabs;
 use Modules\User\Entities\User;
 
 class PermissionSeeder extends Seeder
@@ -113,7 +112,7 @@ class PermissionSeeder extends Seeder
                 'name' => 'sanaz',
                 'password' => Hash::make('12345678'),
                 'level' => 'admin',
-                'unique_code' => CodeGeneratorHelper::generate(get_class(new User()), 'unique_code'),
+                'unique_code' => CodeGeneratorHelper::generate(get_class(new User), 'unique_code'),
             ]
         );
         $user->assignRole($role);

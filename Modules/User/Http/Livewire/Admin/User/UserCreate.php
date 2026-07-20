@@ -14,10 +14,7 @@ class UserCreate extends AdminBaseComponent
     use CreatesUser;
     use LivewireNotify;
 
-
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function store(UserService $userService)
     {
@@ -37,12 +34,13 @@ class UserCreate extends AdminBaseComponent
             $this->notify('error', __('core::messages.create.error'));
         }
     }
+
     public function render()
     {
         return $this->renderView(
             'User::livewire.admin.user.user-create'
         )->layoutData([
-            'title' => __('user::attributes.new_user')
+            'title' => __('user::attributes.new_user'),
         ]);
     }
 }

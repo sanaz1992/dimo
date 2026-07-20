@@ -25,6 +25,6 @@ return [
         'login_with_password' => 'ورود با پسورد',
         'currency' => 'واحد پول',
         'volume_unit' => 'واحد حجم محصولات',
-    ]
+    ],
 
 ];

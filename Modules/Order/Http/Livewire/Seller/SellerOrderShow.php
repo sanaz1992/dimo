@@ -13,10 +13,15 @@ class SellerOrderShow extends SellerBaseComponent
     use LivewireNotify;
 
     public $order;
+
     public $totalSteps;
+
     public $doneSteps;
+
     public $fabrics = [];
+
     public $currency;
+
     public function mount(Order $order)
     {
         $this->order = $order;
@@ -24,8 +29,9 @@ class SellerOrderShow extends SellerBaseComponent
             ->calculateProductionProgress($order);
         $this->reloadOrderItems();
 
-        $this->currency  = app(SettingHelper::class)->currencyLabel();
+        $this->currency = app(SettingHelper::class)->currencyLabel();
     }
+
     public function reloadOrderItems()
     {
         $this->order->load(
@@ -43,7 +49,7 @@ class SellerOrderShow extends SellerBaseComponent
                     'code' => $itemFabric->fabric->code,
                     'title' => $itemFabric->fabric->title,
                     'qty' => ($this->fabrics[$itemFabric->fabric_id]['qty'] ?? 0) + $itemFabric->qty,
-                    'price' => $itemFabric->fabric_price
+                    'price' => $itemFabric->fabric_price,
                 ];
             }
         }
@@ -53,7 +59,7 @@ class SellerOrderShow extends SellerBaseComponent
     {
         return $this->renderView('Order::livewire.order.seller.seller-order-show')
             ->layoutData([
-                'title' => __('order::attributes.orders_show')
+                'title' => __('order::attributes.orders_show'),
             ]);
     }
 }

@@ -10,8 +10,6 @@ use Modules\Core\Filters\QueryFilter;
 use Modules\Core\Helpers\CodeGeneratorHelper;
 use Modules\Media\Entities\Media;
 use Modules\Media\Services\MediaService;
-use Modules\Process\Enums\ProcessType;
-use Modules\Process\Services\ProcessService;
 use Modules\User\Entities\User;
 use Modules\User\Enums\UserLevel;
 use Modules\User\External\Repositories\Contract\AddressRepositoryInterface;
@@ -25,7 +23,7 @@ class UserService
         protected AddressRepositoryInterface $addressRepository,
     ) {}
 
-    public function list(string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], QueryFilter $filter = null)
+    public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
         return $this->userRepository->all($orderBy, $limit, $with, $conditions, $filter);
     }
@@ -37,9 +35,10 @@ class UserService
 
     public function firstOrCreate($condition, $data)
     {
-        if (!isset($data['unique_code'])) {
-            $data['unique_code'] = CodeGeneratorHelper::generate(get_class(new User()), 'unique_code');
+        if (! isset($data['unique_code'])) {
+            $data['unique_code'] = CodeGeneratorHelper::generate(get_class(new User), 'unique_code');
         }
+
         return $this->userRepository->firstOrCreate(
             $condition,
             $data
@@ -50,13 +49,14 @@ class UserService
     {
 
         $user = resolve(UserService::class)->findByColumn($col, $data[$col]);
-        if (!$user) {
+        if (! $user) {
             $user = resolve(UserService::class)->create([
                 'name' => $data['name'],
                 'mobile' => $data['mobile'],
                 'password' => $data['password'],
             ]);
         }
+
         return $user;
     }
 
@@ -71,6 +71,7 @@ class UserService
                 500
             );
         }
+
         return DB::transaction(function () use ($data, $image) {
             $user = $this->userRepository->create($data);
             if (isset($data['city_id'])) {
@@ -94,6 +95,7 @@ class UserService
                 $dir = $user->uploadDir();
                 $this->mediaService->upload($user, $image, 'avatar', $dir);
             }
+
             return $user;
         });
     }
@@ -102,6 +104,7 @@ class UserService
     {
         $image = $data['image'] ?? null;
         unset($data['image']);
+
         return DB::transaction(function () use ($user, $data, $image) {
             $user = $this->userRepository->update($user, $data);
             if (isset($data['city_id'])) {
@@ -122,6 +125,7 @@ class UserService
                     $this->mediaService->delete($oldImage);
                 }
             }
+
             return $user;
         });
     }
@@ -145,6 +149,7 @@ class UserService
             if ($oldImage instanceof Media) {
                 $this->mediaService->delete($oldImage);
             }
+
             return $newImage;
         });
     }

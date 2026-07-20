@@ -7,9 +7,7 @@ use Modules\Warehouse\Services\FabricWarehouseService;
 
 class OrderItemFabricService
 {
-    public function __construct(protected OrderItemRepository $orderItemRepository)
-    {
-    }
+    public function __construct(protected OrderItemRepository $orderItemRepository) {}
 
     public function attachFabrics($orderItem, $product, array $productData): float
     {
@@ -25,11 +23,11 @@ class OrderItemFabricService
 
                 $this->orderItemRepository->createItemFabric([
                     'order_item_id' => $orderItem->id,
-                    'fabric_id'     => $fabricDetail['fabric_id'],
+                    'fabric_id' => $fabricDetail['fabric_id'],
                     // 'color_id'      => $fabricDetail['color_id'],
-                    'qty'           => $qty * $orderItem->qty,
-                    'fabric_price'  => $fabric->price,
-                    'product_required_fabric_id' => $requiredFabricId
+                    'qty' => $qty * $orderItem->qty,
+                    'fabric_price' => $fabric->price,
+                    'product_required_fabric_id' => $requiredFabricId,
                 ]);
 
                 $totalFabricPrice += $fabric->price * $qty;

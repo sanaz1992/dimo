@@ -23,7 +23,7 @@ class MediaResource extends JsonResource
 
         return [
             'collection' => $this->collection,
-            'sizes' => $sizes
+            'sizes' => $sizes,
         ];
     }
 }

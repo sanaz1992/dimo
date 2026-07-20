@@ -21,26 +21,26 @@ class JetstreamController
     public function __construct(
         protected OtpRepositoryInterface $otpRepository,
         protected UserService $userService
-    ) {
-    }
+    ) {}
 
     public function login(LoginRules $request)
     {
         $data = $request->all();
         $user = $this->userService->findByColumn('mobile', $data['mobile']);
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login')->withErrors(['message' => 'کاربر مورد نظر یافت نشد لطفا از طریق فرم ثبت نام اقدام نمایید.']);
         }
         if (Hash::check($data['password'], $user->password)) {
             return redirect()->route('login')->withErrors(['message' => 'رمز عبور وارد شده صحیح نیست.']);
         }
         Auth::loginUsingId($user->id);
-        if ($user->level == "admin") {
+        if ($user->level == 'admin') {
             return redirect()->route('admin.dashboard');
         } else {
             return redirect()->route('user.dashboard');
         }
     }
+
     public function loginSendCode(LoginSendCodeRules $request)
     {
         $data = $request->all();
@@ -144,6 +144,7 @@ class JetstreamController
 
         return view('Jetstream::auth.register-check-code', compact('data'));
     }
+
     public function registerWithOtp(RegisterCheckCodeRules $request)
     {
         $data = $request->all();
@@ -173,6 +174,7 @@ class JetstreamController
 
         return redirect()->route('admin.admins.edit', $user);
     }
+
     public function register(RegisterRules $request)
     {
         $data = $request->all();
@@ -190,7 +192,7 @@ class JetstreamController
         // $user->assignRole(['super_admin']);
         Auth::loginUsingId($user->id);
 
-        if ($user->level == "admin") {
+        if ($user->level == 'admin') {
             return redirect()->route('admin.dashboard');
         } else {
             return redirect()->route('user.dashboard');

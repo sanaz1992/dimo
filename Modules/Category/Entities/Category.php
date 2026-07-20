@@ -38,10 +38,10 @@ class Category extends Model
     public function getMainImageAttribute()
     {
         if ($this->relationLoaded('mainImageRelation')) {
-            return $this->getRelation('mainImageRelation') ?? new NullMedia();
+            return $this->getRelation('mainImageRelation') ?? new NullMedia;
         }
 
-        return $this->mainImageRelation()->first() ?? new NullMedia();
+        return $this->mainImageRelation()->first() ?? new NullMedia;
     }
 
     public function parent()

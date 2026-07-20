@@ -33,5 +33,4 @@ return [
     'enter_postal_code' => 'کد پستی را مجددا وارد کنید',
     'enter_address' => 'آدرس را مجددا وارد کنید',
 
-
 ];

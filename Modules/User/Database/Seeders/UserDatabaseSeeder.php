@@ -16,9 +16,9 @@ class UserDatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['mobile' => '09358364707'],
             [
-                'name'     => 'sanaz',
+                'name' => 'sanaz',
                 'password' => Hash::make('12345678'),
-                'level'    => 'admin',
+                'level' => 'admin',
             ]
         );
         $this->call([

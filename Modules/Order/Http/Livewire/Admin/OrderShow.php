@@ -17,9 +17,13 @@ class OrderShow extends AdminBaseComponent
     use LivewireNotify;
 
     public $order;
+
     public $totalSteps;
+
     public $doneSteps;
+
     public $currency;
+
     public function mount(Order $order)
     {
         // $this->authorize('orders_show');
@@ -30,8 +34,9 @@ class OrderShow extends AdminBaseComponent
         [$this->totalSteps, $this->doneSteps] = resolve(OrderProductionService::class)
             ->calculateProductionProgress($order);
 
-        $this->currency  = app(SettingHelper::class)->currencyLabel();
+        $this->currency = app(SettingHelper::class)->currencyLabel();
     }
+
     public function reloadOrderItems()
     {
         $this->order->load(
@@ -53,7 +58,7 @@ class OrderShow extends AdminBaseComponent
     {
         $this->authorize('orders_approved');
         try {
-            $result =  resolve(OrderService::class)->approveOrder($this->order);
+            $result = resolve(OrderService::class)->approveOrder($this->order);
             if ($result['status']) {
                 $this->notify('success', __('order::messages.confirm_order_successfully'));
             } else {
@@ -65,7 +70,9 @@ class OrderShow extends AdminBaseComponent
     }
 
     public $showCancelOrderModal = false;
+
     public $cancel_description;
+
     public function openCancelOrderModal()
     {
         $this->showCancelOrderModal = true;
@@ -73,12 +80,12 @@ class OrderShow extends AdminBaseComponent
 
     public function cancelOrder()
     {
-        if (!$this->cancel_description) {
+        if (! $this->cancel_description) {
             $this->notify('error', __('order::messages.description_for_cancel_order_is_required'));
         }
         try {
             $this->authorize('orders_approved');
-            $result =  resolve(OrderService::class)->canceleOrder($this->order, $this->cancel_description);
+            $result = resolve(OrderService::class)->canceleOrder($this->order, $this->cancel_description);
             if ($result['status']) {
                 $this->order->refresh();
                 $this->reloadOrderItems();
@@ -91,8 +98,6 @@ class OrderShow extends AdminBaseComponent
             $this->notify('error', __('core::messages.destroy.error'));
         }
     }
-
-
 
     public function shipped(int $orderId)
     {
@@ -119,11 +124,14 @@ class OrderShow extends AdminBaseComponent
     }
 
     public $showAddNoteModal = false;
+
     public $note;
+
     public function addNoteModal()
     {
         $this->showAddNoteModal = true;
     }
+
     public function storeNote()
     {
         $this->showAddNoteModal = false;
@@ -131,11 +139,12 @@ class OrderShow extends AdminBaseComponent
         $this->order->load('notes.creator');
         $this->note = '';
     }
+
     public function render()
     {
         return $this->renderView('Order::livewire.order.admin.order-show')
             ->layoutData([
-                'title' => __('order::attributes.orders_show')
+                'title' => __('order::attributes.orders_show'),
             ]);
     }
 }

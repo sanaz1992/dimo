@@ -8,5 +8,6 @@ use Modules\Order\Entities\Order;
 interface OrderRepositoryInterface extends BaseRepositoryInterface
 {
     public function changeStatus(Order $order, string $status): Order;
+
     public function allItemsHaveStatus(Order $order, array $statuses): mixed;
 }

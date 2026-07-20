@@ -7,6 +7,6 @@ return [
         'image' => [
             'mimes' => 'jpeg,png,jpg',
             'max' => 5120,
-        ]
-    ]
+        ],
+    ],
 ];

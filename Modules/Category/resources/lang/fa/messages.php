@@ -42,14 +42,14 @@ return [
     'enter_fabric_title' => 'عنوان پارچه را وارد کنید',
     'enter_production_sort' => 'ترتیب اجرای فرایند را وارد کنید',
     'delete' => 'حذف دسته بندی',
-    "category_deleted" => 'دسته بندی با موفقیت حذف شد',
-    "category_not_deleted" => 'حذف دسته بندی انجام نشد',
+    'category_deleted' => 'دسته بندی با موفقیت حذف شد',
+    'category_not_deleted' => 'حذف دسته بندی انجام نشد',
     'category_has_subcategories' => 'برای این دسته بندی :count زیردسته بندی ثبت شده است',
     'category_has_items' => 'برای این دسته بندی :count آیتم ثبت شده است',
     'are_you_sure_you_want_delete' => 'آیا از حذف دسته‌بندی مطمئن هستید؟',
     'fill_parent_if_needed' => 'اگر این دسته بندی زیر مجموعه یک دسته بندی دیگر است، آن را انتخاب کنید. برای ایجاد دسته بندی مادر باید گزینه اول را انتخاب کنید ',
-    "delete_error_message" => 'برای این دسته بندی :item_count آیتم و :subcategory_count زیردسته ثبت شده است.',
+    'delete_error_message' => 'برای این دسته بندی :item_count آیتم و :subcategory_count زیردسته ثبت شده است.',
     'select_replacement_category' => 'دسته بندی جایگزین را انتخاب کنید',
     'category_types_dont_match' => 'نوع دسته بندی ها یکسان نیست.',
-    'category_not_found' => 'دسته بندی یافت نشد'
+    'category_not_found' => 'دسته بندی یافت نشد',
 ];

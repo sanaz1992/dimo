@@ -7,6 +7,7 @@ use Livewire\Component;
 class SortSelect extends Component
 {
     public $sortBy;
+
     public $options = [];
 
     public function mount($sortBy = null, $options = [])
@@ -17,7 +18,7 @@ class SortSelect extends Component
 
     public function updatedSortBy($value)
     {
-        $this->dispatch('sortByChanged', $value); //set event for parent component
+        $this->dispatch('sortByChanged', $value); // set event for parent component
     }
 
     public function render()

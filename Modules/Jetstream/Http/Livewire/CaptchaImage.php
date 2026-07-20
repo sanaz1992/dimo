@@ -7,7 +7,9 @@ use Livewire\Component;
 class CaptchaImage extends Component
 {
     public $captchaSrc;
+
     public $configKey;
+
     public function mount($configKey = 'jetstreamcaptcha.captcha')
     {
         $this->configKey = $configKey;

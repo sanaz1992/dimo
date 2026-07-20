@@ -2,7 +2,6 @@
 
 namespace Modules\ACL\External\Repositories;
 
-use Illuminate\Database\Eloquent\Model;
 use Modules\ACL\Entities\Role;
 use Modules\ACL\External\Repositories\Contract\RoleRepositoryInterface;
 use Modules\Core\External\Repositories\BaseRepository;
@@ -17,8 +16,8 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
     public function create(array $data): Role
     {
         return Role::create([
-            'name'       => str_replace(' ', '_', $data['name']),
-            'title'      => $data['title'],
+            'name' => str_replace(' ', '_', $data['name']),
+            'title' => $data['title'],
             'guard_name' => 'web',
         ]);
     }

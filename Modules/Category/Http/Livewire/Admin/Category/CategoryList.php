@@ -12,9 +12,7 @@ class CategoryList extends AdminBaseComponent
     use LivewireNotify;
     use WithPagination;
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function render(CategoryService $categoryService)
     {

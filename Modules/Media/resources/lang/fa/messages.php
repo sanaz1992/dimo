@@ -8,5 +8,4 @@ return [
     'click_again_for_change_item_image' => 'برای تغییر تصویر ":title"، دوباره کلیک کنید',
     'click_for_upload_item' => 'برای آپلود ":title" کلیک کنید',
 
-
 ];

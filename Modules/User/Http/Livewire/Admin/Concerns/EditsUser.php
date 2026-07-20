@@ -3,8 +3,8 @@
 namespace Modules\User\Http\Livewire\Admin\Concerns;
 
 use Illuminate\Support\Facades\Hash;
-use Livewire\WithFileUploads;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\User\Entities\User;
 use Modules\User\Rules\UpdateUserRules;
@@ -17,24 +17,25 @@ trait EditsUser
     public User $user;
 
     public $form = [
-        'name'     => '',
-        'mobile'   => '',
+        'name' => '',
+        'mobile' => '',
         'password' => '',
-        'level'    => '',
-        'image'    => null,
-        'active'   => '',
+        'level' => '',
+        'image' => null,
+        'active' => '',
     ];
 
     public $initialImage;
+
     public $showAdminPasswordMessage;
 
     protected function fillUserForm(User $user): void
     {
         $this->user = $user;
 
-        $this->form['name']   = $user->name;
+        $this->form['name'] = $user->name;
         $this->form['mobile'] = $user->mobile;
-        $this->form['level']  = $user->level;
+        $this->form['level'] = $user->level;
         $this->form['active'] = (bool) $user->active;
         $settingHelper = app(SettingHelper::class);
         $this->showAdminPasswordMessage =
@@ -48,17 +49,18 @@ trait EditsUser
 
     public function getClientOriginalNameProperty()
     {
-        return   $this->form['image'] instanceof TemporaryUploadedFile ?
+        return $this->form['image'] instanceof TemporaryUploadedFile ?
             $this->form['image']->getClientOriginalName() :
             basename(parse_url($this->initialImage, PHP_URL_PATH));
     }
+
     public function updatedFormImage()
     {
         $this->validate([
             'form.image' => [
                 'image',
-                'max:' . config('media.validations.image.max'),
-                'mimes:' . config('media.validations.image.mimes'),
+                'max:'.config('media.validations.image.max'),
+                'mimes:'.config('media.validations.image.mimes'),
             ],
         ]);
     }
@@ -90,6 +92,7 @@ trait EditsUser
             trans('user::attributes')
         );
     }
+
     public function updateUser(UserService $userService)
     {
         return $userService->update($this->user, $this->form);

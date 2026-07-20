@@ -4,7 +4,6 @@ namespace Modules\Media\Services\UploadStrategies;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use Modules\Media\Contracts\FileUploadStrategyInterface;
 
 class LocalUploadStrategy implements FileUploadStrategyInterface
@@ -23,7 +22,7 @@ class LocalUploadStrategy implements FileUploadStrategyInterface
                 ? "{$baseFilename}.{$extension}"
                 : "{$baseFilename}-{$size}.{$extension}";
 
-            $path = $dir . '/' . $filename;
+            $path = $dir.'/'.$filename;
 
             Storage::disk('public')->put($path, $content);
 

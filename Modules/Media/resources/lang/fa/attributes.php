@@ -11,6 +11,4 @@ return [
 
     'image_item_selected' => 'عکس ":title" با موفقیت انتخاب شد.',
 
-
-
 ];

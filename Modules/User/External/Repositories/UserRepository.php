@@ -21,13 +21,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function create(array $data): Model
     {
         return User::create([
-            'name'     => $data['name'],
-            'mobile'   => $data['mobile'],
+            'name' => $data['name'],
+            'mobile' => $data['mobile'],
             'password' => Hash::make(ConvertDatesHelper::convertPersianNumbersToEnglish($data['password'])),
-            'level'    => $data['level'] ?? UserLevel::USER->value,
-            'unique_code' => CodeGeneratorHelper::generate(get_class(new User()), 'unique_code'),
+            'level' => $data['level'] ?? UserLevel::USER->value,
+            'unique_code' => CodeGeneratorHelper::generate(get_class(new User), 'unique_code'),
             'active' => $data['active'] ?? $data['is_active'] ?? false,
-            'expired_at' => $data['expired_at'] ?? null
+            'expired_at' => $data['expired_at'] ?? null,
         ]);
     }
 
@@ -40,6 +40,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
         $user->active = $data['active'] ?? $data['is_active'] ?? false;
         $user->save();
+
         return $user;
     }
 

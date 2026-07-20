@@ -13,7 +13,7 @@ class StoreCategoryRules
             'form.name' => ['required', 'string', 'max:255'],
             'form.type' => ['required', 'string', new Enum(CategoryType::class)],
             'form.image' => ['nullable', 'image', 'max:2048'],
-            'form.parent_id' => ['nullable', 'exists:categories,id']
+            'form.parent_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 }

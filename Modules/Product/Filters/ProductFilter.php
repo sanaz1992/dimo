@@ -22,7 +22,6 @@ class ProductFilter extends QueryFilter
         });
     }
 
-
     public function published($value)
     {
         if ($value === '1') {

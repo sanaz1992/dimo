@@ -74,8 +74,6 @@ class ProductList extends AdminBaseComponent
         $this->resetPage();
     }
 
-
-
     public function publishProduct($productId)
     {
         $this->authorize('products_publish');
@@ -101,8 +99,6 @@ class ProductList extends AdminBaseComponent
     {
         $request = new Request($this->filterData ?? []);
         $filter = new ProductFilter($request);
-
-
 
         $products = $productService->list(
             $this->sortBy ?? null,

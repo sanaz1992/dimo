@@ -4,9 +4,7 @@ namespace Modules\Media\Services\UploadStrategies;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use Modules\Media\Contracts\FileUploadStrategyInterface;
-
 
 class LiaraUploadStrategy implements FileUploadStrategyInterface
 {
@@ -24,7 +22,7 @@ class LiaraUploadStrategy implements FileUploadStrategyInterface
                 ? "{$baseFilename}.{$extension}"
                 : "{$baseFilename}-{$size}.{$extension}";
 
-            $path = $dir . '/' . $filename;
+            $path = $dir.'/'.$filename;
             Storage::disk($disk)->put($path, $content);
 
             $paths[$size] = $path;
@@ -32,7 +30,6 @@ class LiaraUploadStrategy implements FileUploadStrategyInterface
 
         return $paths;
     }
-
 
     public function delete(string $filePath)
     {

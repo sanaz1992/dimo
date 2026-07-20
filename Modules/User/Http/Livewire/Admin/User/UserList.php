@@ -13,18 +13,22 @@ class UserList extends AdminBaseComponent
     // use Authorizable;
 
     public $columns = [];
+
     public $rows = [];
+
     public $statusConfig = [];
+
     public $type;
-    public function mount(string $type = null)
+
+    public function mount(?string $type = null)
     {
         $this->authorize('users_list');
         $this->type = $type;
         $this->columns = [
-            ['key' => 'avatar', 'label' =>  __('user::attributes.avatar')],
-            ['key' => 'name', 'label' =>  __('user::attributes.name')],
-            ['key' => 'mobile', 'label' =>  __('user::attributes.mobile')],
-            ['key' => 'status', 'label' =>  __('user::attributes.status')],
+            ['key' => 'avatar', 'label' => __('user::attributes.avatar')],
+            ['key' => 'name', 'label' => __('user::attributes.name')],
+            ['key' => 'mobile', 'label' => __('user::attributes.mobile')],
+            ['key' => 'status', 'label' => __('user::attributes.status')],
         ];
     }
 
@@ -33,7 +37,7 @@ class UserList extends AdminBaseComponent
         $conditions = [
             'where' => [
                 'level' => ['=', UserLevel::USER->value],
-                'id' => ['!=', 1]
+                'id' => ['!=', 1],
             ],
         ];
 
@@ -41,7 +45,7 @@ class UserList extends AdminBaseComponent
 
         return $this->renderView('User::livewire.admin.user.user-list', compact('users'))
             ->layoutData([
-                'title' => __('user::attributes.users_list')
+                'title' => __('user::attributes.users_list'),
             ]);
     }
 }

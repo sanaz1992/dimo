@@ -9,12 +9,13 @@ use Modules\User\Services\UserService;
 trait CreatesUser
 {
     use WithFileUploads;
+
     public $form = [
-        'name'     => '',
-        'mobile'   => '',
+        'name' => '',
+        'mobile' => '',
         'password' => '',
-        'image'    => null,
-        'active'   => true,
+        'image' => null,
+        'active' => true,
     ];
 
     protected function userRules(): array
@@ -34,6 +35,7 @@ trait CreatesUser
     protected function createUser(UserService $userService, string $level)
     {
         $this->form['level'] = $level;
+
         return $userService->create($this->form);
     }
 
@@ -42,9 +44,9 @@ trait CreatesUser
         $this->validate([
             'form.image' => [
                 'image',
-                'max:' . config("media.validations.image.max"),
-                'mimes:' . config("media.validations.image.mimes")
-            ]
+                'max:'.config('media.validations.image.max'),
+                'mimes:'.config('media.validations.image.mimes'),
+            ],
         ]);
     }
 

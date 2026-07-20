@@ -4,21 +4,31 @@ namespace Modules\Order\Http\Livewire\Component;
 
 use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Modules\Factory\Entities\Hall;
 
 class AdvancedFilters extends Component
 {
     public $code = '';
-    public $seller = '';
-    public $created_at_from = '';
-    public $created_at_to = '';
-    public $started_at_from = '';
-    public $started_at_to = '';
-    public $finished_at_from = '';
-    public $finished_at_to = '';
-    public $price_min = '';
-    public $price_max = '';
-    public $hall = '';
 
+    public $seller = '';
+
+    public $created_at_from = '';
+
+    public $created_at_to = '';
+
+    public $started_at_from = '';
+
+    public $started_at_to = '';
+
+    public $finished_at_from = '';
+
+    public $finished_at_to = '';
+
+    public $price_min = '';
+
+    public $price_max = '';
+
+    public $hall = '';
 
     public function mount(
         $code = null,
@@ -83,9 +93,10 @@ class AdvancedFilters extends Component
         }
         if ($this->hall) {
             $count++;
-        }        return $count;
-    }
+        }
 
+        return $count;
+    }
 
     public function apply()
     {
@@ -112,7 +123,8 @@ class AdvancedFilters extends Component
 
     public function render()
     {
-        $halls = \Modules\Factory\Entities\Hall::all();
+        $halls = Hall::all();
+
         return view('Order::components.filters', compact('halls'));
     }
 }

@@ -10,6 +10,7 @@ use Modules\User\Enums\UserLevel;
 class AdminDashboard extends AdminBaseComponent
 {
     use LivewireNotify;
+
     public $tab;
 
     public function mount()
@@ -17,6 +18,7 @@ class AdminDashboard extends AdminBaseComponent
         $user = auth()->user();
         if ($user->level != UserLevel::ADMIN->value) {
             $this->notify('error', __('core::messages.access_error'));
+
             return redirect()->route('logout');
         }
     }
@@ -26,15 +28,15 @@ class AdminDashboard extends AdminBaseComponent
     {
         $this->setColumns();
     }
-    public function setColumns()
-    {
-    }
+
+    public function setColumns() {}
+
     public function render()
     {
         return $this->renderView(
             'dashboard::livewire.admin.admin-dashboard'
         )->layoutData([
-            'title' => __('core::attributes.dashboard')
+            'title' => __('core::attributes.dashboard'),
         ]);
     }
 }

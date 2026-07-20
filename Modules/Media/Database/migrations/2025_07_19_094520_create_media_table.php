@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->morphs('mediaable');
-            $table->string('collection')->default('default')->comment('avatar,gallery,etc.'); //avatar,gallery,...
+            $table->string('collection')->default('default')->comment('avatar,gallery,etc.'); // avatar,gallery,...
             $table->string('file_name');
             $table->string('origin_name');
             $table->string('mime_type');

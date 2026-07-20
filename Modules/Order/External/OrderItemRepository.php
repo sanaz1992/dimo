@@ -26,6 +26,7 @@ class OrderItemRepository extends BaseRepository implements OrderItemRepositoryI
             return false;
         }
         $item->item_fabrics()->delete();
+
         return $item->delete();
     }
 

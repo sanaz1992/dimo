@@ -17,8 +17,8 @@ enum SettingType: string
     public static function labels(): array
     {
         return [
-            self::TEXTAREA->value  => 'متن',
-            self::TEXT->value  => 'عنوان',
+            self::TEXTAREA->value => 'متن',
+            self::TEXT->value => 'عنوان',
             self::IMAGE->value => 'تصویر',
             self::BOOL->value => 'بله/خیر',
         ];

@@ -10,8 +10,7 @@ class ProductDisplayPriceService
 {
     public function __construct(
         protected SellerPriceService $sellerPriceService
-    ) {
-    }
+    ) {}
 
     public function resolve(Product $product, ?User $user = null): int
     {

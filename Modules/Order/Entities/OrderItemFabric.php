@@ -16,13 +16,14 @@ class OrderItemFabric extends Model
         'color_id',
         'qty',
         'fabric_price',
-        'product_required_fabric_id'
+        'product_required_fabric_id',
     ];
 
     public function order_item(): BelongsTo
     {
         return $this->belongsTo(OrderItem::class);
     }
+
     public function fabric(): BelongsTo
     {
         return $this->belongsTo(FabricWarehouse::class, 'fabric_id');

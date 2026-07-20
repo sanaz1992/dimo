@@ -12,7 +12,7 @@ class EnsureSellerPanelAccess
     {
         $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             abort(401);
         }
 

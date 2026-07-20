@@ -24,8 +24,8 @@ enum OrderStatus: string
     public static function labels(): array
     {
         return [
-            self::DRAFT->value   => 'پیش نویس',
-            self::AWAITING_SALES_MANAGER_APPROVAL->value  => 'در انتظار تایید مدیر فروش',
+            self::DRAFT->value => 'پیش نویس',
+            self::AWAITING_SALES_MANAGER_APPROVAL->value => 'در انتظار تایید مدیر فروش',
             self::APPROVED->value => 'تایید مدیر فروش',
             self::CANCELED->value => 'لغو شده',
             self::IN_PRODUCTION->value => 'در حال تولید',
@@ -46,8 +46,8 @@ enum OrderStatus: string
     public static function colors(): array
     {
         return [
-            self::DRAFT->value   => 'bg-purple-50 text-purple-700 inset-ring-purple-500/10',
-            self::AWAITING_SALES_MANAGER_APPROVAL->value  => 'bg-yellow-50 text-yellow-700 inset-ring-yellow-600/20',
+            self::DRAFT->value => 'bg-purple-50 text-purple-700 inset-ring-purple-500/10',
+            self::AWAITING_SALES_MANAGER_APPROVAL->value => 'bg-yellow-50 text-yellow-700 inset-ring-yellow-600/20',
             self::APPROVED->value => 'bg-green-50 text-green-700 inset-ring-green-600/20',
             self::CANCELED->value => 'bg-red-50 text-red-700 inset-ring-red-600/10',
             self::IN_PRODUCTION->value => 'bg-blue-50 text-blue-700 inset-ring-blue-700/10',
@@ -56,9 +56,10 @@ enum OrderStatus: string
             self::PACKAGING->value => 'bg-indigo-50 text-indigo-700 inset-ring-indigo-700/10',
             self::AWAITING_SHIPPED->value => 'bg-pink-50 text-pink-700 inset-ring-pink-700/10',
             self::SHIPPED->value => 'bg-sky-50 text-sky-700 inset-ring-sky-600/20',
-            self::DELIVERED->value =>  'bg-emerald-50 text-emerald-700 inset-ring-emerald-600/20',
+            self::DELIVERED->value => 'bg-emerald-50 text-emerald-700 inset-ring-emerald-600/20',
         ];
     }
+
     public function color(): string
     {
         return self::colors()[$this->value];
@@ -74,7 +75,7 @@ enum OrderStatus: string
             self::PRODUCED->value,
             self::PACKAGING->value,
             self::AWAITING_SHIPPED->value,
-            self::SHIPPED->value
+            self::SHIPPED->value,
         ];
     }
 }

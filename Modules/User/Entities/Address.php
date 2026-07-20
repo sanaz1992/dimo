@@ -2,8 +2,8 @@
 
 namespace Modules\User\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 // use Modules\User\Database\Factories\AddressFactory;

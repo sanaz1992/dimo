@@ -22,8 +22,7 @@ class OrderService
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
         protected OrderItemService $orderItemService,
-    ) {
-    }
+    ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
@@ -67,7 +66,7 @@ class OrderService
             'user_id' => $user ? $user->id : null,
             'seller_id' => auth()->id(),
             'code' => ($raw === null || $raw === '')
-                ? CodeGeneratorHelper::generate(get_class(new Order()))
+                ? CodeGeneratorHelper::generate(get_class(new Order))
                 : $raw,
             'description' => $orderData['description'] ?? null,
             'status' => OrderStatus::DRAFT->value,

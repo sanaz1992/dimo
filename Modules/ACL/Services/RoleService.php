@@ -10,7 +10,7 @@ class RoleService
 {
     public function __construct(protected RoleRepositoryInterface $roleRepository) {}
 
-    public function list(string $orderBy = null, array $limit = [], array $with = [], array $conditions = [])
+    public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [])
     {
         return $this->roleRepository->all($orderBy, $limit, $with, $conditions);
     }
@@ -20,6 +20,7 @@ class RoleService
         return DB::transaction(function () use ($data) {
             $role = $this->roleRepository->create($data);
             $role->syncPermissions($data['selectedPermissions']);
+
             return $role;
         });
     }
@@ -29,6 +30,7 @@ class RoleService
         return DB::transaction(function () use ($data, $role) {
             $this->roleRepository->update($role, $data);
             $role->syncPermissions($data['selectedPermissions']);
+
             return $role;
         });
     }

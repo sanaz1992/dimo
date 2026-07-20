@@ -9,8 +9,8 @@ use Modules\Product\Http\Livewire\Concerns\CreatesProduct;
 class ProductEdit extends AdminBaseComponent
 {
     use CreatesProduct;
-    protected $queryString = ['currentStep', 'type'];
 
+    protected $queryString = ['currentStep', 'type'];
 
     public function mount(Product $product)
     {
@@ -22,7 +22,7 @@ class ProductEdit extends AdminBaseComponent
     {
         return $this->renderView('Product::livewire.admin.product.product-edit')
             ->layoutData([
-                'title' => __('product::attributes.edit_product') . ' ' . $this->product->name,
+                'title' => __('product::attributes.edit_product').' '.$this->product->name,
             ]);
     }
 }

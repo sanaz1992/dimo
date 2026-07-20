@@ -26,6 +26,7 @@ class CodeGeneratorHelper
                     foreach ($condition as $col => $val) {
                         if ($val instanceof \Closure) {
                             $query = $query->where($val);
+
                             continue;
                         }
                         if ($val[0] == 'LIKE') {
@@ -36,7 +37,7 @@ class CodeGeneratorHelper
                 }
             }
             $found = $query->where($column, $code)->first();
-            if (!$found) {
+            if (! $found) {
                 break;
             }
         }

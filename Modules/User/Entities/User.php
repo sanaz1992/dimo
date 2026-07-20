@@ -10,19 +10,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Modules\Process\Entities\Process;
 use Modules\Core\Traits\Filterable;
 use Modules\Media\Entities\Media;
 use Modules\Media\Entities\NullMedia;
+use Modules\Process\Entities\Process;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use Notifiable;
-    use HasRoles;
-    use SoftDeletes;
     use Filterable;
+    use HasApiTokens;
+    use HasRoles;
+    use Notifiable;
+    use SoftDeletes;
 
     protected $guard_name = 'web';
 
@@ -43,7 +43,7 @@ class User extends Authenticatable
     {
         return [
             'mobile_verified_at' => 'datetime',
-            'password'           => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
@@ -54,13 +54,14 @@ class User extends Authenticatable
 
     public function uploadDir(): string
     {
-        return 'uploads/users/' . $this->id;
+        return 'uploads/users/'.$this->id;
     }
 
     public function medias(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediaable');
     }
+
     public function getStatusAttribute()
     {
         if ($this->active) {
@@ -69,6 +70,7 @@ class User extends Authenticatable
             return ['color' => 'bg-red-50 text-red-700 inset-ring-red-600/10', 'title' => 'غیرفعال'];
         }
     }
+
     public function getCreatedAtJalaliDateAttribute()
     {
         return verta($this->created_at)->format('Y/m/d');
@@ -83,18 +85,20 @@ class User extends Authenticatable
     {
         return verta($this->expired_at)->format('Y/m/d H:i:s');
     }
+
     public function mainImageRelation(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediaable')
             ->where('collection', 'avatar');
     }
+
     public function getAvatarAttribute()
     {
         if ($this->relationLoaded('mainImageRelation')) {
-            return $this->getRelation('mainImageRelation') ?? new NullMedia();
+            return $this->getRelation('mainImageRelation') ?? new NullMedia;
         }
 
-        return $this->mainImageRelation()->first() ?? new NullMedia();
+        return $this->mainImageRelation()->first() ?? new NullMedia;
     }
 
     public function addresses(): HasMany

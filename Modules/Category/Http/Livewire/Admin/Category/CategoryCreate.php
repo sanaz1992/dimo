@@ -19,7 +19,7 @@ class CategoryCreate extends AdminBaseComponent
         return $this->renderView(
             'Category::livewire.admin.category.category-create'
         )->layoutData([
-            'title' => __('category::attributes.create_category')
+            'title' => __('category::attributes.create_category'),
         ]);
     }
 }

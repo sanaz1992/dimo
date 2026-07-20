@@ -2,8 +2,8 @@
 
 namespace Modules\Jetstream\Rules;
 
-use Modules\Core\Rules\Mobile;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Rules\Mobile;
 
 class RegisterRules extends FormRequest
 {
@@ -19,11 +19,11 @@ class RegisterRules extends FormRequest
 
     public static function rules(): array
     {
-        return  [
+        return [
             'name' => ['required', 'string', 'min:3'],
-            'mobile' => ['required', 'string', 'max:11', new Mobile(), 'unique:users,mobile'],
+            'mobile' => ['required', 'string', 'max:11', new Mobile, 'unique:users,mobile'],
             'captcha' => ['required', 'captcha'],
-            'password' => ['required', 'min:8', 'string', 'confirmed']
+            'password' => ['required', 'min:8', 'string', 'confirmed'],
         ];
     }
 }

@@ -11,7 +11,6 @@ use Modules\User\Services\UserService;
 class UserEdit extends AdminBaseComponent
 {
     use EditsUser;
-
     use LivewireNotify;
 
     public function mount(User $user)

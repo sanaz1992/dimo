@@ -25,7 +25,7 @@ return [
 
     'ml' => 'میلی لیتر',
 
-    'show_products' =>  ' مشاهده محصولات',
+    'show_products' => ' مشاهده محصولات',
     'product_categories' => 'گروه بندی محصولات',
 
 ];

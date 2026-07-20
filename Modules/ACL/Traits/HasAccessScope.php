@@ -9,14 +9,14 @@ trait HasAccessScope
     public function scopeVisibleFor(Builder $query): Builder
     {
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             return $query->whereRaw('1 = 0');
         }
         if ($user->hasRole('super_admin')) {
             return $query;
         }
         $user->load('charts');
-        if (!count($user->charts)) {
+        if (! count($user->charts)) {
             return $query->whereRaw('1 = 0');
         }
         // مدیر کل → همه چیز
@@ -41,7 +41,7 @@ trait HasAccessScope
             if (empty($hallIds)) {
                 $hallIds = $stationCharts->pluck('hall_id')->unique()->toArray();
             }
-            if (!empty($hallIds)) {
+            if (! empty($hallIds)) {
                 $columns['hall_id'] = explode('.', $columns['hall_id']);
                 if (count($columns['hall_id']) > 1) {
                     $query->whereHas($columns['hall_id'][0], function ($r) use ($columns, $hallIds) {
@@ -63,7 +63,7 @@ trait HasAccessScope
 
             $stationIds = $stationCharts->pluck('hall_station_id')->toArray();
 
-            if (!empty($stationIds)) {
+            if (! empty($stationIds)) {
                 $columns['station_id'] = explode('.', $columns['station_id']);
                 if (count($columns['station_id']) > 1) {
                     $query->whereHas($columns['station_id'][0], function ($r) use ($columns, $stationIds) {
@@ -74,6 +74,7 @@ trait HasAccessScope
                 }
             }
         }
+
         return $query;
     }
 }

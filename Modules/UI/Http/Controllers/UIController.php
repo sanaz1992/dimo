@@ -2,8 +2,8 @@
 
 namespace Modules\UI\Http\Controllers;
 
-use Modules\Core\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Core\Http\Controllers\Controller;
 
 class UIController extends Controller
 {

@@ -2,15 +2,15 @@
 
 namespace Modules\Category\Http\Livewire\Concerns;
 
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use Modules\Category\Services\CategoryService;
 use Modules\Core\Traits\LivewireNotify;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 trait CreatesCategory
 {
-    use WithFileUploads;
     use LivewireNotify;
+    use WithFileUploads;
 
     public $form = [
         'image' => '',
@@ -18,9 +18,13 @@ trait CreatesCategory
         'description' => '',
         'is_active' => true,
     ];
+
     public $imageConfig;
+
     public $category = null;
+
     public $initialImage;
+
     protected function loadInitialData($category = null)
     {
         $this->imageConfig = config('media.validations.image');
@@ -40,7 +44,7 @@ trait CreatesCategory
     {
         $this->validate(
             [
-                'form.image' => ['nullable', 'image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
+                'form.image' => ['nullable', 'image', 'max:'.config('media.validations.image.max'), 'mimes:'.config('media.validations.image.mimes')],
                 'form.name' => ['required', 'string', 'max:255'],
                 'form.is_active' => ['required', 'in:0,1'],
             ],
@@ -77,13 +81,15 @@ trait CreatesCategory
     {
         $this->validate(
             [
-                'form.image' => ['image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
+                'form.image' => ['image', 'max:'.config('media.validations.image.max'), 'mimes:'.config('media.validations.image.mimes')],
             ],
             trans('category::validation'),
             trans('category::attributes')
         );
     }
+
     public int $imageUploadKey = 0;
+
     public function removeImage()
     {
         $this->form['image'] = null;
@@ -101,6 +107,7 @@ trait CreatesCategory
 
         return $this->initialImage;
     }
+
     public function getClientOriginalNameProperty(): ?string
     {
         $image = $this->form['image'] ?? null;

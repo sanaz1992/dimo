@@ -12,6 +12,7 @@ class OrderProductionService
         protected HallProductionProcessService $hallProductionProcessService,
         protected ProductionOrderItemService $productionOrderItemService
     ) {}
+
     public function calculateProductionProgress(Order $order): array
     {
 
@@ -31,12 +32,12 @@ class OrderProductionService
 
         $conditions = [
             'whereIn' => [
-                'order_item_id' => [$order->items->pluck('id')->toArray()]
-            ]
+                'order_item_id' => [$order->items->pluck('id')->toArray()],
+            ],
         ];
         $productionOrderItems = $this->productionOrderItemService->list(null, [], [], $conditions);
         $productionOrderItems->loadCount([
-            'steps as done_steps_count' => fn($q) => $q->where('status', 'done')
+            'steps as done_steps_count' => fn ($q) => $q->where('status', 'done'),
         ]);
 
         // Calculate the total number of completed steps

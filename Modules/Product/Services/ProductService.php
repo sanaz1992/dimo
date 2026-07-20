@@ -57,6 +57,7 @@ class ProductService
     {
         $image = $data['image'] ?? null;
         unset($data['image']);
+
         return DB::transaction(function () use ($product, $data, $image) {
             $product = $this->productRepository->update($product, $data);
             if ($image) {
@@ -67,6 +68,7 @@ class ProductService
                     $this->mediaService->delete($oldImage);
                 }
             }
+
             return $product;
         });
     }
@@ -74,8 +76,10 @@ class ProductService
     public function createProductSku(Product $product, array $skuData)
     {
         $skuData['product_id'] = $product->id;
+
         return DB::transaction(function () use ($skuData) {
             $productSku = $this->productSkuRepository->create($skuData);
+
             return $productSku;
         });
     }
@@ -85,12 +89,13 @@ class ProductService
         $product->loadCount(['skus' => function ($q) use ($skuId) {
             $q->where('id', $skuId);
         }]);
-        if (!$product->skus_count) {
+        if (! $product->skus_count) {
             throw new InvalidArgumentException(__('product::messages.the_selected_variation_is_not_available_for_this_product'));
         }
 
         return DB::transaction(function () use ($skuId) {
             $result = $this->productSkuRepository->delete($skuId);
+
             return $result;
         });
     }

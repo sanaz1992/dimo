@@ -2,9 +2,9 @@
 
 namespace Modules\Order\Observers;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\Order\Entities\OrderItem;
 use Modules\Order\Entities\OrderItemStatusLog;
-use Illuminate\Support\Facades\Auth;
 
 class OrderItemObserver
 {

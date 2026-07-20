@@ -5,19 +5,22 @@ namespace Modules\Core\Http\Livewire\Admin;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Modules\Core\Enums\SettingType;
-use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Services\SettingService;
 use Modules\Core\Traits\LivewireNotify;
 
 class SettingEdit extends AdminBaseComponent
 {
-    // use AuthorizesRequests;
-    use WithFileUploads;
     use LivewireNotify;
 
+    // use AuthorizesRequests;
+    use WithFileUploads;
+
     public array $form = [];
+
     public $settings;
+
     public array $initialImage = [];
+
     public $imageConfig;
 
     public function mount()
@@ -51,8 +54,8 @@ class SettingEdit extends AdminBaseComponent
             [
                 'form.image' => [
                     'image',
-                    'max:' . config("media.validations.image.max"),
-                    'mimes:' . config("media.validations.image.mimes")
+                    'max:'.config('media.validations.image.max'),
+                    'mimes:'.config('media.validations.image.mimes'),
                 ],
             ],
             trans('product::validation'),
@@ -63,7 +66,7 @@ class SettingEdit extends AdminBaseComponent
     public function removeImage(string $key)
     {
 
-        $deleteMedia =  resolve(SettingService::class)->deleteMedia($key);
+        $deleteMedia = resolve(SettingService::class)->deleteMedia($key);
         if ($deleteMedia) {
             $this->form[$key] = null;
             $this->initialImage[$key] = null;
@@ -101,7 +104,7 @@ class SettingEdit extends AdminBaseComponent
     {
         return $this->renderView('Core::livewire.admin.setting-edit')
             ->layoutData([
-                'title' => __('core::attributes.settings')
+                'title' => __('core::attributes.settings'),
             ]);
     }
 }

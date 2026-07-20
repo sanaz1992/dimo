@@ -3,13 +3,14 @@
 namespace Modules\Core\Http\Livewire\Admin;
 
 use Livewire\Component;
-use Modules\Product\Entities\Product;
 use Modules\Product\Services\ProductService;
 
 class SearchNavbar extends Component
 {
     public $showSearchBox = false;
+
     public $products;
+
     public $search;
 
     public function changeQuery($value)
@@ -19,11 +20,11 @@ class SearchNavbar extends Component
             $this->showSearchBox = true;
             $conditions = [
                 'where' => [
-                    'title' => ['LIKE', $value]
+                    'title' => ['LIKE', $value],
                 ],
                 'orWhere' => [
-                    'code' => ['LIKE', $value]
-                ]
+                    'code' => ['LIKE', $value],
+                ],
             ];
             $this->products = resolve(ProductService::class)
                 ->list(null, [], [], $conditions);

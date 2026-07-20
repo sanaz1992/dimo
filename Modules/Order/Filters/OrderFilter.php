@@ -2,8 +2,8 @@
 
 namespace Modules\Order\Filters;
 
-use Modules\Core\Filters\QueryFilter;
 use Illuminate\Http\Request;
+use Modules\Core\Filters\QueryFilter;
 
 class OrderFilter extends QueryFilter
 {
@@ -17,15 +17,15 @@ class OrderFilter extends QueryFilter
 
     public function code($value)
     {
-        return $this->builder->where('code', 'LIKE', '%' . $value . '%');
+        return $this->builder->where('code', 'LIKE', '%'.$value.'%');
     }
 
     public function seller($value)
     {
         return $this->builder->whereHas('seller', function ($q) use ($value) {
-            $q->where('name', 'LIKE', '%' . $value . '%')
-                ->orWhere('unique_code', 'LIKE', '%' . $value . '%')
-                ->orWhere('mobile', 'LIKE', '%' . $value . '%');
+            $q->where('name', 'LIKE', '%'.$value.'%')
+                ->orWhere('unique_code', 'LIKE', '%'.$value.'%')
+                ->orWhere('mobile', 'LIKE', '%'.$value.'%');
         });
     }
 
@@ -35,10 +35,12 @@ class OrderFilter extends QueryFilter
             $q->where('id', $value);
         });
     }
+
     public function created_at_from($value)
     {
         return $this->builder->where('created_at', '>=', $value);
     }
+
     public function created_at_to($value)
     {
         return $this->builder->where('created_at', '<=', $value);

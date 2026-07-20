@@ -2,25 +2,21 @@
 
 namespace Modules\Core\Services;
 
-use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Morilog\Jalali\Jalalian;
-use SoapClient;
 
 class SmsIr
 {
     /**
-     * @param array $mobiles
-     * @param int $userFormUrlId
-     * @param string $smsText
+     * @param  array  $mobiles
+     * @param  int  $userFormUrlId
+     * @param  string  $smsText
      */
     public static function sendVerify(string $mobile, int $otp)
     {
         try {
 
             $curl = curl_init();
-            curl_setopt_array($curl, array(
+            curl_setopt_array($curl, [
                 CURLOPT_URL => 'https://api.sms.ir/v1/send/verify',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
@@ -30,22 +26,22 @@ class SmsIr
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_POSTFIELDS => '{
-                    "mobile": "' . $mobile . '",
+                    "mobile": "'.$mobile.'",
                     "templateId": 110134,
                     "parameters": [
                         {
                             "name": "OTP",
-                            "value": "' . $otp . '"
+                            "value": "'.$otp.'"
                         }
                     ]
                 }',
-                CURLOPT_HTTPHEADER => array(
+                CURLOPT_HTTPHEADER => [
                     'Content-Type: application/json',
                     'Accept: text/plain',
-                    'x-api-key: fJudg1G1reAMigTBKAvYiuIo2gd7zJcbsnDWiBvbRVoPmdEI'//sandbox
+                    'x-api-key: fJudg1G1reAMigTBKAvYiuIo2gd7zJcbsnDWiBvbRVoPmdEI', // sandbox
                     // 'x-api-key: qV6dH8VbPg9dggmf4bZhzmKskfey4D8ByZ6s3XzaY3eLhz53'//production
-                ),
-            ));
+                ],
+            ]);
             $response = curl_exec($curl);
             curl_close($curl);
             $response = json_decode($response);

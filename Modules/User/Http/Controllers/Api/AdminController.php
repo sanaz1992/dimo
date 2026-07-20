@@ -37,7 +37,7 @@ class AdminController extends Controller
         $level = $filter->get('level');
 
         if ($level) {
-            if (!UserLevel::tryFrom($level)) {
+            if (! UserLevel::tryFrom($level)) {
                 return $this->respondError(
                     'مقدار درخواستی برای level معتبر نیست',
                     422
@@ -57,17 +57,18 @@ class AdminController extends Controller
             $deleted = $filter->get('deleted');
             if ($deleted) {
                 $conditions = array_merge($conditions, [
-                    'trashed' => 'only'
+                    'trashed' => 'only',
                 ]);
             }
-            //get admin lists
+            // get admin lists
             $users = $this->userService->list(null, [10, true], ['mainImageRelation'], $conditions, $filter);
 
             return $this->respondSuccess(
                 UserResource::collection($users)->resolve()
             );
         } catch (\Exception $e) {
-            Log::error('Error fetching admins: ' . $e->getMessage());
+            Log::error('Error fetching admins: '.$e->getMessage());
+
             return $this->respondError('خطا در بازیابی لیست مدیران.', 500); // 500 Internal Server Error
         }
     }
@@ -75,6 +76,7 @@ class AdminController extends Controller
     public function show(User $admin)
     {
         $admin->load('roles', 'permissions');
+
         return $this->respondSuccess(
             (new UserResource($admin))->resolve()
         );
@@ -86,6 +88,7 @@ class AdminController extends Controller
         $data['level'] = $data['level'] ?? UserLevel::ADMIN->value;
         $user = $this->userService->create($data);
         $user->load('roles', 'permissions');
+
         return $this->respondSuccess(
             (new UserResource($user))->resolve()
         );
@@ -97,6 +100,7 @@ class AdminController extends Controller
         // $data['level'] = $data['level'] ?? UserLevel::ADMIN->value;
         $user = $this->userService->update($admin, $data);
         $user->load('roles', 'permissions');
+
         return $this->respondSuccess(
             (new UserResource($user))->resolve()
         );
@@ -124,6 +128,7 @@ class AdminController extends Controller
     public function getAdminRoles(User $user)
     {
         $user->load('roles', 'permissions');
+
         return $this->respondSuccess(
             (new UserResource($user))->resolve()
         );
@@ -136,6 +141,7 @@ class AdminController extends Controller
         $data['selectedPermissions'] = $data['permissions'];
         resolve(UserRoleService::class)->updateUserRoles($user, $data);
         $user->load('roles', 'permissions');
+
         return $this->respondSuccess(
             (new UserResource($user))->resolve()
         );
@@ -156,6 +162,7 @@ class AdminController extends Controller
         $grouped = collect($permissions)
             ->map(fn ($item) => collect($item)->only(['name', 'title', 'section', 'group']))
             ->groupBy(['section', 'group']);
+
         return $this->respondSuccess(
             $grouped,
             'عملیات با موفقیت انجام شد.',
@@ -166,6 +173,7 @@ class AdminController extends Controller
     public function updateUserImage(UpdateUserImageRequest $request, User $user): JsonResponse
     {
         $media = $this->userService->updateImage($user, $request->file('image'));
+
         return $this->respondSuccess(
             data: new MediaResource($media)
         );

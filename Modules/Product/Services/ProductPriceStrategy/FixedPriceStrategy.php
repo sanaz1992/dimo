@@ -8,7 +8,7 @@ final class FixedPriceStrategy implements ProductPriceStrategy
 {
     public function supports(Product $product): bool
     {
-        return !(bool) cache('settings')->where('key', 'auto_calculate_product_cost')->first()->value;
+        return ! (bool) cache('settings')->where('key', 'auto_calculate_product_cost')->first()->value;
     }
 
     public function getPrice(Product $product): int

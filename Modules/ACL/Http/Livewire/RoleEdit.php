@@ -14,21 +14,25 @@ class RoleEdit extends AdminBaseComponent
 {
     // use AuthorizesRequests;
     use LivewireNotify;
+
     public Role $role;
+
     public $form = [
-        'title'               => '',
+        'title' => '',
         'selectedPermissions' => [],
     ];
 
     public $permissions;
+
     public $message;
+
     public function mount(Role $role)
     {
         // $this->authorize('roles_edit');
-        $this->role                        = $role;
-        $this->form['title']               = $role->title;
+        $this->role = $role;
+        $this->form['title'] = $role->title;
         $this->form['selectedPermissions'] = $role->permissions->pluck('name')->toArray();
-        $this->permissions                 = Permission::get();
+        $this->permissions = Permission::get();
     }
 
     public function update(RoleService $roleService)
@@ -44,11 +48,12 @@ class RoleEdit extends AdminBaseComponent
             $this->notify('error', __('core::messages.create.error'));
         }
     }
+
     public function render()
     {
         return $this->renderView('acl::livewire.role-edit')
             ->layoutData([
-                'title' => __('acl::attributes.roles_edit')
+                'title' => __('acl::attributes.roles_edit'),
             ]);
     }
 }

@@ -3,9 +3,7 @@
 namespace Modules\Core\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Modules\Media\Entities\Media;
 use Modules\User\Entities\User;
 
 class History extends Model
@@ -18,7 +16,7 @@ class History extends Model
         'old_value',
         'new_value',
         'action',
-        'description'
+        'description',
     ];
 
     public function historiable(): MorphTo

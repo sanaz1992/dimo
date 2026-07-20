@@ -2,6 +2,6 @@
 
 return [
     'thumbnails' => [
-        'small'  => [50, 50],
+        'small' => [50, 50],
     ],
 ];

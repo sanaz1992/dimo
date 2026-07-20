@@ -39,7 +39,7 @@ class CategoryDatabaseSeeder extends Seeder
                 'title' => 'کوسن',
             ],
         ];
-        $product_categories = array_map(fn($cat) => [...$cat, 'type' => CategoryType::PRODUCT], $product_categories);
+        $product_categories = array_map(fn ($cat) => [...$cat, 'type' => CategoryType::PRODUCT], $product_categories);
 
         $categories = array_merge($product_categories);
 

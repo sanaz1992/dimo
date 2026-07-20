@@ -2,8 +2,8 @@
 
 namespace Modules\Core\Traits;
 
-use Modules\Core\Filters\QueryFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Modules\Core\Filters\QueryFilter;
 
 trait Filterable
 {

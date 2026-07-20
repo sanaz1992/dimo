@@ -5,7 +5,6 @@ namespace Modules\Order\External;
 use Modules\Core\External\Repositories\BaseRepository;
 use Modules\Order\Entities\Order;
 use Modules\Order\External\Contracts\OrderRepositoryInterface;
-use Modules\Shipment\Entities\Shipment;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
@@ -18,6 +17,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     {
         $order->status = $status;
         $order->save();
+
         return $order;
     }
 
@@ -26,6 +26,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         $order->load(['items' => function ($q) use ($statuses) {
             $q->whereIn('status', $statuses);
         }]);
+
         return $order->items;
     }
 }

@@ -17,6 +17,7 @@ class ProductSku extends Model
         'stock',
         'is_active',
     ];
+
     protected $casts = [
         'packaging_type' => ProductPackagingType::class,
     ];

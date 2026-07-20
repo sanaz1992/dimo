@@ -12,9 +12,9 @@ class UploadStrategyFactory
             case 'public':
             case 'public_html':
             case 'local':
-                return  new LocalUploadStrategy();
+                return new LocalUploadStrategy;
             default:
-                throw new \Exception("Unsupported disk");
+                throw new \Exception('Unsupported disk');
         }
     }
 }

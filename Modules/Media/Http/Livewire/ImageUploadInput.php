@@ -2,10 +2,10 @@
 
 namespace Modules\Media\Http\Livewire;
 
+use Livewire\Attributes\Modelable;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\Modelable;
 
 class ImageUploadInput extends Component
 {
@@ -13,15 +13,17 @@ class ImageUploadInput extends Component
 
     #[Modelable]
     public $image;
+
     // public $name = 'image';
     // public $form;
     public $initialImage;
+
     public $model;
 
     public function rules()
     {
         return [
-            'image' => 'image|max:' . config("media.validations.image.max") . '|mimes:' . config("media.validations.image.mimes"),
+            'image' => 'image|max:'.config('media.validations.image.max').'|mimes:'.config('media.validations.image.mimes'),
         ];
     }
 
@@ -48,7 +50,7 @@ class ImageUploadInput extends Component
 
     public function getClientOriginalNameProperty()
     {
-        return   $this->image instanceof TemporaryUploadedFile ?
+        return $this->image instanceof TemporaryUploadedFile ?
             $this->image->getClientOriginalName() :
             basename(parse_url($this->initialImage, PHP_URL_PATH));
     }

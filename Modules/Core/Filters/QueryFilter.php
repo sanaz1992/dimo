@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 abstract class QueryFilter
 {
     protected $request;
+
     protected $builder;
 
     protected array $searchable = [];

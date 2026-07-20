@@ -19,7 +19,6 @@ enum OrderItemStatus: string
     case DELIVERED = 'delivered';
     case RETURNED_TO_PRODUCTION = 'returned_to_production';
 
-
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
@@ -28,8 +27,8 @@ enum OrderItemStatus: string
     public static function labels(): array
     {
         return [
-            self::DRAFT->value  => 'پیش نویس',
-            self::AWAITING_SALES_MANAGER_APPROVAL->value  => 'در انتظار تایید مدیر فروش',
+            self::DRAFT->value => 'پیش نویس',
+            self::AWAITING_SALES_MANAGER_APPROVAL->value => 'در انتظار تایید مدیر فروش',
             self::APPROVED->value => 'تایید مدیر فروش',
             self::CANCELED->value => 'لغو شده',
             self::IN_PRODUCTION->value => 'در حال تولید',
@@ -53,8 +52,8 @@ enum OrderItemStatus: string
     public static function colors(): array
     {
         return [
-            self::DRAFT->value   => 'bg-gray-50 text-gray-600 inset-ring-gray-500/10',
-            self::AWAITING_SALES_MANAGER_APPROVAL->value  => ' bg-[#FEFEE8] text-[#9E700A] inset-ring-yellow-600/20',
+            self::DRAFT->value => 'bg-gray-50 text-gray-600 inset-ring-gray-500/10',
+            self::AWAITING_SALES_MANAGER_APPROVAL->value => ' bg-[#FEFEE8] text-[#9E700A] inset-ring-yellow-600/20',
             self::APPROVED->value => 'bg-green-50 text-green-700 inset-ring-green-600/20',
             self::CANCELED->value => 'bg-red-50 text-red-600 inset-ring-red-600/10',
             self::IN_PRODUCTION->value => 'bg-blue-50 text-blue-700 inset-ring-blue-700/10',
@@ -69,6 +68,7 @@ enum OrderItemStatus: string
             self::RETURNED_TO_PRODUCTION->value => 'bg-[#FEFEE8] text-[#9E700A] inset-ring-yellow-600/20',
         ];
     }
+
     public function color(): string
     {
         return self::colors()[$this->value];

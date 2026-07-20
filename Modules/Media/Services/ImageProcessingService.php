@@ -2,18 +2,16 @@
 
 namespace Modules\Media\Services;
 
-use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManager;
-
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ImageProcessingService
 {
     /**
      * resize image
      *
-     * @param UploadedFile $file
-     * @param array $sizes [ 'thumb' => [100,100], 'medium' => [300,300] ]
+     * @param  array  $sizes  [ 'thumb' => [100,100], 'medium' => [300,300] ]
      * @return array ['original' => binary, 'thumb' => binary, ...]
      */
     public function resizeAndPrepare(UploadedFile $file, array $sizes = []): array

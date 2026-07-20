@@ -4,8 +4,8 @@ namespace Modules\Core\Enums;
 
 enum CurrencyEnum: string
 {
-    case RIAL   = 'rial';
-    case TOMAN  = 'toman';
+    case RIAL = 'rial';
+    case TOMAN = 'toman';
 
     public static function values(): array
     {
@@ -15,8 +15,8 @@ enum CurrencyEnum: string
     public static function labels(): array
     {
         return [
-            self::RIAL->value   => 'ریال',
-            self::TOMAN->value  => 'تومان',
+            self::RIAL->value => 'ریال',
+            self::TOMAN->value => 'تومان',
         ];
     }
 

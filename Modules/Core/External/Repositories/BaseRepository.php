@@ -25,16 +25,16 @@ class BaseRepository implements BaseRepositoryInterface
     //         'trashed'=>'only'
     //     ];
     public function all(
-        string $orderBy = null,
+        ?string $orderBy = null,
         array $limit = [],
         array $with = [],
         array $conditions = [],
-        QueryFilter $filter = null
+        ?QueryFilter $filter = null
     ) {
         $query = $this->model->query();
 
         // Soft Deletes
-        if (!empty($conditions['trashed'])) {
+        if (! empty($conditions['trashed'])) {
             if ($conditions['trashed'] === 'only') {
                 $query = $query->onlyTrashed();
             } elseif ($conditions['trashed'] === 'with') {
@@ -46,7 +46,7 @@ class BaseRepository implements BaseRepositoryInterface
             $query = $query->visibleFor();
         }
 
-        if (!empty($with)) {
+        if (! empty($with)) {
             foreach ($with as $action => $relation) {
                 switch ($action) {
                     case 'count':
@@ -61,41 +61,43 @@ class BaseRepository implements BaseRepositoryInterface
                 }
             }
         }
-        if (!empty($conditions['where'])) {
+        if (! empty($conditions['where'])) {
             foreach ($conditions['where'] as $col => $val) {
                 if ($val instanceof \Closure) {
                     $query = $query->where($val);
+
                     continue;
                 }
                 if ($val[0] == 'LIKE') {
-                    $val[1] = '%' . $val[1] . '%';
+                    $val[1] = '%'.$val[1].'%';
                 }
                 $query = $query->where($col, $val[0], $val[1]);
             }
         }
-        if (!empty($conditions['whereNotIn'])) {
+        if (! empty($conditions['whereNotIn'])) {
             foreach ($conditions['whereNotIn'] as $col => $val) {
                 $query = $query->whereNotIn($col, $val[0]);
             }
         }
-        if (!empty($conditions['whereIn'])) {
+        if (! empty($conditions['whereIn'])) {
             foreach ($conditions['whereIn'] as $col => $val) {
                 $query = $query->whereIn($col, $val[0]);
             }
         }
-        if (!empty($conditions['orWhere'])) {
+        if (! empty($conditions['orWhere'])) {
             foreach ($conditions['orWhere'] as $col => $val) {
                 if ($val instanceof \Closure) {
                     $query = $query->orWhere($val);
+
                     continue;
                 }
                 if ($val[0] == 'LIKE') {
-                    $val[1] = '%' . $val[1] . '%';
+                    $val[1] = '%'.$val[1].'%';
                 }
                 $query = $query->orWhere($col, $val[0], $val[1]);
             }
         }
-        if (!empty($conditions['whereNull'])) {
+        if (! empty($conditions['whereNull'])) {
             foreach ($conditions['whereNull'] as $col => $val) {
                 if ($val) {
                     $query = $query->whereNull($col);
@@ -104,27 +106,27 @@ class BaseRepository implements BaseRepositoryInterface
                 }
             }
         }
-        if (!empty($conditions['whereRaw'])) {
+        if (! empty($conditions['whereRaw'])) {
             foreach ($conditions['whereRaw'] as $raw) {
                 $query->whereRaw($raw);
             }
         }
-        if (!empty($conditions['whereColumn'])) {
+        if (! empty($conditions['whereColumn'])) {
             foreach ($conditions['whereColumn'] as $condition) {
                 $query->whereColumn($condition[0], $condition[1], $condition[2]);
             }
         }
-        if (!empty($conditions['whereHas'])) {
+        if (! empty($conditions['whereHas'])) {
             foreach ($conditions['whereHas'] as $relation => $callback) {
                 $query = $query->whereHas($relation, $callback);
             }
         }
-        if (!empty($conditions['orWhereHas'])) {
+        if (! empty($conditions['orWhereHas'])) {
             foreach ($conditions['orWhereHas'] as $relation => $callback) {
                 $query = $query->whereHas($relation, $callback);
             }
         }
-        if (!empty($conditions['whereBetween'])) {
+        if (! empty($conditions['whereBetween'])) {
             foreach ($conditions['whereBetween'] as $col => $val) {
                 if (isset($val[0]) && isset($val[1])) {
                     $query = $query->whereBetween($col, $val);
@@ -138,7 +140,7 @@ class BaseRepository implements BaseRepositoryInterface
                 }
             }
         }
-        if (!empty($conditions['whereInSub'])) {
+        if (! empty($conditions['whereInSub'])) {
             foreach ($conditions['whereInSub'] as $condition) {
                 // ['column', function($query) {...}]
                 $query->whereIn($condition[0], $condition[1]);
@@ -160,7 +162,7 @@ class BaseRepository implements BaseRepositoryInterface
         } else {
             $query = $query->latest();
         }
-        if (!empty($limit)) {
+        if (! empty($limit)) {
             if ($limit[1]) {
                 $query = $query->paginate($limit[0]);
             } else {
@@ -169,6 +171,7 @@ class BaseRepository implements BaseRepositoryInterface
         } else {
             $query = $query->get();
         }
+
         return $query;
     }
 
@@ -183,7 +186,7 @@ class BaseRepository implements BaseRepositoryInterface
                     $query->where($condition[1], $condition[2]);
                 } elseif (count($condition) == 4) {
                     if ($condition[2] == 'like') {
-                        $query->where($condition[1], $condition[2], '%' . $condition[3] . '%');
+                        $query->where($condition[1], $condition[2], '%'.$condition[3].'%');
                     } else {
                         $query->where($condition[1], $condition[2], $condition[3]);
                     }
@@ -262,20 +265,22 @@ class BaseRepository implements BaseRepositoryInterface
     public function update(Model $record, array $data): ?Model
     {
 
-        if (!$record) {
+        if (! $record) {
             return null;
         }
 
         $record->update($data);
+
         return $record;
     }
 
     public function delete($id)
     {
         $item = $this->model->find($id);
-        if (!$item) {
+        if (! $item) {
             return false;
         }
+
         return $item->delete();
     }
 }

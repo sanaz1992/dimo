@@ -2,25 +2,27 @@
 
 namespace Modules\Product\Imports;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Modules\Core\Helpers\SlugHelper;
 use Modules\Category\Entities\Category;
-use Modules\Product\Enums\ProductOrderType;
 use Modules\Category\External\CategoryRepository;
+use Modules\Core\Helpers\SlugHelper;
+use Modules\Media\Services\MediaService;
+use Modules\Product\Enums\ProductOrderType;
 use Modules\Product\External\ProductRepository;
 use Modules\Product\Services\ProductService;
 use Modules\Warehouse\External\Repositories\RawMaterialWarehouseRepository;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
-use Modules\Media\Services\MediaService;
 
 class MarkzaProductImport implements ToCollection
 {
     protected ProductRepository $productRepository;
+
     protected RawMaterialWarehouseRepository $rawMaterialWarehouseRepository;
+
     protected CategoryRepository $categoryRepository;
+
     protected ProductService $productService;
 
     public function __construct(
@@ -39,7 +41,6 @@ class MarkzaProductImport implements ToCollection
     public function collection(Collection $rows)
     {
         foreach ($rows as $key => $row) {
-
 
             if ($key != 0) {
                 // dd(is_int($row[7]));
@@ -62,34 +63,34 @@ class MarkzaProductImport implements ToCollection
                 if ($row[0]) {
                     $category = $this->categoryRepository->firstOrCreate(
                         ['title' => $row[0]],
-                        ['slug' => SlugHelper::generate(get_class(new Category()), $row[0])]
+                        ['slug' => SlugHelper::generate(get_class(new Category), $row[0])]
                     );
                 }
                 // dd($row[6], $row[7]);
                 if ($row[7] && $row[7] != '_' && is_int($row[7])) {
                     $product = $this->productRepository->firstOrCreate([
-                        'code' => $row[1]
+                        'code' => $row[1],
                     ], [
                         'title' => $row[2],
                         'category_id' => $category->id,
                         'price' => $row[7],
-                        'has_fabric' =>  true,
+                        'has_fabric' => true,
                         'is_publish' => true,
-                        'order_type' => ProductOrderType::LEATHER->value
+                        'order_type' => ProductOrderType::LEATHER->value,
                     ]);
                     Log::info('product is:', ['product' => $product]);
                     $this->importMedia($key, $product);
                 }
                 if ($row[8] && $row[8] != '_' && is_int($row[8])) {
                     $product = $this->productRepository->firstOrCreate([
-                        'code' => $row[1] . '-z'
+                        'code' => $row[1].'-z',
                     ], [
                         'title' => $row[2],
                         'category_id' => $category->id,
                         'price' => $row[8],
-                        'has_fabric' =>  true,
+                        'has_fabric' => true,
                         'is_publish' => true,
-                        'order_type' => ProductOrderType::BASE->value
+                        'order_type' => ProductOrderType::BASE->value,
                     ]);
                     Log::info('product is:', ['product' => $product]);
                     $this->importMedia($key, $product);
@@ -105,7 +106,7 @@ class MarkzaProductImport implements ToCollection
         // پیدا کردن فایلی که با row_X شروع می‌شود (با هر پسوندی)
         $files = glob(storage_path("app/tmp_images/row_{$rowNumber}.*"));
 
-        if (!empty($files)) {
+        if (! empty($files)) {
             $tempImage = $files[0]; // اولین فایل پیدا شده
 
             $dir = $product->uploadDir();

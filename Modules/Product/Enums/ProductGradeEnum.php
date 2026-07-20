@@ -5,9 +5,8 @@ namespace Modules\Product\Enums;
 enum ProductGradeEnum: string
 {
     case DOUBLE_DISTILLED = 'double_distilled';
-    case PREMIUM  = 'premium ';
+    case PREMIUM = 'premium ';
     case NORMAL = 'normal';
-
 
     public static function values(): array
     {
@@ -17,9 +16,9 @@ enum ProductGradeEnum: string
     public static function labels(): array
     {
         return [
-            self::DOUBLE_DISTILLED->value  => 'دوآتیشه',
-            self::PREMIUM->value  => 'ممتاز',
-            self::NORMAL->value  => 'معمولی',
+            self::DOUBLE_DISTILLED->value => 'دوآتیشه',
+            self::PREMIUM->value => 'ممتاز',
+            self::NORMAL->value => 'معمولی',
         ];
     }
 

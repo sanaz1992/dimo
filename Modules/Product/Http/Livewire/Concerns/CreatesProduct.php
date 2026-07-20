@@ -2,22 +2,22 @@
 
 namespace Modules\Product\Http\Livewire\Concerns;
 
-use Livewire\WithFileUploads;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
 use Modules\Category\Services\CategoryService;
+use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Product\Enums\ProductExtractionMethod;
 use Modules\Product\Enums\ProductGradeEnum;
-use Modules\Product\Services\ProductService;
-use Illuminate\Validation\Rules\Enum;
-use Modules\Core\Helpers\SettingHelper;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Modules\Product\Enums\ProductPackagingType;
+use Modules\Product\Services\ProductService;
 
 trait CreatesProduct
 {
-    use WithFileUploads;
     use LivewireNotify;
+    use WithFileUploads;
 
     public $form = [
         'image' => '',
@@ -33,23 +33,32 @@ trait CreatesProduct
         'packaging_type' => '',
         'volume_ml' => '',
         'price' => '',
-        'is_active' => ''
+        'is_active' => '',
     ];
 
-
     public $categories;
+
     public $gardes;
+
     public $extractionMethods;
+
     public $imageConfig;
+
     public string $currentStep = 'basic';
+
     public array $steps = [
         'basic' => 'اطلاعات پایه',
         'sku' => 'تنوع',
     ];
+
     public $currency;
+
     public $initialImage;
+
     public $product = null;
+
     public $packagingType;
+
     protected function loadInitialData($product = null)
     {
         $this->categories = resolve(CategoryService::class)->list(conditions: ['where' => ['is_active' => ['=', true]]]);
@@ -119,11 +128,12 @@ trait CreatesProduct
             $this->currentStep = $stepKeys[$nextIndex];
         }
     }
+
     protected function validateCurrentStep(): array
     {
         if ($this->currentStep === 'basic') {
             return [
-                'form.image' => ['nullable', 'image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
+                'form.image' => ['nullable', 'image', 'max:'.config('media.validations.image.max'), 'mimes:'.config('media.validations.image.mimes')],
                 'form.name' => ['required', 'string', 'max:255'],
                 'form.grade' => ['nullable', new Enum(ProductGradeEnum::class)],
                 'form.category_id' => ['required', 'exists:categories,id'],
@@ -141,6 +151,7 @@ trait CreatesProduct
                 'skuForm.is_active' => ['required', 'in:0,1'],
             ];
         }
+
         return [];
     }
 
@@ -212,13 +223,15 @@ trait CreatesProduct
     {
         $this->validate(
             [
-                'form.image' => ['image', 'max:' . config('media.validations.image.max'), 'mimes:' . config('media.validations.image.mimes')],
+                'form.image' => ['image', 'max:'.config('media.validations.image.max'), 'mimes:'.config('media.validations.image.mimes')],
             ],
             trans('product::validation'),
             trans('product::attributes')
         );
     }
+
     public int $imageUploadKey = 0;
+
     public function removeImage()
     {
         $this->form['image'] = null;
@@ -236,6 +249,7 @@ trait CreatesProduct
 
         return $this->initialImage;
     }
+
     public function getClientOriginalNameProperty(): ?string
     {
         $image = $this->form['image'] ?? null;

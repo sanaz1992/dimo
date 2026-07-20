@@ -13,15 +13,14 @@ class MediaService
         protected MediaRepositoryInterface $mediaRepository,
         protected UploadStrategyFactory $factory,
         protected ImageProcessingService $imageProcessingService
-    ) {
-    }
+    ) {}
 
     public function upload(
         object $model,
         UploadedFile $file,
         string $collection = 'default',
         string $dir = 'uploads/media',
-        string $disk = null
+        ?string $disk = null
     ) {
         if ($disk == null) {
             $disk = config('filesystems.default');
@@ -44,7 +43,6 @@ class MediaService
             $paths['original'] = $strategy->upload($file, $dir);
         }
 
-
         $media = $this->mediaRepository->create([
             'mediaable_type' => get_class($model),
             'mediaable_id' => $model->id,
@@ -64,12 +62,12 @@ class MediaService
         $strategy = $this->factory->make($media->disk);
         $strategy->delete($media->file_name);
 
-        if (!empty($media->thumbnail_path)) {
+        if (! empty($media->thumbnail_path)) {
             $thumbnails = $media->thumbnail_path;
 
             if (is_array($thumbnails)) {
                 foreach ($thumbnails as $path) {
-                    //origin file = main file in media
+                    // origin file = main file in media
                     if ($path !== $media->file_name) {
                         $strategy->delete($path);
                     }
@@ -87,6 +85,7 @@ class MediaService
         if (count($parts) > 1) {
             return strtolower($parts[1]);
         }
+
         return 'Core'; // default
     }
 }

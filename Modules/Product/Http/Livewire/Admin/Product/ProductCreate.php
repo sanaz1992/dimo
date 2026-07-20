@@ -3,7 +3,6 @@
 namespace Modules\Product\Http\Livewire\Admin\Product;
 
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
-use Modules\Core\Traits\LivewireNotify;
 use Modules\Product\Http\Livewire\Concerns\CreatesProduct;
 
 class ProductCreate extends AdminBaseComponent
@@ -20,7 +19,7 @@ class ProductCreate extends AdminBaseComponent
         return $this->renderView(
             'Product::livewire.admin.product.product-create'
         )->layoutData([
-            'title' => __('product::attributes.create_product')
+            'title' => __('product::attributes.create_product'),
         ]);
     }
 }

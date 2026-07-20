@@ -10,6 +10,7 @@ class UserRoleService
     {
         $user->syncRoles($data['selectedRoles']);
         $user->syncPermissions($data['selectedPermissions']);
+
         return $user;
     }
 }

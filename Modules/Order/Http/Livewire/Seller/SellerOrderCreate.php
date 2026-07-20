@@ -14,7 +14,6 @@ class SellerOrderCreate extends SellerBaseComponent
 
     protected $redirectRoute = 'seller.orders.edit';
 
-
     public function mount()
     {
         switch (auth()->user()->level) {

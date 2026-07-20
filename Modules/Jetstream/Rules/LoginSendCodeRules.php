@@ -2,8 +2,8 @@
 
 namespace Modules\Jetstream\Rules;
 
-use Modules\Core\Rules\Mobile;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Core\Rules\Mobile;
 
 class LoginSendCodeRules extends FormRequest
 {
@@ -19,8 +19,8 @@ class LoginSendCodeRules extends FormRequest
 
     public static function rules(): array
     {
-        return  [
-            'mobile'    => ['required', 'string', 'max:11', new Mobile()],
+        return [
+            'mobile' => ['required', 'string', 'max:11', new Mobile],
         ];
     }
 }

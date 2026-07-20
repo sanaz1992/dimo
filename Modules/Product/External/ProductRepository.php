@@ -18,16 +18,16 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function create(array $data): Product
     {
-        $data['slug'] = SlugHelper::generate(get_class(new Product()), $data['name']);
+        $data['slug'] = SlugHelper::generate(get_class(new Product), $data['name']);
         $data['description'] = $data['description'] ?? null;
-        $data['code'] = $data['code'] ?? CodeGeneratorHelper::generate(get_class(new Product()));
+        $data['code'] = $data['code'] ?? CodeGeneratorHelper::generate(get_class(new Product));
 
         return Product::create($data);
     }
 
     public function firstOrCreate(array $condition, array $data): Product
     {
-        $data['slug'] = SlugHelper::generate(get_class(new Product()), $data['name']);
+        $data['slug'] = SlugHelper::generate(get_class(new Product), $data['name']);
 
         return Product::firstOrCreate(
             $condition,   // شرط جستجو
@@ -49,5 +49,4 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         return $product;
     }
-
 }

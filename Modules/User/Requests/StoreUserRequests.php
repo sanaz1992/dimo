@@ -23,8 +23,8 @@ class StoreUserRequests extends BaseFormRequest
                 'required',
                 'string',
                 'max:11',
-                new Mobile(),
-                Rule::unique('users', 'mobile')->whereNull('deleted_at')
+                new Mobile,
+                Rule::unique('users', 'mobile')->whereNull('deleted_at'),
             ],
             'password' => ['required', 'min:8', 'string'],
             'province_id' => ['nullable', 'exists:provinces,id'],

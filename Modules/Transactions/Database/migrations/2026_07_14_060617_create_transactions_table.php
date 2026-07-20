@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('order_id')->constrained()->onDelete('restrict');
+            $table->foreignId('order_id')->constrained()->onDelete('restrict');
             $table->string('gateway'); // zarinpal, sadad, mellat...
             $table->string('transaction_id')->nullable(); // Bank transaction number
             $table->string('reference_id')->nullable(); // Bank reference/tracking number

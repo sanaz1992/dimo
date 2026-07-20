@@ -10,10 +10,13 @@ class ConvertDatesHelper
 {
     public static function jalaliToGregorian($datetime, string $format = 'Y/m/d H:i:s')
     {
-        if (!$datetime) return null;
+        if (! $datetime) {
+            return null;
+        }
         try {
             $datetime = CalendarUtils::createDateTimeFromFormat('Y/m/d', self::convertPersianNumbersToEnglish($datetime))
                 ->format($format);
+
             return $datetime;
         } catch (Throwable $e) {
             return null;
@@ -34,6 +37,7 @@ class ConvertDatesHelper
             return $datetime;
         } catch (Throwable $e) {
             dd($e);
+
             return null;
         }
     }
@@ -42,6 +46,7 @@ class ConvertDatesHelper
     {
         $persian = ['۰', '۱', '۲', '۳', '۴', '٤', '۵', '٥', '٦', '۶', '۷', '۸', '۹'];
         $english = [0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9];
+
         return str_replace($persian, $english, $input);
     }
 }

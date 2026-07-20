@@ -20,7 +20,7 @@ class CategoryEdit extends AdminBaseComponent
         return $this->renderView(
             'Category::livewire.admin.category.category-edit'
         )->layoutData([
-            'title' => __('category::attributes.edit_category') . ' ' . $this->category->name
+            'title' => __('category::attributes.edit_category').' '.$this->category->name,
         ]);
     }
 }

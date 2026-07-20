@@ -5,8 +5,7 @@ namespace Modules\Product\Enums;
 enum ProductExtractionMethod: string
 {
     case TRADITIONAL = 'traditional';
-    case INDUSTRIAL  = 'Industrial ';
-
+    case INDUSTRIAL = 'Industrial ';
 
     public static function values(): array
     {
@@ -16,8 +15,8 @@ enum ProductExtractionMethod: string
     public static function labels(): array
     {
         return [
-            self::TRADITIONAL->value  => 'سنتی',
-            self::INDUSTRIAL->value  => 'صنعتی',
+            self::TRADITIONAL->value => 'سنتی',
+            self::INDUSTRIAL->value => 'صنعتی',
         ];
     }
 

@@ -6,9 +6,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use Nwidart\Modules\Traits\PathNamespace;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use Modules\Core\External\Repositories\BaseRepository;
 use Modules\Core\External\Repositories\Contract\BaseRepositoryInterface;
 use Modules\Core\External\Repositories\Contract\SettingRepositoryInterface;
@@ -18,6 +15,9 @@ use Modules\Core\Http\Livewire\Admin\SettingEdit;
 use Modules\Core\Http\Middlewares\SetApiLocale;
 use Modules\User\Http\Middleware\EnsureAdminPanelAccess;
 use Modules\User\Http\Middleware\EnsureSellerPanelAccess;
+use Nwidart\Modules\Traits\PathNamespace;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -57,7 +57,7 @@ class CoreServiceProvider extends ServiceProvider
         // Blade::component('core::components.admin.header', 'core.admin.header');
 
         $this->publishes([
-            __DIR__ . '/../Resources/assets' => public_path('core'),
+            __DIR__.'/../Resources/assets' => public_path('core'),
         ], ['public', 'laravel-assets']);
 
         Livewire::component('setting::edit', SettingEdit::class);
@@ -74,7 +74,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->app->bind(BaseRepositoryInterface::class, BaseRepository::class);
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
-      
+
     }
 
     /**
@@ -121,9 +121,9 @@ class CoreServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $config = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $config_key = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $config);
-                    $segments = explode('.', $this->nameLower . '.' . $config_key);
+                    $segments = explode('.', $this->nameLower.'.'.$config_key);
 
                     // Remove duplicated adjacent segments
                     $normalized = [];
@@ -158,14 +158,14 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/' . $this->nameLower);
+        $viewPath = resource_path('views/modules/'.$this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->name);
 
-        Blade::componentNamespace(config('modules.namespace') . '\\' . $this->name . '\\View\\Components', $this->nameLower);
+        Blade::componentNamespace(config('modules.namespace').'\\'.$this->name.'\\View\\Components', $this->nameLower);
     }
 
     /**
@@ -180,8 +180,8 @@ class CoreServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path . '/modules/' . $this->nameLower)) {
-                $paths[] = $path . '/modules/' . $this->nameLower;
+            if (is_dir($path.'/modules/'.$this->nameLower)) {
+                $paths[] = $path.'/modules/'.$this->nameLower;
             }
         }
 

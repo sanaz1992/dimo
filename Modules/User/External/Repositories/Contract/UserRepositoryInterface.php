@@ -9,6 +9,8 @@ use Modules\User\Entities\User;
 interface UserRepositoryInterface extends BaseRepositoryInterface
 {
     public function update(Model $record, array $data): ?Model;
+
     public function updateCharts(User $user, array $chartsId): void;
+
     public function restore(string $code): User;
 }

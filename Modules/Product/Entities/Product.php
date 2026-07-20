@@ -36,7 +36,7 @@ class Product extends Model
 
     public function uploadDir(): string
     {
-        return 'uploads/products/' . $this->id;
+        return 'uploads/products/'.$this->id;
     }
 
     public function getCreatedAtJalaliDateAttribute()
@@ -73,10 +73,10 @@ class Product extends Model
     public function getMainImageAttribute()
     {
         if ($this->relationLoaded('mainImageRelation')) {
-            return $this->getRelation('mainImageRelation') ?? new NullMedia();
+            return $this->getRelation('mainImageRelation') ?? new NullMedia;
         }
 
-        return $this->mainImageRelation()->first() ?? new NullMedia();
+        return $this->mainImageRelation()->first() ?? new NullMedia;
     }
 
     public function order_items(): HasMany

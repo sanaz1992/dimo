@@ -16,12 +16,12 @@ class Setting extends Model
         'value',
         'group',
         'type',
-        'description'
+        'description',
     ];
 
     public function uploadDir(): string
     {
-        return 'uploads/settings/' . $this->id;
+        return 'uploads/settings/'.$this->id;
     }
 
     public function medias(): MorphMany
@@ -34,12 +34,13 @@ class Setting extends Model
         return $this->morphOne(Media::class, 'mediaable')
             ->where('collection', 'main');
     }
+
     public function getMainImageAttribute()
     {
         if ($this->relationLoaded('mainImageRelation')) {
-            return $this->getRelation('mainImageRelation') ?? new NullMedia();
+            return $this->getRelation('mainImageRelation') ?? new NullMedia;
         }
 
-        return $this->mainImageRelation()->first() ?? new NullMedia();
+        return $this->mainImageRelation()->first() ?? new NullMedia;
     }
 }

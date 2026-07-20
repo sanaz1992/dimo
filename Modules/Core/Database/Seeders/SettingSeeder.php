@@ -37,7 +37,7 @@ class SettingSeeder extends Seeder
                 'value' => null,
                 'type' => SettingType::IMAGE->value,
                 'group' => 'general',
-                'description' => 'سایز 130*35 px'
+                'description' => 'سایز 130*35 px',
             ],
             [
                 'title' => 'favicon',
@@ -45,14 +45,14 @@ class SettingSeeder extends Seeder
                 'value' => null,
                 'type' => SettingType::IMAGE->value,
                 'group' => 'general',
-                'description' => 'سایز 20*20 px'
+                'description' => 'سایز 20*20 px',
             ],
             [
                 'title' => 'ورود با پسورد',
                 'key' => 'login_with_password',
                 'type' => SettingType::BOOL->value,
                 'group' => 'login',
-                'value' => true
+                'value' => true,
             ],
             [
                 'title' => 'واحد پول',
@@ -73,7 +73,7 @@ class SettingSeeder extends Seeder
                     'title' => $item['title'],
                     'type' => $item['type'],
                     'group' => $item['group'],
-                    'description' => $item['description'] ?? null
+                    'description' => $item['description'] ?? null,
                 ]
             );
         }

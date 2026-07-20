@@ -3,6 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Media\Http\Controllers\MediaController;
 
-Route::middleware(['auth', 'verified','admin.panel'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin.panel'])->group(function () {
     Route::resource('media', MediaController::class)->names('media');
 });

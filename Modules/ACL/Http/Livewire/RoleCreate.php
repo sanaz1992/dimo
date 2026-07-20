@@ -13,10 +13,12 @@ class RoleCreate extends AdminBaseComponent
 {
     // use AuthorizesRequests;
     use LivewireNotify;
+
     public $permissions;
+
     public $form = [
-        'title'               => '',
-        'name'                => '',
+        'title' => '',
+        'name' => '',
         'selectedPermissions' => [],
     ];
 
@@ -38,6 +40,7 @@ class RoleCreate extends AdminBaseComponent
             $roleService->create($this->form);
 
             $this->notify('success', __('core::messages.create.success'));
+
             // $this->reset('form');
             return redirect()->route('admin.roles.create');
         } catch (ValidationException $e) {
@@ -51,7 +54,7 @@ class RoleCreate extends AdminBaseComponent
     {
         return $this->renderView('acl::livewire.role-create')
             ->layoutData([
-                'title' => __('acl::attributes.create')
+                'title' => __('acl::attributes.create'),
             ]);
     }
 }

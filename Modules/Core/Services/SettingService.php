@@ -2,9 +2,8 @@
 
 namespace Modules\Core\Services;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Modules\Core\Enums\SettingType;
 use Modules\Core\External\Repositories\Contract\SettingRepositoryInterface;
 use Modules\Media\Entities\Media;
@@ -15,10 +14,9 @@ class SettingService
     public function __construct(
         protected SettingRepositoryInterface $settingRepository,
         protected MediaService $mediaService
-    ) {
-    }
+    ) {}
 
-    public function list(string $orderBy = null, array $limit = [], array $with = [], array $conditions = [])
+    public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [])
     {
         return $this->settingRepository->all($orderBy, $limit, $with, $conditions);
     }
@@ -27,6 +25,7 @@ class SettingService
     {
         return $this->settingRepository->find($id);
     }
+
     public function update(array $data)
     {
         return DB::transaction(function () use ($data) {
@@ -46,6 +45,7 @@ class SettingService
                 }
             }
             Cache::forget('settings');
+
             return $setting;
         });
     }
@@ -55,12 +55,13 @@ class SettingService
         $setting = $this->settingRepository->findByColumn('key', $key);
         $media = $setting?->medias?->first();
 
-        if (!$media) {
+        if (! $media) {
             return false;
         }
 
         $this->mediaService->delete($media);
         Cache::forget('settings');
+
         return true;
     }
 }

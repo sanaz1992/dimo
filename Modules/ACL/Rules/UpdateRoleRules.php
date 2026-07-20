@@ -2,8 +2,6 @@
 
 namespace Modules\ACL\Rules;
 
-use Modules\User\Rules\StoreUserRules;
-
 class UpdateRoleRules
 {
     public static function rules()

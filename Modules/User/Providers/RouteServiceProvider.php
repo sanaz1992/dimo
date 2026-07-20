@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     protected $defer = true;
+
     protected string $name = 'User';
 
     /**

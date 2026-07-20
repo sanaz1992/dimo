@@ -5,9 +5,8 @@ namespace Modules\Product\Enums;
 enum ProductPackagingType: string
 {
     case GLASS_BOTTLE = 'glass_Bottle';
-    case PET_BOTTLE  = 'pet_bottle ';
+    case PET_BOTTLE = 'pet_bottle ';
     case GALLON_JUG = 'gallon_jug';
-
 
     public static function values(): array
     {
@@ -17,9 +16,9 @@ enum ProductPackagingType: string
     public static function labels(): array
     {
         return [
-            self::GLASS_BOTTLE->value  => 'شیشه‌ای',
-            self::PET_BOTTLE->value  => 'پلاستیکی',
-            self::GALLON_JUG->value  => 'گالن',
+            self::GLASS_BOTTLE->value => 'شیشه‌ای',
+            self::PET_BOTTLE->value => 'پلاستیکی',
+            self::GALLON_JUG->value => 'گالن',
         ];
     }
 

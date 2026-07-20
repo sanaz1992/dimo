@@ -2,10 +2,8 @@
 
 namespace Modules\Product\External;
 
-use Illuminate\Database\Eloquent\Model;
 use Modules\Core\External\Repositories\BaseRepository;
 use Modules\Core\Helpers\CodeGeneratorHelper;
-use Modules\Core\Helpers\SlugHelper;
 use Modules\Product\Entities\ProductSku;
 use Modules\Product\External\Contracts\ProductSkuRepositoryInterface;
 
@@ -18,7 +16,8 @@ class ProductSkuRepository extends BaseRepository implements ProductSkuRepositor
 
     public function create(array $data): ProductSku
     {
-        $data['sku'] = $data['sku'] ?? CodeGeneratorHelper::generate(get_class(new ProductSku()), 'sku');
+        $data['sku'] = $data['sku'] ?? CodeGeneratorHelper::generate(get_class(new ProductSku), 'sku');
+
         return ProductSku::create($data);
     }
 }

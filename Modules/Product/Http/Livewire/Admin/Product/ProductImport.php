@@ -8,7 +8,6 @@ use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Product\Imports\MarkzaProductImport;
-use Modules\Product\Imports\ProductImport as ImportsProductImport;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ProductImport extends AdminBaseComponent
@@ -26,7 +25,6 @@ class ProductImport extends AdminBaseComponent
         // مسیر فایل اکسل
         $filePath = $this->file->getRealPath();
 
-
         // مرحله ۱: استخراج تصاویر از اکسل
         $this->extractImages($filePath);
 
@@ -34,7 +32,7 @@ class ProductImport extends AdminBaseComponent
         Log::info('import data log');
 
         // Excel::import(new ProductImport(), $this->file->getRealPath());
-        dd("اطلاعات با موفقیت ثبت شد");
+        dd('اطلاعات با موفقیت ثبت شد');
         session()->flash('success', 'فایل با موفقیت ایمپورت شد');
     }
 
@@ -47,7 +45,7 @@ class ProductImport extends AdminBaseComponent
         File::deleteDirectory($tempDir);
         mkdir($tempDir, 0777, true);
 
-        if (!file_exists($tempDir)) {
+        if (! file_exists($tempDir)) {
             mkdir($tempDir, 0777, true);
         }
 
@@ -59,9 +57,9 @@ class ProductImport extends AdminBaseComponent
             // تبدیل MIME به پسوند
             $extensions = [
                 'image/jpeg' => 'jpg',
-                'image/png'  => 'png',
-                'image/gif'  => 'gif',
-                'image/webp' => 'webp'
+                'image/png' => 'png',
+                'image/gif' => 'gif',
+                'image/webp' => 'webp',
             ];
             $ext = $extensions[$mime] ?? 'jpg'; // اگر نشناخت فرض بر jpg
 
@@ -69,7 +67,7 @@ class ProductImport extends AdminBaseComponent
             $row = preg_replace('/[A-Z]/', '', $coordinate);
 
             // ذخیره با پسوند درست
-            copy($path, $tempDir . "/row_{$row}.{$ext}");
+            copy($path, $tempDir."/row_{$row}.{$ext}");
         }
     }
 
@@ -78,7 +76,7 @@ class ProductImport extends AdminBaseComponent
         return $this->renderView(
             'Product::livewire.product.product-import',
         )->layoutData([
-            'title' => __('product::attributes.product_list')
+            'title' => __('product::attributes.product_list'),
         ]);
     }
 }

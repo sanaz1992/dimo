@@ -13,7 +13,7 @@ class ProvinceSeeder extends Seeder
      */
     public function run(): void
     {
-        $json = file_get_contents(base_path('Modules/User/Database/data/provinces.json')); //get provinces from json file
+        $json = file_get_contents(base_path('Modules/User/Database/data/provinces.json')); // get provinces from json file
         $provinces = json_decode($json, true);
 
         foreach ($provinces as $province) {
@@ -21,12 +21,12 @@ class ProvinceSeeder extends Seeder
                 ['slug' => $province['slug']],
                 [
                     'name' => $province['name'],
-                    'tel_prefix' => $province['tel_prefix']
+                    'tel_prefix' => $province['tel_prefix'],
                 ]
             );
         }
 
-        $citiesJson = file_get_contents(base_path('Modules/User/Database/data/cities.json')); //get provinces from json file
+        $citiesJson = file_get_contents(base_path('Modules/User/Database/data/cities.json')); // get provinces from json file
         $cities = json_decode($citiesJson, true);
 
         foreach ($cities as $city) {
@@ -34,7 +34,7 @@ class ProvinceSeeder extends Seeder
                 ['slug' => $city['slug']],
                 [
                     'name' => $city['name'],
-                    'province_id' => $city['province_id'] - 99
+                    'province_id' => $city['province_id'] - 99,
                 ]
             );
         }

@@ -3,15 +3,9 @@
 namespace Modules\Order\Http\Livewire\Seller;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Validation\ValidationException;
-use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Http\Livewire\Seller\SellerBaseComponent;
-use Modules\Core\Traits\LivewireNotify;
 use Modules\Order\Entities\Order;
 use Modules\Order\Http\Livewire\Traits\OrderEditTrait;
-use Modules\Order\Services\OrderItemService;
-use Modules\Order\Services\OrderService;
-use Modules\Category\Services\CategoryService;
 use Modules\User\Enums\UserLevel;
 
 class SellerOrderEdit extends SellerBaseComponent
@@ -26,6 +20,7 @@ class SellerOrderEdit extends SellerBaseComponent
             case UserLevel::SELLER->value:
                 if ($order->seller_id != $authUser->id) {
                     $this->notify('error', __('core::messages.access_error'));
+
                     return redirect()->route('seller.dashboard');
                 }
                 break;

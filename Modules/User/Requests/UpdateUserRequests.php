@@ -10,16 +10,17 @@ class UpdateUserRequests extends StoreUserRequests
     public function rules(): array
     {
         $uniqueCode = $this->route('user') ?? $this->route('admin');
+
         return array_merge(parent::rules(), [
-            'mobile'   => [
+            'mobile' => [
                 'required',
                 'string',
                 'max:11',
-                new Mobile(),
-                Rule::unique('users', 'mobile')->ignore($uniqueCode, 'unique_code')
+                new Mobile,
+                Rule::unique('users', 'mobile')->ignore($uniqueCode, 'unique_code'),
             ],
             'password' => ['nullable', 'min:8', 'string'],
-            'process' => ['nullable', 'exists:processes,slug']
+            'process' => ['nullable', 'exists:processes,slug'],
         ]);
     }
 }

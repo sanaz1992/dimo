@@ -7,7 +7,9 @@ use Livewire\Component;
 class Tabs extends Component
 {
     public $tabs = [];
+
     public $active;
+
     public $wrapperClass;
 
     public function mount($tabs = [], $active = null, $wrapperClass = null)
@@ -20,7 +22,7 @@ class Tabs extends Component
     public function setActive($key)
     {
         $this->active = $key;
-        $this->dispatch('tabChanged', $key);  //set event for parent component
+        $this->dispatch('tabChanged', $key);  // set event for parent component
     }
 
     public function render()

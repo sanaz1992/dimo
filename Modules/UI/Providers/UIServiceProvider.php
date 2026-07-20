@@ -14,6 +14,7 @@ use RecursiveIteratorIterator;
 class UIServiceProvider extends ServiceProvider
 {
     use PathNamespace;
+
     protected $defer = true;
 
     protected string $name = 'UI';
@@ -33,7 +34,7 @@ class UIServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
 
         $this->publishes([
-            __DIR__ . '/../Resources/assets' => public_path('ui'),
+            __DIR__.'/../Resources/assets' => public_path('ui'),
         ], ['public', 'laravel-assets']);
 
         Livewire::component('UI::tabs', Tabs::class);
@@ -93,9 +94,9 @@ class UIServiceProvider extends ServiceProvider
 
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
-                    $config = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                    $config = str_replace($configPath.DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $config_key = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $config);
-                    $segments = explode('.', $this->nameLower . '.' . $config_key);
+                    $segments = explode('.', $this->nameLower.'.'.$config_key);
 
                     // Remove duplicated adjacent segments
                     $normalized = [];
@@ -130,14 +131,14 @@ class UIServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/' . $this->nameLower);
+        $viewPath = resource_path('views/modules/'.$this->nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
 
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
+        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower.'-module-views']);
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->name);
 
-        Blade::componentNamespace(config('modules.namespace') . '\\' . $this->name . '\\View\\Components', $this->nameLower);
+        Blade::componentNamespace(config('modules.namespace').'\\'.$this->name.'\\View\\Components', $this->nameLower);
     }
 
     /**
@@ -152,8 +153,8 @@ class UIServiceProvider extends ServiceProvider
     {
         $paths = [];
         foreach (config('view.paths') as $path) {
-            if (is_dir($path . '/modules/' . $this->nameLower)) {
-                $paths[] = $path . '/modules/' . $this->nameLower;
+            if (is_dir($path.'/modules/'.$this->nameLower)) {
+                $paths[] = $path.'/modules/'.$this->nameLower;
             }
         }
 

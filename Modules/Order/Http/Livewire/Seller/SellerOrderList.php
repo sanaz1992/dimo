@@ -10,8 +10,11 @@ use Modules\Order\Services\OrderService;
 class SellerOrderList extends SellerBaseComponent
 {
     use WithPagination;
+
     public $sortBy;
+
     public $activeTab;
+
     public $tabs;
 
     public function mount()
@@ -20,6 +23,7 @@ class SellerOrderList extends SellerBaseComponent
         $this->tabs = OrderListTabs::labels();
         // dd($this->tabs);
     }
+
     public function render()
     {
         $conditions = [
@@ -32,7 +36,7 @@ class SellerOrderList extends SellerBaseComponent
             'Order::livewire.order.seller.seller-order-list',
             compact('orders')
         )->layoutData([
-            'title' => __('order::attributes.orders_list')
+            'title' => __('order::attributes.orders_list'),
         ]);
     }
 }

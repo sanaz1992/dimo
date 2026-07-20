@@ -20,13 +20,13 @@ class HistoryObserver
             // فیلدهایی که میخوای ذخیره بشن
             if (in_array($field, $model->historyFields ?? [])) {
                 History::create([
-                    'user_id'    => Auth::id(),
+                    'user_id' => Auth::id(),
                     'historiable_type' => get_class($model),
-                    'historiable_id'   => $model->id,
-                    'field'      => $field,
-                    'old_value'  => $original[$field] ?? null,
-                    'new_value'  => $newValue,
-                    'action'     => 'update',
+                    'historiable_id' => $model->id,
+                    'field' => $field,
+                    'old_value' => $original[$field] ?? null,
+                    'new_value' => $newValue,
+                    'action' => 'update',
                     'description' => $model->historyDescription ?? null,
                 ]);
             }
@@ -40,13 +40,13 @@ class HistoryObserver
     {
         foreach ($model->historyFields ?? [] as $field) {
             History::create([
-                'user_id'    => Auth::id(),
+                'user_id' => Auth::id(),
                 'historiable_type' => get_class($model),
-                'historiable_id'   => $model->id,
-                'field'      => $field,
-                'old_value'  => null,
-                'new_value'  => $model->{$field},
-                'action'     => 'create',
+                'historiable_id' => $model->id,
+                'field' => $field,
+                'old_value' => null,
+                'new_value' => $model->{$field},
+                'action' => 'create',
                 'description' => $model->historyDescription ?? null,
             ]);
         }
@@ -59,13 +59,13 @@ class HistoryObserver
     {
         foreach ($model->historyFields ?? [] as $field) {
             History::create([
-                'user_id'    => Auth::id(),
+                'user_id' => Auth::id(),
                 'historiable_type' => get_class($model),
-                'historiable_id'   => $model->id,
-                'field'      => $field,
-                'old_value'  => $model->{$field},
-                'new_value'  => null,
-                'action'     => 'delete',
+                'historiable_id' => $model->id,
+                'field' => $field,
+                'old_value' => $model->{$field},
+                'new_value' => null,
+                'action' => 'delete',
                 'description' => $model->historyDescription ?? null,
             ]);
         }

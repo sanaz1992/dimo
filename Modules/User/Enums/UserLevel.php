@@ -4,8 +4,8 @@ namespace Modules\User\Enums;
 
 enum UserLevel: string
 {
-    case USER   = 'user';
-    case ADMIN  = 'admin';
+    case USER = 'user';
+    case ADMIN = 'admin';
     case SALES_OPERATOR = 'sales_operator';
     case DRIVER = 'driver';
 
@@ -17,8 +17,8 @@ enum UserLevel: string
     public static function labels(): array
     {
         return [
-            self::USER->value   => 'کاربر معمولی',
-            self::ADMIN->value  => 'مدیر سیستم',
+            self::USER->value => 'کاربر معمولی',
+            self::ADMIN->value => 'مدیر سیستم',
             self::SALES_OPERATOR->value => 'کارشناس فروش',
             self::DRIVER->value => 'راننده',
         ];
@@ -27,7 +27,7 @@ enum UserLevel: string
     public static function adminLabels(): array
     {
         return [
-            self::ADMIN->value  => 'مدیر سیستم',
+            self::ADMIN->value => 'مدیر سیستم',
             self::SALES_OPERATOR->value => 'کارشناس فروش',
         ];
     }
