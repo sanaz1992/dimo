@@ -95,59 +95,18 @@
             </div>
 
             <div class="products-grid">
-                <article class="product-card">
-                    <button class="wishlist" aria-label="علاقه‌مندی">♡</button>
-                    <div class="product-image">
-                        <div class="sprigs"></div>
-                        <div class="mini-bottle"></div>
-                    </div>
-                    <h3 class="product-name">گلاب ممتاز کاشان</h3>
-                    <div class="rating">★ ★ ★ ★ ★</div>
-                    <div class="price">۳۸۵,۰۰۰ تومان</div>
-                    <button class="product-btn">افزودن به سبد خرید</button>
-                </article>
-
-                <article class="product-card">
-                    <button class="wishlist" aria-label="علاقه‌مندی">♡</button>
-                    <div class="product-image">
-                        <div class="sprigs"></div>
-                        <div class="mini-bottle"
-                            style="background:linear-gradient(180deg,#f2eadc,#b98f60 62%,#7d4d28);">
+                @foreach ($products as $product)
+                    <article class="product-card">
+                        <button class="wishlist" aria-label="علاقه‌مندی">♡</button>
+                        <div class="product-image">
+                            <img src="{{ $product->main_image?->getThumbnailUrl('small') }}" />
                         </div>
-                    </div>
-                    <h3 class="product-name">عرق نعناع خالص</h3>
-                    <div class="rating">★ ★ ★ ★ ★</div>
-                    <div class="price">۲۴۰,۰۰۰ تومان</div>
-                    <button class="product-btn">افزودن به سبد خرید</button>
-                </article>
-
-                <article class="product-card">
-                    <button class="wishlist" aria-label="علاقه‌مندی">♡</button>
-                    <div class="product-image">
-                        <div class="sprigs"></div>
-                        <div class="mini-bottle"
-                            style="background:linear-gradient(180deg,#efe4d1,#b08555 62%,#68401f);">
-                        </div>
-                    </div>
-                    <h3 class="product-name">پک هدیه لوکس</h3>
-                    <div class="rating">★ ★ ★ ★ ★</div>
-                    <div class="price">۶۹۵,۰۰۰ تومان</div>
-                    <button class="product-btn">افزودن به سبد خرید</button>
-                </article>
-
-                <article class="product-card">
-                    <button class="wishlist" aria-label="علاقه‌مندی">♡</button>
-                    <div class="product-image">
-                        <div class="sprigs"></div>
-                        <div class="mini-bottle"
-                            style="background:linear-gradient(180deg,#f1e6d6,#ab7d50 62%,#744423);">
-                        </div>
-                    </div>
-                    <h3 class="product-name">عرق بیدمشک اصل</h3>
-                    <div class="rating">★ ★ ★ ★ ★</div>
-                    <div class="price">۲۹۰,۰۰۰ تومان</div>
-                    <button class="product-btn">افزودن به سبد خرید</button>
-                </article>
+                        <h3 class="product-name">{{$product->name}}</h3>
+                        <div class="rating">★ ★ ★ ★ ★</div>
+                        <div class="price">۳۸۵,۰۰۰ تومان</div>
+                        <button class="product-btn">افزودن به سبد خرید</button>
+                    </article>
+                @endforeach
             </div>
         </div>
     </section>

@@ -19,6 +19,7 @@ export default defineConfig({
                 'Modules/Jetstream/resources/assets/js/login.js',
                 'Modules/Dashboard/resources/assets/css/index.css',
                 'Modules/Shop/resources/assets/css/style.css',
+                'Modules/Shop/resources/assets/css/products.css',
 
             ],
             refresh: true,

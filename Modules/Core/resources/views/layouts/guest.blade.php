@@ -2,7 +2,10 @@
 <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <?php $settingHelper = app(\Modules\Core\Helpers\SettingHelper::class); ?>
+    <?php
+use Modules\Core\Helpers\SettingHelper;
+
+$settingHelper = app(SettingHelper::class); ?>
     <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -30,9 +33,9 @@
 <body>
     <x-Core::guest.header />
 
-    
     {{ $slot }}
-  
+
+    <x-Core::guest.footer />
 
     @stack('modals')
 
