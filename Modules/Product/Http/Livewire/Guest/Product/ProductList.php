@@ -4,6 +4,7 @@ namespace Modules\Product\Http\Livewire\Guest\Product;
 
 use Livewire\WithPagination;
 use Modules\Category\Entities\Category;
+use Modules\Category\Services\CategoryService;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
 use Modules\Product\Services\ProductService;
 
@@ -46,8 +47,11 @@ class ProductList extends GuestBaseComponent
 
     public function render()
     {
+        $categories = resolve(CategoryService::class)->list(conditions: ['where' => ['is_active' => ['=', true]]]);
+
         return $this->renderView('Product::livewire.guest.product.product-list', [
             'products' => $this->products,
+            'categories' => $categories,
         ])->layoutData([
             'title' => __('product::attributes.products'),
         ]);
