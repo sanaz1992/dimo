@@ -15,6 +15,8 @@ use Modules\Product\Http\Livewire\Admin\Product\ProductEdit;
 use Modules\Product\Http\Livewire\Admin\Product\ProductImport;
 use Modules\Product\Http\Livewire\Admin\Product\ProductList;
 use Modules\Product\Http\Livewire\Component\ProductAdvancedFilters;
+use Modules\Product\Http\Livewire\Guest\Product\ProductDetail as GuestProductDetail;
+use Modules\Product\Http\Livewire\Guest\Product\ProductList as GuestProductList;
 use Modules\Product\Services\Pricing\NullDiscountCalculator;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -46,6 +48,9 @@ class ProductServiceProvider extends ServiceProvider
         Livewire::component('product::edit', ProductEdit::class);
         Livewire::component('product::list', ProductList::class);
         Livewire::component('product::import', ProductImport::class);
+
+        Livewire::component('product::guest.list', GuestProductList::class);
+        Livewire::component('product::guest.detail', GuestProductDetail::class);
 
         Livewire::component('product::product-advanced-filters', ProductAdvancedFilters::class);
     }

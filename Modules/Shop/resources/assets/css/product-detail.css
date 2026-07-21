@@ -1,0 +1,464 @@
+
+
+/* Product detail */
+.product-detail {
+    padding: 20px 0 35px;
+}
+
+.product-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+}
+
+.product-layout {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 28px;
+    align-items: start;
+}
+
+/* Gallery */
+.gallery {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.thumb {
+    width: 96px;
+    height: 96px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: #111;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: .8;
+}
+
+.thumb:hover,
+.thumb.active {
+    transform: translateY(-2px);
+    border-color: rgba(199, 42, 49, 0.7);
+    opacity: 1;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main-image {
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: #101010;
+    padding: 18px;
+    min-height: 520px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-image::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% -20% auto;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(199, 42, 49, 0.17), transparent 70%);
+    filter: blur(10px);
+}
+
+.main-image img {
+    max-height: 470px;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+/* Info */
+.product-info h1 {
+    margin: 0 0 10px;
+    font-size: 2rem;
+    line-height: 1.4;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    color: var(--gold);
+    font-size: 0.95rem;
+}
+
+.rating .reviews {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.price {
+    color: var(--red);
+    font-weight: 800;
+    font-size: 1.55rem;
+    margin-bottom: 18px;
+}
+
+.description {
+    color: var(--muted);
+    line-height: 1.9;
+    font-size: 0.98rem;
+    margin-bottom: 22px;
+}
+
+.section-label {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.option-btn {
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.92rem;
+}
+
+.option-btn:hover,
+.option-btn.active {
+    border-color: var(--red);
+    background: rgba(199, 42, 49, 0.12);
+    color: #fff;
+}
+
+.buy-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.qty {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.qty button {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.qty span {
+    min-width: 48px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.add-to-cart {
+    flex: 1;
+    min-width: 240px;
+    height: 48px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #c72a31, #a92027);
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(199, 42, 49, 0.25);
+    transition: var(--transition);
+}
+
+.add-to-cart:hover {
+    transform: translateY(-1px);
+}
+
+/* Services */
+.services {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.service-card {
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 18px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.service-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(199, 42, 49, 0.12);
+    color: var(--red);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 1.4rem;
+}
+
+.service-card h4 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+}
+
+.service-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .product-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .services {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .thumbs {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .thumb {
+        flex: 0 0 auto;
+        width: 78px;
+        height: 78px;
+    }
+
+    .main-image {
+        min-height: 360px;
+    }
+
+    .product-info h1 {
+        font-size: 1.55rem;
+    }
+
+    .add-to-cart {
+        width: 100%;
+    }
+}
+
+/* بخش نظرات کاربران */
+.comments-section {
+    margin-top: 40px;
+    background: #151515;
+    padding: 30px;
+    border-radius: 22px;
+    border: 1px solid var(--border);
+}
+
+.comments-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #a92027;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.comments-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.comment-success-alert {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+    border: 1px solid rgba(25, 135, 84, 0.2);
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+}
+
+/* فرم ثبت دیدگاه */
+.comment-form-container {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+}
+
+.comment-form-container h4 {
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comment-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.comment-field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-field-group label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    color: var(--muted);
+}
+
+.comment-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.comment-input:focus {
+    border-color: #a92027;
+}
+
+.comment-input option {
+    background: #151515;
+    color: #ffffff;
+}
+
+.comment-textarea {
+    resize: vertical;
+}
+
+.comment-error {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+/* دکمه ارسال */
+.btn-submit-comment {
+    background: linear-gradient(rgb(199, 42, 49), rgb(169, 32, 39));
+    border: none;
+    padding: 10px 25px;
+    border-radius: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+    opacity: 1;
+}
+
+.btn-submit-comment:hover {
+    opacity: 0.9;
+}
+
+/* لیست نظرات */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comment-item {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.comment-author {
+    font-size: 0.95rem;
+    color: #ffffff;
+}
+
+.comment-stars {
+    color: #ffb800;
+    font-size: 0.9rem;
+}
+
+.comment-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.comment-date {
+    font-size: 0.75rem;
+    color: #666;
+    display: block;
+    margin-top: 8px;
+}
+
+.no-comments-message {
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 20px;
+}

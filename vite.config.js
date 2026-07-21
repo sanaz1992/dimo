@@ -20,6 +20,7 @@ export default defineConfig({
                 'Modules/Dashboard/resources/assets/css/index.css',
                 'Modules/Shop/resources/assets/css/style.css',
                 'Modules/Shop/resources/assets/css/products.css',
+                'Modules/Shop/resources/assets/css/product-detail.css',
 
             ],
             refresh: true,
