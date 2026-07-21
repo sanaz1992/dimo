@@ -1,13 +1,11 @@
 <main>
     <section class="page-header">
         <div class="container">
-            <div class="breadcrumbs">
-                <a href="#">@lang('shop::attributes.home_page')</a>
-                <span>/</span>
-                <span>@lang('product::attributes.products')</span>
-                <span>/</span>
-                <span> {{ $category?->name }}</span>
-            </div>
+            <x-Shop::breadcrumbs :items="[
+        ['label' => __('shop::attributes.home_page'), 'url' => route('home')],
+        ['label' => __('product::attributes.products'), 'url' => route('products.index')],
+        ['label' => $category?->name],
+    ]" />
 
             <h1 class="page-title">@lang('product::attributes.products') {{ $category?->name }}</h1>
 
