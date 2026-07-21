@@ -13,11 +13,16 @@
             </div>
 
             <div class="menu">
-                <a class="active" href="{{ route('home') }}">@lang('shop::attributes.home_page')</a>
-                <a href="{{ route('products.index') }}">@lang('product::attributes.products')</a>
-                <a href="{{ route('about.index') }}">@lang('pages::attributes.about')</a>
-                <a href="{{ route('blogs.index') }}">@lang('blog::attributes.blog')</a>
-                <a href="{{route('contactus.index')}}">@lang('pages::attributes.contactus')</a>
+                <a class="{{ request()->routeIs('home') ? 'active' : '' }}"
+                    href="{{ route('home') }}">@lang('shop::attributes.home_page')</a>
+                <a class="{{ request()->routeIs('products.index') ? 'active' : '' }}"
+                    href="{{ route('products.index') }}">@lang('product::attributes.products')</a>
+                <a class="{{ request()->routeIs('about.index') ? 'active' : '' }}"
+                    href="{{ route('about.index') }}">@lang('pages::attributes.about')</a>
+                <a class="{{ request()->routeIs('blogs.index') ? 'active' : '' }}"
+                    href="{{ route('blogs.index') }}">@lang('blog::attributes.blog')</a>
+                <a class="{{ request()->routeIs('contactus.index') ? 'active' : '' }}"
+                    href="{{route('contactus.index')}}">@lang('pages::attributes.contactus')</a>
             </div>
 
             <div class="actions">

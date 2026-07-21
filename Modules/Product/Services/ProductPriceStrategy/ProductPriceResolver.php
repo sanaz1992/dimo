@@ -22,11 +22,7 @@ final class ProductPriceResolver
         if (! $hasStrategy) { // نباید برسد اینجا اگر Fixed همیشه supports باشد
             $productPrice = (int) $product->price;
         }
-        $costPrice = 0;
-        foreach ($product->cost_items as $ci) {
-            $costPrice += $ci->base_price * $ci->pivot->amount;
-        }
 
-        return $productPrice + $costPrice;
+        return $productPrice;
     }
 }

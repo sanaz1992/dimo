@@ -14,6 +14,11 @@ class Category extends Model
 {
     protected $fillable = ['name', 'slug', 'is_active', 'description'];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function uploadDir(): string
     {
         return 'uploads/categories';

@@ -88,4 +88,24 @@ class Product extends Model
     {
         return $this->hasMany(ProductSku::class);
     }
+
+    public function getDefaultSku(): ?ProductSku
+    {
+        // اولویت ۱: ارزان‌ترین SKU که هم فعال است و هم موجودی دارد
+        $sku = $this->skus()
+            ->where('is_active', true)
+            ->where('stock', '>', 0)
+            ->orderBy('price', 'asc')
+            ->first();
+
+        if ($sku) {
+            return $sku;
+        }
+
+        // اولویت ۲: ارزان‌ترین SKU فعال (حتی اگر موجودی آن صفر باشد)
+        return $this->skus()
+            ->where('is_active', true)
+            ->orderBy('price', 'asc')
+            ->first();
+    }
 }

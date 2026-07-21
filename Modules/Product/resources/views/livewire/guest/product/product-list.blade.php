@@ -5,9 +5,11 @@
                 <a href="#">@lang('shop::attributes.home_page')</a>
                 <span>/</span>
                 <span>@lang('product::attributes.products')</span>
+                <span>/</span>
+                <span> {{ $category?->name }}</span>
             </div>
 
-            <h1 class="page-title">@lang('product::attributes.products')</h1>
+            <h1 class="page-title">@lang('product::attributes.products') {{ $category?->name }}</h1>
 
             <div class="filter-bar">
                 <div class="sort-box">
@@ -16,9 +18,15 @@
                 </div>
 
                 <div class="category-tabs">
-                    <button class="tab-btn active">@lang('shop::attributes.all')</button>
+                    <a href="{{ route('products.index') }}"
+                        class="tab-btn {{ request()->routeIs('products.index') ? 'active' : '' }} ">
+                        @lang('shop::attributes.all')
+                    </a>
                     @foreach ($categories as $category)
-                        <button class="tab-btn">{{$category->name}}</button>
+                        <a href="{{ route('categories.products.index', $category) }}"
+                            class="tab-btn  {{ request()->routeIs('categories.products.index') && request()->route('category')->id === $category->id ? 'active' : '' }}">
+                            {{$category->name}}
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -34,13 +42,13 @@
                         </div>
 
                         <div class="product-content">
-                            <h3 class="product-name">{{$product->name   }}</h3>
+                            <h3 class="product-name">{{$product->name}}</h3>
                             <div class="product-meta">
                                 <div class="rating">★★★★★ <span>(4.9)</span></div>
                                 <div class="price">۲۸۵,۰۰۰ تومان</div>
                             </div>
                             <div class="product-actions">
-                                <button class="add-to-cart">افزودن به سبد خرید</button>
+                                <button class="product-btn">افزودن به سبد خرید</button>
                                 <button class="quick-view">👁</button>
                             </div>
                         </div>
