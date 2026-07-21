@@ -13,5 +13,6 @@
     "Inventory": true,
     "Shop": true,
     "Pages": true,
-    "Blog": true
+    "Blog": true,
+    "Cart": true
 }
