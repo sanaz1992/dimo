@@ -5,6 +5,7 @@ namespace Modules\Product\Http\Livewire\Guest\Product;
 use Livewire\WithPagination;
 use Modules\Category\Entities\Category;
 use Modules\Category\Services\CategoryService;
+use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
 use Modules\Product\Services\ProductService;
 
@@ -18,8 +19,13 @@ class ProductList extends GuestBaseComponent
 
     public $sort = 'latest';
 
+    public $currency;
+
     public function mount(?Category $category = null)
     {
+        $settingHelper = app(SettingHelper::class);
+        $this->currency = $settingHelper->currencyLabel();
+
         if ($category && $category->exists) {
             $this->category = $category;
         }
@@ -30,17 +36,24 @@ class ProductList extends GuestBaseComponent
      */
     public function getProductsProperty()
     {
-        $conditions = [];
+        $conditions = [
+            'whereHas' => ['skus' => function ($q) {
+                $q->where('is_active', true);
+            }],
+        ];
         if ($this->category) {
             $conditions = array_merge($conditions, [
                 'where' => ['category_id' => ['=', $this->category->id]],
+
             ]);
         }
 
         return resolve(ProductService::class)->list(
             null,
-            [12, true],
-            [],
+            [8, true],
+            ['skus' => function ($query) {
+                $query->where('is_active', true);
+            }],
             $conditions
         );
     }

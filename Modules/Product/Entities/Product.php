@@ -12,7 +12,6 @@ use Modules\Core\Traits\Filterable;
 use Modules\Media\Entities\Media;
 use Modules\Media\Entities\NullMedia;
 use Modules\Order\Entities\OrderItem;
-use Modules\Product\Services\ProductPriceStrategy\ProductPriceResolver;
 
 class Product extends Model
 {
@@ -42,16 +41,6 @@ class Product extends Model
     public function getCreatedAtJalaliDateAttribute()
     {
         return verta($this->created_at)->format('Y/m/d');
-    }
-
-    public function getFinalPriceAttribute(): int
-    {
-        return app(ProductPriceResolver::class)->resolve($this);
-    }
-
-    public function getEffectivePriceAttribute(): int
-    {
-        return (int) $this->final_price;
     }
 
     public function category(): BelongsTo

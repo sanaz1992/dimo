@@ -33,36 +33,12 @@
 
             <div class="product-grid">
                 @foreach ($products as $product)
-                    <article class="product-card">
-                        <div class="product-badge">جدید</div>
-                        <button class="wishlist-btn" aria-label="افزودن به علاقه‌مندی">♡</button>
-
-                        <div class="product-image">
-                            <img src="{{ $product->main_image?->getThumbnailUrl('small') }}" />
-                        </div>
-
-                        <div class="product-content">
-                            <h3 class="product-name">{{$product->name}}</h3>
-                            <div class="product-meta">
-                                <div class="rating">★★★★★ <span>(4.9)</span></div>
-                                <div class="price">۲۸۵,۰۰۰ تومان</div>
-                            </div>
-                            <div class="product-actions">
-                                <button class="product-btn">افزودن به سبد خرید</button>
-                                <button class="quick-view">👁</button>
-                            </div>
-                        </div>
-                    </article>
+                    <x-Product::guest.product-card :product="$product" :currency="$currency" />
                 @endforeach
-
             </div>
 
-            <div class="pagination">
-                <a href="#" class="page-link active">1</a>
-                <a href="#" class="page-link">2</a>
-                <a href="#" class="page-link">3</a>
-                <a href="#" class="page-link">›</a>
-            </div>
+            {{$products->links('Shop::pagination')}}
+
         </div>
     </section>
 </main>

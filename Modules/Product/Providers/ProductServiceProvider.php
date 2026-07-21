@@ -5,7 +5,7 @@ namespace Modules\Product\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
-use Modules\Product\Console\CleanDuplicateCostItemsCommand;
+use Modules\Product\Contracts\DiscountCalculator;
 use Modules\Product\External\Contracts\ProductRepositoryInterface;
 use Modules\Product\External\Contracts\ProductSkuRepositoryInterface;
 use Modules\Product\External\ProductRepository;
@@ -15,9 +15,7 @@ use Modules\Product\Http\Livewire\Admin\Product\ProductEdit;
 use Modules\Product\Http\Livewire\Admin\Product\ProductImport;
 use Modules\Product\Http\Livewire\Admin\Product\ProductList;
 use Modules\Product\Http\Livewire\Component\ProductAdvancedFilters;
-use Modules\Product\Services\ProductPriceStrategy\FixedPriceStrategy;
-use Modules\Product\Services\ProductPriceStrategy\ProductPriceResolver;
-use Modules\Product\Services\ProductPriceStrategy\SmartCostStrategy;
+use Modules\Product\Services\Pricing\NullDiscountCalculator;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -63,16 +61,7 @@ class ProductServiceProvider extends ServiceProvider
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(ProductSkuRepositoryInterface::class, ProductSkuRepository::class);
 
-        $this->app->singleton(ProductPriceResolver::class, function ($app) {
-            return new ProductPriceResolver([
-                $app->make(SmartCostStrategy::class),
-                $app->make(FixedPriceStrategy::class),
-            ]);
-        });
-
-        $this->commands([
-            CleanDuplicateCostItemsCommand::class,
-        ]);
+        $this->app->bind(DiscountCalculator::class, NullDiscountCalculator::class);
     }
 
     /**
@@ -81,7 +70,7 @@ class ProductServiceProvider extends ServiceProvider
     protected function registerCommands(): void
     {
         $this->commands([
-            CleanDuplicateCostItemsCommand::class,
+            //
         ]);
     }
 
