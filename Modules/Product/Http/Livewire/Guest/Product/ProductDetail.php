@@ -2,8 +2,7 @@
 
 namespace Modules\Product\Http\Livewire\Guest\Product;
 
-use Modules\Cart\DTOs\AddToCartData;
-use Modules\Cart\Services\CartManager;
+use Modules\Cart\Http\Livewire\Concerns\InteractsWithCart;
 use Modules\Category\Services\CategoryService;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
@@ -13,6 +12,7 @@ use Modules\Product\Services\Pricing\ProductPriceResolver;
 
 class ProductDetail extends GuestBaseComponent
 {
+    use InteractsWithCart;
     use LivewireNotify;
 
     public Product $product;
@@ -77,27 +77,6 @@ class ProductDetail extends GuestBaseComponent
         }
 
         return app(ProductPriceResolver::class)->resolveForSku($selectedSku, $this->quantity);
-    }
-
-    public function addToCart(CartManager $cartManager): void
-    {
-        if (! $this->selectedSkuId) {
-            $this->addError('selectedSkuId', 'لطفا یک گزینه را انتخاب کنید.');
-
-            return;
-        }
-        // dd($this->product);
-        $cartManager->add(
-            new AddToCartData(
-                productId: $this->product->id,
-                skuId: $this->selectedSkuId,
-                quantity: $this->quantity,
-            ),
-            auth()->user()
-        );
-
-        $this->dispatch('cart-updated');
-        $this->notify('success', 'محصول به سبد خرید اضافه شد.');
     }
 
     public function render()

@@ -10,6 +10,7 @@ final readonly class ProductPrice
         public int $finalPrice,         // قیمت نهایی (پرداختی)
         public int $discountPercentage, // درصد تخفیف
         public bool $hasStock,          // موجودی دارد؟
-        public bool $isFromPrice = false // آیا قیمت «شروع از...» است؟ (برای کارت محصول)
+        public bool $isFromPrice, // آیا قیمت «شروع از...» است؟ (برای کارت محصول)
+        public int $skuId
     ) {}
 }

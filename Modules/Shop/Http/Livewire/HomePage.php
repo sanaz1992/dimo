@@ -2,6 +2,7 @@
 
 namespace Modules\Shop\Http\Livewire;
 
+use Modules\Cart\Http\Livewire\Concerns\InteractsWithCart;
 use Modules\Category\Services\CategoryService;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
@@ -9,6 +10,8 @@ use Modules\Product\Services\ProductService;
 
 class HomePage extends GuestBaseComponent
 {
+    use InteractsWithCart;
+
     public $currency;
 
     public function mount()

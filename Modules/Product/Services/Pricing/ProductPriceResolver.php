@@ -36,7 +36,8 @@ final readonly class ProductPriceResolver
             finalPrice: $finalPrice,
             discountPercentage: $discountPercentage,
             hasStock: $hasStock,
-            isFromPrice: false
+            isFromPrice: false,
+            skuId: $sku->id
         );
     }
 
@@ -75,7 +76,8 @@ final readonly class ProductPriceResolver
             finalPrice: $price->finalPrice,
             discountPercentage: $price->discountPercentage,
             hasStock: $price->hasStock,
-            isFromPrice: $hasMultiplePrices
+            isFromPrice: $hasMultiplePrices,
+            skuId: $defaultSku->id
         );
     }
 }

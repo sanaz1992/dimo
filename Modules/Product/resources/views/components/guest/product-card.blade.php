@@ -43,6 +43,6 @@
                 @endif
             </div>
         </a>
-        <button class="product-btn mt-2">@lang('shop::attributes.add_to_cart')</button>
+        <button class="product-btn mt-2" wire:click="addProductToCart({{ $product->id }}, {{ $price->skuId }}, 1)">@lang('shop::attributes.add_to_cart')</button>
     </div>
 </article>

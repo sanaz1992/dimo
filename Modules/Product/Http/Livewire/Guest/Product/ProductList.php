@@ -3,6 +3,7 @@
 namespace Modules\Product\Http\Livewire\Guest\Product;
 
 use Livewire\WithPagination;
+use Modules\Cart\Http\Livewire\Concerns\InteractsWithCart;
 use Modules\Category\Entities\Category;
 use Modules\Category\Services\CategoryService;
 use Modules\Core\Helpers\SettingHelper;
@@ -11,6 +12,7 @@ use Modules\Product\Services\ProductService;
 
 class ProductList extends GuestBaseComponent
 {
+    use InteractsWithCart;
     use WithPagination;
 
     public ?Category $category = null;

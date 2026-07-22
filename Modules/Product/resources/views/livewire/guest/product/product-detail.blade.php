@@ -87,7 +87,7 @@
                                     <button type="button" wire:click="incrementQuantity">+</button>
                                 </div>
 
-                                <button class="add-to-cart" wire:click="addToCart">افزودن به سبد خرید</button>
+                                <button class="add-to-cart" wire:click="addProductToCart({{ $product->id }}, {{ $selectedSkuId }}, {{$quantity}})">افزودن به سبد خرید</button>
                             @else
                                 <button disabled class="add-to-cart" style="background-color: #ccc; cursor: not-allowed;">
                                     ناموجود در انبار
