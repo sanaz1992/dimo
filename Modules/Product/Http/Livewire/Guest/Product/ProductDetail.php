@@ -2,14 +2,19 @@
 
 namespace Modules\Product\Http\Livewire\Guest\Product;
 
+use Modules\Cart\DTOs\AddToCartData;
+use Modules\Cart\Services\CartManager;
 use Modules\Category\Services\CategoryService;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
+use Modules\Core\Traits\LivewireNotify;
 use Modules\Product\Entities\Product;
 use Modules\Product\Services\Pricing\ProductPriceResolver;
 
 class ProductDetail extends GuestBaseComponent
 {
+    use LivewireNotify;
+
     public Product $product;
 
     public $currency;
@@ -44,7 +49,7 @@ class ProductDetail extends GuestBaseComponent
         $this->quantity = 1;
     }
 
-    public function incrementQty()
+    public function incrementQuantity()
     {
         $selectedSku = $this->product->skus->firstWhere('id', $this->selectedSkuId);
         if ($selectedSku && $this->quantity < $selectedSku->stock) {
@@ -52,7 +57,7 @@ class ProductDetail extends GuestBaseComponent
         }
     }
 
-    public function decrementQty()
+    public function decrementQuantity()
     {
         if ($this->quantity > 1) {
             $this->quantity--;
@@ -72,6 +77,26 @@ class ProductDetail extends GuestBaseComponent
         }
 
         return app(ProductPriceResolver::class)->resolveForSku($selectedSku, $this->quantity);
+    }
+
+    public function addToCart(CartManager $cartManager): void
+    {
+        if (! $this->selectedSkuId) {
+            $this->addError('selectedSkuId', 'لطفا یک گزینه را انتخاب کنید.');
+
+            return;
+        }
+        // dd($this->product);
+        $cartManager->add(
+            new AddToCartData(
+                productId: $this->product->id,
+                skuId: $this->selectedSkuId,
+                quantity: $this->quantity,
+            ),
+            auth()->user()
+        );
+
+        $this->notify('success', 'محصول به سبد خرید اضافه شد.');
     }
 
     public function render()

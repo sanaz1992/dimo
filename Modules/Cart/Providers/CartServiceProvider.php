@@ -4,6 +4,10 @@ namespace Modules\Cart\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Cart\External\CartItemRepository;
+use Modules\Cart\External\CartRepository;
+use Modules\Cart\External\Contracts\CartItemRepositoryInterface;
+use Modules\Cart\External\Contracts\CartRepositoryInterface;
 use Modules\Product\Providers\EventServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -36,7 +40,6 @@ class CartServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
-
     }
 
     /**
@@ -46,6 +49,9 @@ class CartServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        $this->app->bind(CartRepositoryInterface::class, CartRepository::class);
+        $this->app->bind(CartItemRepositoryInterface::class, CartItemRepository::class);
     }
 
     /**

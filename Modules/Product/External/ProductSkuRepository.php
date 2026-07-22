@@ -20,4 +20,12 @@ class ProductSkuRepository extends BaseRepository implements ProductSkuRepositor
 
         return ProductSku::create($data);
     }
+
+    public function findProductSku(int $productId, int $skuId): ?ProductSku
+    {
+        return ProductSku::query()
+            ->where('product_id', $productId)
+            ->where('id', $skuId)
+            ->first();
+    }
 }

@@ -8,4 +8,6 @@ use Modules\Product\Entities\ProductSku;
 interface ProductSkuRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(array $data): ProductSku;
+
+    public function findProductSku(int $productId, int $skuId): ?ProductSku;
 }
