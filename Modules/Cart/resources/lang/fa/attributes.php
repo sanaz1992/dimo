@@ -6,5 +6,6 @@ return [
     'shipping_cost' => 'هزینه ارسال',
     'free' => 'رایگان',
     'total' => 'مجموع کل',
+    'continue_shopping' => 'ادامه فرایند خرید',
 
 ];

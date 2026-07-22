@@ -10,31 +10,17 @@
         <section class="{{ $cart->items->count() ? 'grid' : '' }} cart-layout">
 
             @if ($cart->items->count())
-                <!-- Cart Items -->
-                <div class="panel cart-items">
-                    @foreach ($cart->items as $cartItem)
-                        <article class="cart-item">
-                            <button class="remove-item" wire:click="removeItem({{ $cartItem->id }})"
-                                aria-label="حذف محصول">×</button>
-                            <div class="item-image">
-                                <img src="{{ $cartItem->product->main_image?->getThumbnailUrl('small') }}"
-                                    alt="{{$cartItem->product->name}}">
-                            </div>
-                            <div class="item-info">
-                                <h2>{{$cartItem->product->name}}</h2>
-                                <span>{{formatPrice($cartItem->sku->volume_ml)}} @lang('product::attributes.ml')</span>
-                            </div>
-                            <div class="item-price">
-                                {{ formatPrice($cartItem->final_price * $cartItem->quantity) }} {{ $currency }}
-                            </div>
-                            <div class="qty">
-                                <button type="button">−</button>
-                                <span>{{ formatPrice($cartItem->quantity) }}</span>
-                                <button type="button">+</button>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
+
+                @if ($step === 'cart')
+                    @include('Cart::livewire.guest.steps.cart-items')
+                @elseif ($step === 'auth')
+                    @include('Cart::livewire.guest.steps.auth')
+                @elseif ($step === 'address')
+                    @include('Cart::livewire.guest.steps.address')
+                @elseif ($step === 'review')
+                    @include('Cart::livewire.guest.steps.review')
+                @endif
+
                 <!-- Summary -->
                 <aside class="panel summary">
                     <h3>@lang('cart::attributes.cart_summery')</h3>
@@ -54,7 +40,7 @@
                         <span>{{formatPrice($total)}} {{ $currency }}</span>
                     </div>
 
-                    <button class="checkout-btn">ثبت سفارش</button>
+                    <button class="checkout-btn" wire:click="continue">@lang('cart::attributes.continue_shopping')</button>
                 </aside>
             @else
                 <div class="empty-cart">

@@ -3,6 +3,7 @@
 namespace Modules\Cart\Http\Livewire;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Livewire\Attributes\On;
 use Modules\Cart\Entities\CartItem;
 use Modules\Cart\Services\CartManager;
 use Modules\Core\Helpers\SettingHelper;
@@ -14,14 +15,57 @@ class CartPage extends GuestBaseComponent
 
     public $cart;
 
+    public string $step = 'cart';
+
+    public $cartItemsCount;
+
     public function mount()
     {
-        $this->cart = resolve(CartManager::class)->getCart(auth()->user());
+        $this->loadCart();
+
+        $this->step = request('step', 'cart');
 
         $settingHelper = app(SettingHelper::class);
         $this->currency = $settingHelper->currencyLabel();
+    }
 
-        $this->loadCart();
+    public function continue()
+    {
+        if ($this->step === 'cart') {
+            if ($this->cartItemsCount < 1) {
+                return;
+            }
+
+            if (! auth()->check()) {
+                session(['url.intended' => route('cart.index', ['step' => 'address'])]);
+
+                return redirect()->route('login');
+            }
+
+            $this->step = 'address';
+
+            return;
+        }
+
+        if ($this->step === 'auth') {
+            if (! auth()->check()) {
+                return;
+            }
+
+            $this->step = 'address';
+
+            return;
+        }
+
+        if ($this->step === 'address') {
+            if (! $this->selectedAddressId) {
+                $this->addError('selectedAddressId', 'لطفا آدرس را انتخاب کنید.');
+
+                return;
+            }
+
+            $this->step = 'review';
+        }
     }
 
     #[On('cart-updated')]
@@ -34,6 +78,9 @@ class CartPage extends GuestBaseComponent
             'items.product',
             'items.sku',
         ]);
+
+        $items = $this->cart?->items ?? collect();
+        $this->cartItemsCount = (int) $items->sum('quantity');
     }
 
     public function updateQuantity(int $itemId, int $quantity): void
@@ -85,8 +132,6 @@ class CartPage extends GuestBaseComponent
 
         $items = $this->cart?->items ?? collect();
 
-        $cartItemsCount = (int) $items->sum('quantity');
-
         $subtotal = (int) $items->sum(
             fn ($item) => (int) $item->final_price * (int) $item->quantity
         );
@@ -96,7 +141,7 @@ class CartPage extends GuestBaseComponent
 
         return $this->renderView(
             'Cart::livewire.guest.cart-page',
-            compact('cartItemsCount', 'subtotal', 'total')
+            compact('subtotal', 'total')
         )->layoutData(
             ['title' => __('product::attributes.products')]
         );

@@ -104,4 +104,59 @@ class CartManager
 
         return $cart->items->sum('quantity');
     }
+
+    public function mergeGuestCartIntoUser(Authenticatable $user): void
+    {
+        $token = $this->sessionManager->getToken();
+
+        if (! $token) {
+            return;
+        }
+
+        DB::transaction(function () use ($token, $user) {
+            $guestCart = $this->cartRepository->findActiveForToken($token);
+
+            if (! $guestCart) {
+                return;
+            }
+
+            $guestCart->load('items');
+
+            $userCart = $this->cartRepository->findActiveForUser($user);
+
+            if (! $userCart) {
+                $guestCart->update([
+                    'user_id' => $user->getAuthIdentifier(),
+                    'token' => null,
+                ]);
+
+                return;
+            }
+
+            $userCart->load('items');
+
+            foreach ($guestCart->items as $guestItem) {
+                $existingItem = $userCart->items
+                    ->firstWhere('sku_id', $guestItem->sku_id);
+
+                if ($existingItem) {
+                    $existingItem->update([
+                        'quantity' => $existingItem->quantity + $guestItem->quantity,
+                    ]);
+
+                    $guestItem->delete();
+
+                    continue;
+                }
+
+                $guestItem->update([
+                    'cart_id' => $userCart->id,
+                ]);
+            }
+
+            $guestCart->delete();
+        });
+
+        $this->sessionManager->forget();
+    }
 }

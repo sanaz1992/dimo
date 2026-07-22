@@ -2,19 +2,26 @@
 
 namespace Modules\Cart\Services;
 
-use Illuminate\Support\Str;
-
 class CartSessionManager
 {
+    private const CART_TOKEN_KEY = 'cart_token';
+
+    public function getToken(): ?string
+    {
+        return session(self::CART_TOKEN_KEY);
+    }
+
     public function getOrCreateToken(): string
     {
-        $token = session()->get('cart_token');
-
-        if (! $token) {
-            $token = (string) Str::uuid();
-            session()->put('cart_token', $token);
+        if (! session()->has(self::CART_TOKEN_KEY)) {
+            session([self::CART_TOKEN_KEY => str()->uuid()->toString()]);
         }
 
-        return $token;
+        return session(self::CART_TOKEN_KEY);
+    }
+
+    public function forget(): void
+    {
+        session()->forget(self::CART_TOKEN_KEY);
     }
 }
