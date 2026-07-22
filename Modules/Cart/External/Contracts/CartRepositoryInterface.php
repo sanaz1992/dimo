@@ -11,4 +11,8 @@ interface CartRepositoryInterface extends BaseRepositoryInterface
     public function getOrCreateActiveForUser(Authenticatable $user): Cart;
 
     public function getOrCreateActiveForToken(string $token): Cart;
+
+    public function findActiveForUser(Authenticatable $user): ?Cart;
+
+    public function findActiveForToken(string $token): ?Cart;
 }

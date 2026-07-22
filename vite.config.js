@@ -21,6 +21,7 @@ export default defineConfig({
                 'Modules/Shop/resources/assets/css/style.css',
                 'Modules/Shop/resources/assets/css/products.css',
                 'Modules/Shop/resources/assets/css/product-detail.css',
+                'Modules/Cart/resources/assets/css/cart.css',
 
             ],
             refresh: true,

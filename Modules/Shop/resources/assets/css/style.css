@@ -124,20 +124,28 @@ a {
 
 /* Header */
 .topbar {
-    padding: 22px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, .04);
     position: sticky;
     top: 0;
     z-index: 50;
-    backdrop-filter: blur(14px);
-    background: rgba(13, 13, 13, .72);
+    backdrop-filter: blur(10px);
+    background: rgba(10, 10, 10, 0.92);
+    border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 78px;
+    max-width: 100%;
 }
 
 .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 18px;
+    gap: 40px;
 }
 
 .brand {
@@ -902,6 +910,12 @@ footer {
     color: var(--muted-2);
     text-align: center;
     font-size: .92rem;
+}
+
+.breadcrumb {
+    color: var(--muted-2);
+    font-size: 0.92rem;
+    margin-bottom: 12px;
 }
 
 /* Responsive */

@@ -4,10 +4,13 @@ namespace Modules\Cart\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Modules\Cart\External\CartItemRepository;
 use Modules\Cart\External\CartRepository;
 use Modules\Cart\External\Contracts\CartItemRepositoryInterface;
 use Modules\Cart\External\Contracts\CartRepositoryInterface;
+use Modules\Cart\Http\Livewire\CartIcon;
+use Modules\Cart\Http\Livewire\CartPage;
 use Modules\Product\Providers\EventServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -40,6 +43,9 @@ class CartServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
+
+        Livewire::component('cart::guest.cart-icon', CartIcon::class);
+        Livewire::component('cart::guest.cart-page', CartPage::class);
     }
 
     /**

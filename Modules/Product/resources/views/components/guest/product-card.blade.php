@@ -29,7 +29,7 @@
             <div class="price-box">
                 @if($price)
                     @if($price->discountAmount > 0)
-                        <del class="text-gray-400">{{ number_format($price->basePrice) }} {{ $currency }}</del>
+                        <del class="text-gray-400">{{ formatPrice($price->basePrice) }} {{ $currency }}</del>
                         <span class="badge text-red-500">{{ $price->discountPercentage }}%
                             @lang('shop::attributes.discount')</span>
                     @endif
@@ -38,7 +38,7 @@
                         @if($price->isFromPrice)
                             <span class="text-sm text-gray-500">@lang('shop::attributes.start_from'):</span>
                         @endif
-                        {{ number_format($price->finalPrice) }} {{ $currency }}
+                        {{ formatPrice($price->finalPrice) }} {{ $currency }}
                     </div>
                 @endif
             </div>

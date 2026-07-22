@@ -78,4 +78,30 @@ class CartManager
             $this->sessionManager->getOrCreateToken()
         );
     }
+
+    public function getCart(?Authenticatable $user = null): ?Cart
+    {
+        if ($user) {
+            return $this->cartRepository
+                ->getOrCreateActiveForUser($user)
+                ->load('items.product', 'items.sku');
+        }
+
+        return $this->cartRepository
+            ->getOrCreateActiveForToken($this->sessionManager->getOrCreateToken())
+            ->load('items.product', 'items.sku');
+    }
+
+    /**
+     * دریافت تعداد کل آیتم‌های داخل سبد خرید
+     */
+    public function getCartItemsCount(?Authenticatable $user = null): int
+    {
+        $cart = $this->getCart($user);
+        if (! $cart) {
+            return 0;
+        }
+
+        return $cart->items->sum('quantity');
+    }
 }

@@ -48,7 +48,7 @@
                             @if($this->priceDetails)
                                 @if($this->priceDetails->discountAmount > 0)
                                     <del class="text-gray-400 block text-sm">
-                                        {{ number_format($this->priceDetails->basePrice) }} {{ $currency }}
+                                        {{ formatPrice($this->priceDetails->basePrice) }} {{ $currency }}
                                     </del>
                                     <span class="badge text-red-500 text-xs font-bold bg-red-50 px-2 py-0.5 rounded">
                                         {{ $this->priceDetails->discountPercentage }}% @lang('shop::attributes.discount')
@@ -56,7 +56,7 @@
                                 @endif
 
                                 <div class="font-bold text-xl mt-1">
-                                    {{ number_format($this->priceDetails->finalPrice) }} {{ $currency }}
+                                    {{ formatPrice($this->priceDetails->finalPrice) }} {{ $currency }}
                                 </div>
                             @else
                                 <span class="text-red-500 font-bold">@lang('shop::attributes.unavailable')</span>
@@ -73,7 +73,7 @@
                             @foreach ($product->skus as $sku)
                                 <button type="button" wire:click="selectSku({{ $sku->id }})"
                                     class="option-btn {{ $selectedSkuId == $sku->id ? 'active' : '' }}">
-                                    {{ $sku->volume_ml }} @lang('product::attributes.ml')
+                                    {{ formatPrice($sku->volume_ml) }} @lang('product::attributes.ml')
                                 </button>
                             @endforeach
                         </div>
@@ -83,7 +83,7 @@
                             @if($this->priceDetails && $this->priceDetails->hasStock)
                                 <div class="qty">
                                     <button type="button" wire:click="decrementQuantity">−</button>
-                                    <span>{{ $quantity }}</span>
+                                    <span>{{ formatPrice($quantity) }}</span>
                                     <button type="button" wire:click="incrementQuantity">+</button>
                                 </div>
 

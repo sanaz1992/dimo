@@ -29,4 +29,20 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
             'status' => 'active',
         ]);
     }
+
+    public function findActiveForUser(Authenticatable $user): ?Cart
+    {
+        return Cart::query()
+            ->where('user_id', $user->getAuthIdentifier())
+            ->where('status', 'active')
+            ->first();
+    }
+
+    public function findActiveForToken(string $token): ?Cart
+    {
+        return Cart::query()
+            ->where('token', $token)
+            ->where('status', 'active')
+            ->first();
+    }
 }

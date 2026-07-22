@@ -96,6 +96,7 @@ class ProductDetail extends GuestBaseComponent
             auth()->user()
         );
 
+        $this->dispatch('cart-updated');
         $this->notify('success', 'محصول به سبد خرید اضافه شد.');
     }
 

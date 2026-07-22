@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Cart\Http\Controllers\CartController;
+use Modules\Cart\Http\Livewire\CartPage;
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('carts', CartController::class)->names('cart');
-});
+Route::get('/cart', CartPage::class)->name('cart.index');
