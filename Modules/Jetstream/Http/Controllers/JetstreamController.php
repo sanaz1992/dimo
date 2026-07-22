@@ -181,7 +181,7 @@ class JetstreamController
         return redirect()->route('admin.admins.edit', $user);
     }
 
-    public function register(RegisterRules $request)
+    public function register(RegisterRules $request, CartManager $cartManager)
     {
         $data = $request->all();
         $user = $this->userService->findByColumn('mobile', $data['mobile']);
@@ -198,10 +198,14 @@ class JetstreamController
         // $user->assignRole(['super_admin']);
         Auth::loginUsingId($user->id);
 
+        $cartManager->mergeGuestCartIntoUser($request->user());
+
         if ($user->level == 'admin') {
-            return redirect()->route('admin.dashboard');
+            // return redirect()->route('admin.dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         } else {
-            return redirect()->route('user.dashboard');
+            // return redirect()->route('user.dashboard');
+            return redirect()->intended(route('user.dashboard'));
         }
     }
 }
