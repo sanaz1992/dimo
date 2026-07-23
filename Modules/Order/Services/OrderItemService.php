@@ -3,18 +3,19 @@
 namespace Modules\Order\Services;
 
 use Illuminate\Support\Facades\DB;
+use Modules\Cart\Entities\CartItem;
 use Modules\Order\Entities\Order;
 use Modules\Order\Entities\OrderItem;
 use Modules\Order\Enums\OrderItemStatus;
 use Modules\Order\Enums\OrderStatus;
 use Modules\Order\External\OrderItemRepository;
+use Modules\Product\Entities\ProductSku;
 use Modules\Product\Services\ProductService;
 
 class OrderItemService
 {
     public function __construct(
         protected OrderItemRepository $orderItemRepository,
-        protected OrderItemFabricService $orderItemFabricService,
         protected ProductService $productService
     ) {}
 
@@ -27,50 +28,26 @@ class OrderItemService
     {
         return $this->orderItemRepository->find($id);
     }
-    // public function attachProducts(Order $order, array $productsData): array
-    // {
-    //     $subTotal = 0;
-    //     $totalPrice = 0;
 
-    //     foreach ($productsData as $productData) {
-    //         [$productPrice, $totalProductPrice] = $this->createOrderItem($order, $productData);
-
-    //         $subTotal += $productPrice;
-    //         $totalPrice += $totalProductPrice;
-    //     }
-
-    //     return [$subTotal, $totalPrice];
-    // }
-
-    public function createOrderItem(Order $order, array $data): OrderItem
+    public function createOrderItem(Order $order, CartItem $cartItem): OrderItem|bool
     {
-        $orderItem = $this->orderItemRepository->create([
-            'order_id' => $order->id,
-            'product_id' => $data['product_id'],
-            'qty' => $data['qty'],
-            'status' => $data['status'] ?? OrderItemStatus::DRAFT->value,
-            'custom_frame' => $data['custom_frame'] ?? false,
-            'send_fabric_by_customer' => $data['send_fabric_by_customer'] ?? false,
-            'frame_color_id' => $data['frame_color_id'] ?? null,
-            'price' => 0,
-            'total_price' => 0,
-        ]);
+        return DB::transaction(function () use ($order, $cartItem) {
+            $productSku = $this->productService->checkProductHasStock($cartItem->product_sku_id, $cartItem->quantity);
+            if ($productSku instanceof ProductSku) {
+                $orderItem = $this->orderItemRepository->create([
+                    'order_id' => $order->id,
+                    'product_sku_id' => $cartItem->product_sku_id,
+                    'quantity' => $cartItem->quantity,
+                    'price' => $productSku->price,
+                    'discount' => 0,
+                    'total' => $productSku->price * $cartItem->quantity,
+                ]);
+            } else {
+                return false;
+            }
 
-        $product = $this->productService->find($data['product_id']);
-
-        $totalFabricPrice = $this->orderItemFabricService->attachFabrics($orderItem, $product, $data);
-
-        $productPrice = $product->effective_price + $totalFabricPrice;
-        $totalProductPrice = $this->calculateProductTotal($orderItem, $productPrice);
-
-        $orderItem->update([
-            'price' => $productPrice,
-            'total_price' => $totalProductPrice,
-        ]);
-
-        resolve(OrderService::class)->updateOrderPrices($orderItem->order_id);
-
-        return $orderItem;
+            return $orderItem;
+        });
     }
 
     protected function calculateProductTotal($orderItem, float $productPrice): float

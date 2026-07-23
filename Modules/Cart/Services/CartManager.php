@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Modules\Cart\DTOs\AddToCartData;
 use Modules\Cart\Entities\Cart;
+use Modules\Cart\Entities\CartItem;
 use Modules\Cart\External\Contracts\CartItemRepositoryInterface;
 use Modules\Cart\External\Contracts\CartRepositoryInterface;
 use Modules\Product\External\Contracts\ProductSkuRepositoryInterface;
@@ -157,6 +158,21 @@ class CartManager
             $guestCart->delete();
         });
 
+        $this->sessionManager->forget();
+    }
+
+    public function removeItem(CartItem $item)
+    {
+        $this->cartItemRepository->delete($item->id);
+    }
+
+    public function clear(): void
+    {
+        $cart = $this->getCart();
+        if ($cart) {
+            $cart->items()->delete();
+            $cart->delete();
+        }
         $this->sessionManager->forget();
     }
 }

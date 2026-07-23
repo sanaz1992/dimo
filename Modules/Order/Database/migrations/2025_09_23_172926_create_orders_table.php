@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('status')->default('pending'); // pending, processing, shipped, delivered, cancelled
             $table->string('payment_status')->default('unpaid'); // unpaid, paid, failed, refunded
 
-            $table->decimal('subtotal', 12, 0); // Total price before discount and shipping cost
+            $table->decimal('subtotal', 12, 0)->nullable(); // Total price before discount and shipping cost
             $table->decimal('discount_amount', 12, 0)->default(0);
             $table->decimal('shipping_cost', 12, 0)->default(0);
-            $table->decimal('total_amount', 12, 0); // Final payable amount
+            $table->decimal('total_amount', 12, 0)->nullable(); // Final payable amount
 
             $table->text('notes')->nullable(); // Customer notes
             $table->timestamps();

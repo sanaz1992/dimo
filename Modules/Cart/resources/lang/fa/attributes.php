@@ -17,5 +17,10 @@ return [
     'postal_code' => 'کد پستی',
     'address' => 'آدرس',
     'store_address' => 'ثبت آدرس',
+    'shipping_address' => 'آدرس تحویل سفارش',
+    'track_shipments' => 'بررسی مرسوله‌ها',
+    'place_order' => 'پرداخت و ثبت نهایی سفارش',
+
+    'show_products' => 'مشاهده محصولات',
 
 ];

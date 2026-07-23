@@ -10,8 +10,11 @@ use Modules\Cart\Services\CartManager;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
+use Modules\Order\Exceptions\OutOfStockException;
+use Modules\Order\Services\OrderService;
 use Modules\User\Entities\City;
 use Modules\User\Entities\Province;
+use Modules\User\External\Repositories\AddressRepository;
 use Modules\User\Services\UserService;
 
 class CartPage extends GuestBaseComponent
@@ -39,6 +42,8 @@ class CartPage extends GuestBaseComponent
 
     public ?int $selectedAddressId = null;
 
+    public $selectedAddress;
+
     public function mount()
     {
         $this->loadCart();
@@ -63,13 +68,17 @@ class CartPage extends GuestBaseComponent
     {
 
         switch ($this->step) {
+            case 'payment':
             case 'review':
             case 'address':
                 if (! $this->selectedAddressId) {
                     $this->notify('error', 'لطفا آدرس را انتخاب کنید.');
 
                     $this->step = 'address';
+                } else {
+                    $this->selectedAddress = app(AddressRepository::class)->find($this->selectedAddressId);
                 }
+
             case 'auth':
                 if (! auth()->check()) {
                     $this->step = 'cart';
@@ -153,6 +162,8 @@ class CartPage extends GuestBaseComponent
                 $this->notify('error', 'لطفا آدرس را انتخاب کنید.');
 
                 return;
+            } else {
+                $this->selectedAddress = app(AddressRepository::class)->find($this->selectedAddressId);
             }
             $this->step = 'review';
         }
@@ -235,5 +246,50 @@ class CartPage extends GuestBaseComponent
         )->layoutData(
             ['title' => __('product::attributes.products')]
         );
+    }
+
+    public function redirectToPayment()
+    {
+        $cartManager = app(CartManager::class);
+        // check data
+        $this->step = 'payment';
+        $this->checkStepData();
+
+        // check cart items
+        if (! $this->cart || $this->cart->items->isEmpty()) {
+            $this->notify('error', __('cart::messages.your_cart_is_empty'));
+
+            return;
+        }
+
+        try {
+            app(OrderService::class)->createFromCart($this->cart, [
+                'user_id' => auth()->id(),
+                'address_id' => $this->selectedAddressId,
+            ]);
+
+            // delete cart
+            $cartManager->clear();
+
+            dd('success');
+            // //send to payment
+            // return PaymentService::pay($order);
+        } catch (OutOfStockException $e) {
+            // get item doesnt have enough stock
+            $failedItem = $e->getItem();
+
+            if ($failedItem) {
+                // delete item
+                $cartManager->removeItem($failedItem);
+            }
+
+            // show message
+            $this->notify('notify', $e->getMessage());
+        } catch (\Exception $e) {
+            dd($e);
+            $this->notify('error', $e->getMessage());
+            $this->notify('error', __('cart::messages.error_in_submit_order'));
+            $this->step = 'cart';
+        }
     }
 }

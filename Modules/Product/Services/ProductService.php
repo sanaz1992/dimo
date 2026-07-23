@@ -9,6 +9,7 @@ use Modules\Core\Traits\LivewireNotify;
 use Modules\Media\Entities\Media;
 use Modules\Media\Services\MediaService;
 use Modules\Product\Entities\Product;
+use Modules\Product\Entities\ProductSku;
 use Modules\Product\External\Contracts\ProductRepositoryInterface;
 use Modules\Product\External\Contracts\ProductSkuRepositoryInterface;
 
@@ -98,5 +99,20 @@ class ProductService
 
             return $result;
         });
+    }
+
+    public function findProductSku($id): ProductSku
+    {
+        return $this->productSkuRepository->find($id);
+    }
+
+    public function checkProductHasStock(int $productSkuId, int $quantity): ProductSku|bool
+    {
+        $productSku = $this->findProductSku($productSkuId);
+        if ($productSku->stock > $quantity) {
+            return $productSku;
+        } else {
+            return false;
+        }
     }
 }

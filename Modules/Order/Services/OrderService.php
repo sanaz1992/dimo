@@ -2,19 +2,18 @@
 
 namespace Modules\Order\Services;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Modules\Cart\Entities\Cart;
+use Modules\Cart\Services\CartManager;
 use Modules\Core\Filters\QueryFilter;
 use Modules\Core\Helpers\CodeGeneratorHelper;
 use Modules\Core\Helpers\ConvertDatesHelper;
-use Modules\Factory\Enums\ProductionOrderItemStatus;
 use Modules\Order\Entities\Order;
+use Modules\Order\Entities\OrderItem;
 use Modules\Order\Enums\OrderItemStatus;
 use Modules\Order\Enums\OrderStatus;
-use Modules\Order\Enums\OrderType;
+use Modules\Order\Exceptions\OutOfStockException;
 use Modules\Order\External\Contracts\OrderRepositoryInterface;
-use Modules\Product\Entities\Product;
-use Modules\User\Entities\User;
 use Modules\User\Services\UserService;
 
 class OrderService
@@ -22,6 +21,7 @@ class OrderService
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
         protected OrderItemService $orderItemService,
+        protected CartManager $cartManager
     ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
@@ -39,41 +39,44 @@ class OrderService
         return $this->orderRepository->findByColumn($col, $value);
     }
 
-    public function create(array $orderData): Order
+    public function createFromCart(Cart $cart, array $data)
     {
-        return DB::transaction(function () use ($orderData) {
-            if (! empty($orderData['customer_mobile'])) {
-                $user = resolve(UserService::class)->firstOrCreate(
-                    ['mobile' => $orderData['customer_mobile']],
-                    [
-                        'name' => $orderData['customer_name'] ?? $orderData['customer_mobile'],
-                        'password' => $orderData['customer_mobile'],
-                    ]
-                );
-            }
+        $data['status'] = 'pending';
 
-            return $this->createOrder($user ?? null, $orderData);
+        return DB::transaction(function () use ($cart, $data) {
+            $order = $this->create($data);
+
+            // create order items
+            $cart->load('items');
+            foreach ($cart->items as $item) {
+                $orderItem = $this->orderItemService->createOrderItem($order, $item);
+                // error if it doesnt have enough stock
+                if (! $orderItem instanceof OrderItem) {
+                    throw new OutOfStockException(
+                        __('messages.out_of_stock_item', ['product' => $item->product->name]),
+                        $item
+                    );
+                }
+            }
+            // update order prices
+            $this->updateOrderPrices($order->id);
+
+            return $order;
         });
     }
 
-    protected function createOrder(?User $user, array $orderData): Order
+    public function create(array $orderData): Order
     {
-        $raw = $orderData['code'] ?? null;
+        $raw = $orderData['order_number'] ?? null;
         $raw = is_string($raw) ? trim($raw) : $raw;
         $raw = ConvertDatesHelper::convertPersianNumbersToEnglish($raw);
+        $orderData['order_number'] = ($raw === null || $raw === '')
+            ? CodeGeneratorHelper::generate(get_class(new Order), 'order_number')
+            : $raw;
 
-        return $this->orderRepository->create([
-            'user_id' => $user ? $user->id : null,
-            'seller_id' => auth()->id(),
-            'code' => ($raw === null || $raw === '')
-                ? CodeGeneratorHelper::generate(get_class(new Order))
-                : $raw,
-            'description' => $orderData['description'] ?? null,
-            'status' => OrderStatus::DRAFT->value,
-            'subtotal' => 0,
-            'total_price' => 0,
-            'type' => $orderData['type'] ?? OrderType::SALE->value,
-        ]);
+        return DB::transaction(function () use ($orderData) {
+            return $this->orderRepository->create($orderData);
+        });
     }
 
     public function updateOrderPrices(int $orderId)
@@ -83,13 +86,16 @@ class OrderService
         $order->load('items');
         $subTotal = 0;
         $totalPrice = 0;
+        $discount = 0;
         foreach ($order->items as $item) {
             $subTotal += $item->price;
             $totalPrice += $item->total_price;
+            $discount += $item->discount;
         }
         $order = $this->orderRepository->update($order, [
             'subtotal' => $subTotal,
             'total_price' => $totalPrice,
+            'discount' => $discount,
         ]);
 
         return $order;
@@ -168,40 +174,6 @@ class OrderService
         });
     }
 
-    /**
-     * Distinct non-fabric products of an order that have no production route
-     * (`hall_difinations`). Used both for the block message and to link the
-     * admin to each product's edit page so a route can be defined.
-     *
-     * @return Collection<int, Product>
-     */
-    public function productsMissingProductionRoute(Order $order): Collection
-    {
-        $order->loadMissing('items.product.hall_difinations');
-
-        return $order->items
-            ->map->product
-            ->filter(fn ($product) => $product
-                && ! $this->isFabricItem($product)
-                && $product->hall_difinations->isEmpty())
-            ->unique('id')
-            ->values();
-    }
-
-    /**
-     * Fabric lines were imported as stub products (unit متر / name «پارچه»,
-     * code prefix 103). They are record-only and never enter production.
-     */
-    protected function isFabricItem($product): bool
-    {
-        if (! $product) {
-            return false;
-        }
-
-        return str_contains((string) $product->title, 'پارچه')
-            || str_starts_with((string) $product->code, '103');
-    }
-
     public function approveOrder(Order $order): array
     {
         if ($order->status != OrderStatus::AWAITING_SALES_MANAGER_APPROVAL->value) {
@@ -248,7 +220,7 @@ class OrderService
                     //         ]
                     //     ]
                     // );
-                    $groupName = $order->code.'-'.$orderItem->id.$i;
+                    $groupName = $order->order_number.'-'.$orderItem->id.$i;
                     foreach ($productHallDifinations as $productHallDifination) {
                         // if (in_array($productHallDifination->hall->slug, ["painting", "cutting-and-sewing"])) {
                         //     $parentId = null;
@@ -330,24 +302,6 @@ class OrderService
         return DB::transaction(function () use ($order) {
             $order = $this->orderRepository->update($order, ['status' => OrderStatus::DELIVERED->value]);
             $this->orderItemService->updateItemsStatus($order, OrderItemStatus::DELIVERED->value);
-
-            return $order;
-        });
-    }
-
-    public function createInternalOrder(array $data)
-    {
-        return DB::transaction(function () use ($data) {
-            $data['type'] = OrderType::INTERNAL->value;
-            $order = $this->createOrder(null, $data);
-            $productsData = [
-                'product_id' => $data['product_id'],
-                'qty' => $data['qty'],
-                // 'status' => OrderItemStatus::AWAITING_SALES_MANAGER_APPROVAL->value,
-            ];
-            $this->orderItemService->createOrderItem($order, $productsData);
-            $this->confirmFinalApproval($order);
-            // $order = $this->update($order, ['status' => OrderStatus::AWAITING_SALES_MANAGER_APPROVAL->value]);
 
             return $order;
         });

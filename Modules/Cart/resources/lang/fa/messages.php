@@ -29,4 +29,9 @@ return [
 
     'access_error' => 'شما دسترسی لازم برای ورود به این صفحه را ندارید',
 
+    'out_of_stock_item' => 'محصول :product به علت کمبود موجودی در انبار موجود نیست.',
+    'error_in_submit_order' => 'خطایی در ثبت سفارش رخ داد.',
+    'redirecting_to_gateway' => 'در حال انتقال به درگاه',
+    'your_cart_is_empty' => 'سبد خرید شما خالی است',
+    'you_have_no_items_in_your_shopping_cart' => 'هنوز محصولی به سبد خرید اضافه نکرده‌اید.',
 ];

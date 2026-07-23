@@ -2,8 +2,10 @@
 <div class="panel cart-items">
     @foreach ($cart->items as $cartItem)
         <article class="cart-item">
-            <button class="remove-item" wire:click="removeItem({{ $cartItem->id }})"
-                aria-label="@lang('core::attributes.delete')">×</button>
+            @if(!isset($canChange) || $canChange == true)
+                <button class="remove-item" wire:click="removeItem({{ $cartItem->id }})"
+                    aria-label="@lang('core::attributes.delete')">×</button>
+            @endif
             <div class="item-image">
                 <img src="{{ $cartItem->product->main_image?->getThumbnailUrl('small') }}"
                     alt="{{$cartItem->product->name}}">
@@ -16,9 +18,13 @@
                 {{ formatPrice($cartItem->final_price * $cartItem->quantity) }} {{ $currency }}
             </div>
             <div class="qty">
-                <button type="button">−</button>
-                <span>{{ formatPrice($cartItem->quantity) }}</span>
-                <button type="button">+</button>
+                @if(!isset($canChange) || $canChange == true)
+                    <button type="button">−</button>
+                    <span>{{ formatPrice($cartItem->quantity) }}</span>
+                    <button type="button">+</button>
+                @else
+                    <span>{{ formatPrice($cartItem->quantity) }}</span>
+                @endif
             </div>
         </article>
     @endforeach

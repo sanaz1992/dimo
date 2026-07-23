@@ -4,25 +4,17 @@ namespace Modules\Order\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Modules\Factory\Entities\ProductionOrderItem;
-use Modules\Product\Entities\Product;
-use Modules\Shipment\Entities\ShipmentItem;
-use Modules\Warehouse\Entities\Color;
+use Modules\Product\Entities\ProductSku;
 
 class OrderItem extends Model
 {
     protected $fillable = [
         'order_id',
-        'product_id',
-        'discount',
+        'product_sku_id',
+        'quantity',
         'price',
-        'qty',
-        'status',
-        'custom_frame',
-        'send_fabric_by_customer',
-        'frame_color_id',
-        'total_price',
+        'discount',
+        'total',
     ];
 
     public function getUpdatedAtJalaliAttribute()
@@ -35,33 +27,8 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function product(): BelongsTo
+    public function product_sku(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function item_fabrics(): HasMany
-    {
-        return $this->hasMany(OrderItemFabric::class);
-    }
-
-    public function frame_color(): BelongsTo
-    {
-        return $this->belongsTo(Color::class, 'frame_color_id');
-    }
-
-    public function production_order_items(): HasMany
-    {
-        return $this->hasMany(ProductionOrderItem::class);
-    }
-
-    public function status_logs(): HasMany
-    {
-        return $this->hasMany(OrderItemStatusLog::class, 'order_item_id');
-    }
-
-    public function shipment_items(): HasMany
-    {
-        return $this->hasMany(ShipmentItem::class);
+        return $this->belongsTo(ProductSku::class);
     }
 }

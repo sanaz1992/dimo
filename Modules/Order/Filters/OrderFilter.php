@@ -17,7 +17,7 @@ class OrderFilter extends QueryFilter
 
     public function code($value)
     {
-        return $this->builder->where('code', 'LIKE', '%'.$value.'%');
+        return $this->builder->where('order_number', 'LIKE', '%'.$value.'%');
     }
 
     public function seller($value)
