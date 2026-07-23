@@ -1,19 +1,17 @@
 <!-- Cart Items -->
 <div class="panel cart-items ">
     <div style="    min-height: 50px;">
-        <h3 style="float: right">انتخاب یا ثبت آدرس</h3>
+        <h3 style="float: right">@lang('cart::attributes.select_or_create_address')</h3>
         <button type="submit" class="btn-submit-comment btn-submit-light" style="float: left"
-            wire:click="changeAddressFormStatus">افزودن
-            آدرس</button>
+            wire:click="changeAddressFormStatus">@lang('cart::attributes.create_address')</button>
     </div>
     @foreach ($user->addresses as $address)
         <label for="address-{{ $address->id }}"
             class="address-item {{ $selectedAddressId == $address->id ? 'active' : '' }}"
             style="display: flex; cursor: pointer; width: 100%;">
 
-            <!-- تغییر نوع به radio برای انتخاب تک‌گزینه‌ای -->
-            <input type="radio" id="address-{{ $address->id }}" value="{{ $address->id }}" wire:model.live="selectedAddressId"
-                class="remove-item hidden" />
+            <input type="radio" id="address-{{ $address->id }}" value="{{ $address->id }}"
+                wire:model.live="selectedAddressId" class="remove-item hidden" />
 
             <div class="item-info">
                 <h2>{{ $address->receiver_name }} - {{ $address->receiver_mobile }}</h2>
@@ -27,7 +25,7 @@
             <form wire:submit.prevent="submitAddress" class="comment-form">
                 <div class="comment-form-grid">
                     <div class="comment-field-group">
-                        <label>نام و نام خانوادگی گیرنده *</label>
+                        <label>@lang('cart::attributes.receiver_full_name') *</label>
                         <input type="text" wire:model.defer="addressForm.receiver_name" class="comment-input">
                         @error('receiver_name')
                             <span class="comment-error">{{ $message }}</span>
@@ -35,7 +33,7 @@
                     </div>
 
                     <div class="comment-field-group">
-                        <label>شماره موبایل *</label>
+                        <label>@lang('cart::attributes.receiver_mobile') *</label>
                         <input type="text" wire:model.defer="addressForm.receiver_mobile" class="comment-input">
                         @error('receiver_mobile')
                             <span class="comment-error">{{ $message }}</span>
@@ -45,7 +43,7 @@
 
                 <div class="comment-form-grid">
                     <div class="comment-field-group">
-                        <label>استان *</label>
+                        <label>@lang('cart::attributes.province') *</label>
 
                         <select wire:change="provinceChanged" wire:model.defer="addressForm.province_id"
                             class="comment-input">
@@ -60,7 +58,7 @@
                     </div>
 
                     <div class="comment-field-group">
-                        <label>شهر *</label>
+                        <label>@lang('cart::attributes.city') *</label>
                         <select wire:model.defer="addressForm.city_id" class="comment-input">
                             <option value="">{{__('core::messages.select_one_item')}}</option>
                             @foreach ($cities as $city)
@@ -75,18 +73,16 @@
 
                 <div class="comment-form-grid">
                     <div class="comment-field-group">
-                        <label>کد پستی *</label>
+                        <label>@lang('cart::attributes.postal_code') *</label>
                         <input type="text" wire:model.defer="addressForm.postal_code" class="comment-input">
                         @error('postal_code')
                             <span class="comment-error">{{ $message }}</span>
                         @enderror
                     </div>
-
-
                 </div>
 
                 <div class="comment-field-group">
-                    <label>آدرس کامل *</label>
+                    <label>@lang('cart::attributes.address') *</label>
                     <textarea wire:model.defer="addressForm.address" rows="4"
                         class="comment-input comment-textarea"></textarea>
                     @error('addressForm.address')
@@ -95,7 +91,7 @@
                 </div>
 
                 <div>
-                    <button type="submit" class="btn-submit-comment">ثبت آدرس</button>
+                    <button type="submit" class="btn-submit-comment">@lang('cart::attributes.store_address')</button>
                 </div>
             </form>
         </div>

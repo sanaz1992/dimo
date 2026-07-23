@@ -2,7 +2,8 @@
 <div class="panel cart-items">
     @foreach ($cart->items as $cartItem)
         <article class="cart-item">
-            <button class="remove-item" wire:click="removeItem({{ $cartItem->id }})" aria-label="حذف محصول">×</button>
+            <button class="remove-item" wire:click="removeItem({{ $cartItem->id }})"
+                aria-label="@lang('core::attributes.delete')">×</button>
             <div class="item-image">
                 <img src="{{ $cartItem->product->main_image?->getThumbnailUrl('small') }}"
                     alt="{{$cartItem->product->name}}">
