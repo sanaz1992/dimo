@@ -153,4 +153,11 @@ class UserService
             return $newImage;
         });
     }
+
+    public function createAddress(User $user, array $data)
+    {
+        $data['user_id'] = $user->id;
+        $data['type'] = 'user-address';
+        $this->addressRepository->create($data);
+    }
 }

@@ -34,6 +34,32 @@
                     </svg>
                 </button>
                 @livewire('cart::guest.cart-icon')
+                @auth
+                    <div class="user-menu-wrapper" style="position: relative; display: inline-block;">
+                        <a href="{{ route('admin.dashboard') }}" class="icon-btn user-profile-btn" aria-label="داشبورد کاربری"
+                          >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            {{-- <span class="user-name" style="font-weight: 500;">
+                                {{ substr(auth()->user()->name, 0, 1) ?: auth()->user()->mobile ?: 'حساب کاربری' }}
+                            </span> --}}
+                        </a>
+                    </div>
+                @endauth
+
+                @guest
+                    <a href="{{ route('login') }}" class="icon-btn" aria-label="ورود / ثبت نام">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                    </a>
+                @endguest
             </div>
         </nav>
     </div>

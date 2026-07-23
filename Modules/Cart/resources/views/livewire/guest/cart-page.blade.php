@@ -13,8 +13,8 @@
 
                 @if ($step === 'cart')
                     @include('Cart::livewire.guest.steps.cart-items')
-                @elseif ($step === 'auth')
-                    @include('Cart::livewire.guest.steps.auth')
+                {{-- @elseif ($step === 'auth')
+                    @include('Cart::livewire.guest.steps.auth') --}}
                 @elseif ($step === 'address')
                     @include('Cart::livewire.guest.steps.address')
                 @elseif ($step === 'review')

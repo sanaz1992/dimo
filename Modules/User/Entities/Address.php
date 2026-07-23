@@ -15,7 +15,7 @@ class Address extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['user_id', 'type', 'city_id', 'address', 'postal_code'];
+    protected $fillable = ['user_id', 'type', 'city_id', 'address', 'postal_code', 'receiver_name', 'receiver_mobile'];
 
     public function city(): BelongsTo
     {

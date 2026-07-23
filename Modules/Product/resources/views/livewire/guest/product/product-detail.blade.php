@@ -87,7 +87,9 @@
                                     <button type="button" wire:click="incrementQuantity">+</button>
                                 </div>
 
-                                <button class="add-to-cart" wire:click="addProductToCart({{ $product->id }}, {{ $selectedSkuId }}, {{$quantity}})">افزودن به سبد خرید</button>
+                                <button class="add-to-cart"
+                                    wire:click="addProductToCart({{ $product->id }}, {{ $selectedSkuId }}, {{$quantity}})">افزودن
+                                    به سبد خرید</button>
                             @else
                                 <button disabled class="add-to-cart" style="background-color: #ccc; cursor: not-allowed;">
                                     ناموجود در انبار
@@ -179,23 +181,23 @@
                 <!-- لیست نظرات ثبت شده -->
                 <div class="comments-list">
                     {{-- @forelse($this->approvedComments as $comment)
-                        <div class="comment-item">
-                            <div class="comment-header">
-                                <strong class="comment-author">{{ $comment->name }}</strong>
-                                <span class="comment-stars">
-                                    {{ str_repeat('★', $comment->rating) }}{{ str_repeat('☆', 5 - $comment->rating) }}
-                                </span>
-                            </div>
-                            <p class="comment-text">
-                                {{ $comment->content }}
-                            </p>
-                            <span class="comment-date">
-                                {{ $comment->created_at->diffForHumans() }}
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <strong class="comment-author">{{ $comment->name }}</strong>
+                            <span class="comment-stars">
+                                {{ str_repeat('★', $comment->rating) }}{{ str_repeat('☆', 5 - $comment->rating) }}
                             </span>
                         </div>
+                        <p class="comment-text">
+                            {{ $comment->content }}
+                        </p>
+                        <span class="comment-date">
+                            {{ $comment->created_at->diffForHumans() }}
+                        </span>
+                    </div>
                     @empty
-                        <p class="no-comments-message">هنوز هیچ دیدگاهی برای این محصول ثبت نشده است. اولین دیدگاه را شما
-                            بنویسید!</p>
+                    <p class="no-comments-message">هنوز هیچ دیدگاهی برای این محصول ثبت نشده است. اولین دیدگاه را شما
+                        بنویسید!</p>
                     @endforelse --}}
                 </div>
             </div>
@@ -204,5 +206,9 @@
 </main>
 
 @push('styles')
-    @vite('Modules/Shop/resources/assets/css/product-detail.css')
+    @vite([
+        'Modules/Shop/resources/assets/css/product-detail.css',
+        'Modules/Shop/resources/assets/css/comments.css'
+    ])
+
 @endpush
