@@ -12,6 +12,7 @@ use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Order\Exceptions\OutOfStockException;
 use Modules\Order\Services\OrderService;
+use Modules\Transactions\Services\PaymentService;
 use Modules\User\Entities\City;
 use Modules\User\Entities\Province;
 use Modules\User\External\Repositories\AddressRepository;
@@ -69,6 +70,7 @@ class CartPage extends GuestBaseComponent
 
         switch ($this->step) {
             case 'payment':
+                break;
             case 'review':
             case 'address':
                 if (! $this->selectedAddressId) {
@@ -79,6 +81,7 @@ class CartPage extends GuestBaseComponent
                     $this->selectedAddress = app(AddressRepository::class)->find($this->selectedAddressId);
                 }
 
+                // no break
             case 'auth':
                 if (! auth()->check()) {
                     $this->step = 'cart';
@@ -163,10 +166,19 @@ class CartPage extends GuestBaseComponent
 
                 return;
             } else {
-                $this->selectedAddress = app(AddressRepository::class)->find($this->selectedAddressId);
+                $this->setAddress();
             }
             $this->step = 'review';
         }
+    }
+
+    public function setAddress()
+    {
+        if (! $this->cart->address_id || $this->cart->address_id != $this->selectedAddressId) {
+            $this->cart = app(CartManager::class)->setAddress($this->cart, $this->selectedAddressId);
+        }
+        $this->cart->load('address');
+        $this->selectedAddress = $this->cart->address;
     }
 
     #[On('cart-updated')]
@@ -178,10 +190,13 @@ class CartPage extends GuestBaseComponent
         $this->cart?->load([
             'items.product',
             'items.sku',
+            'address',
         ]);
 
         $items = $this->cart?->items ?? collect();
         $this->cartItemsCount = (int) $items->sum('quantity');
+
+        $this->selectedAddressId = $this->cart->address_id;
     }
 
     public function updateQuantity(int $itemId, int $quantity): void
@@ -263,17 +278,18 @@ class CartPage extends GuestBaseComponent
         }
 
         try {
-            app(OrderService::class)->createFromCart($this->cart, [
+            $order = app(OrderService::class)->createFromCart($this->cart, [
                 'user_id' => auth()->id(),
                 'address_id' => $this->selectedAddressId,
             ]);
 
             // delete cart
-            $cartManager->clear();
+            // $cartManager->clear();
 
-            dd('success');
             // //send to payment
-            // return PaymentService::pay($order);
+            $url = app(PaymentService::class)->pay($order->id);
+
+            return redirect()->away($url);
         } catch (OutOfStockException $e) {
             // get item doesnt have enough stock
             $failedItem = $e->getItem();

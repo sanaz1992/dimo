@@ -2,8 +2,8 @@
 
 namespace Modules\Shop\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Core\Http\Controllers\Controller;
 
 class ShopController extends Controller
 {

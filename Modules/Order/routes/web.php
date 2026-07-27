@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Order\Entities\Order;
 use Modules\Order\Http\Controllers\OrderController;
 use Modules\Order\Http\Livewire\Admin\OrderCreate;
 use Modules\Order\Http\Livewire\Admin\OrderEdit;
@@ -9,16 +8,13 @@ use Modules\Order\Http\Livewire\Admin\OrderImport;
 use Modules\Order\Http\Livewire\Admin\OrderList;
 use Modules\Order\Http\Livewire\Admin\OrderShow;
 use Modules\Order\Http\Livewire\Admin\OrderTrackingShow;
-use Modules\Order\Http\Livewire\Seller\SellerOrderCreate;
-use Modules\Order\Http\Livewire\Seller\SellerOrderEdit;
-use Modules\Order\Http\Livewire\Seller\SellerOrderList;
-use Modules\Order\Http\Livewire\Seller\SellerOrderShow;
+use Modules\Order\Http\Livewire\User\UserOrderShow;
 
 Route::middleware(['auth', 'verified', 'admin.panel'])
     ->name('admin.')
     ->prefix('/admin')
     ->group(function () {
-        Route::get('/orders/done-orders', [OrderController::class, 'doneAllOrders']);
+        // Route::get('/orders/done-orders', [OrderController::class, 'doneAllOrders']);
 
         Route::get('/orders', OrderList::class)->middleware(['can:orders_list'])->name('orders.index');
         Route::get('/orders/import', OrderImport::class)->middleware(['can:orders_create'])->name('orders.import');
@@ -30,15 +26,14 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
         Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->middleware(['can:orders_show'])->name('orders.invoice');
     });
 
-Route::middleware(['auth', 'verified', 'seller.panel'])
-    ->name('seller.')
-    ->prefix('/seller')
+Route::middleware(['auth', 'verified'])
+
     ->group(function () {
 
-        Route::get('/orders', SellerOrderList::class)->name('orders.index');
-        // Route::get('/orders/{order}/show', OrderShow::class)->name('orders.show');
-        Route::get('/orders/create', SellerOrderCreate::class)->name('orders.create');
-        Route::get('/orders/{order}/edit', SellerOrderEdit::class)->name('orders.edit');
-        Route::get('/orders/{order}/show', SellerOrderShow::class)->name('orders.show');
-        Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
+        // Route::get('/orders', SellerOrderList::class)->name('orders.index');
+        // // Route::get('/orders/{order}/show', OrderShow::class)->name('orders.show');
+        // Route::get('/orders/create', SellerOrderCreate::class)->name('orders.create');
+        // Route::get('/orders/{order}/edit', SellerOrderEdit::class)->name('orders.edit');
+        Route::get('/orders/{order}', UserOrderShow::class)->name('orders.show');
+        // Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
     });

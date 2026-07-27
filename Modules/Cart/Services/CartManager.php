@@ -3,6 +3,7 @@
 namespace Modules\Cart\Services;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Cart\DTOs\AddToCartData;
 use Modules\Cart\Entities\Cart;
@@ -82,6 +83,9 @@ class CartManager
 
     public function getCart(?Authenticatable $user = null): ?Cart
     {
+        if (! $user && Auth::check()) {
+            $user = auth()->user();
+        }
         if ($user) {
             return $this->cartRepository
                 ->getOrCreateActiveForUser($user)
@@ -174,5 +178,14 @@ class CartManager
             $cart->delete();
         }
         $this->sessionManager->forget();
+    }
+
+    public function setAddress(Cart $cart, int $selectedAddressId)
+    {
+        return DB::transaction(function () use ($cart, $selectedAddressId) {
+            $cart = $this->cartRepository->update($cart, ['address_id' => $selectedAddressId]);
+
+            return $cart;
+        });
     }
 }

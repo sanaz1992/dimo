@@ -81,21 +81,20 @@ class OrderService
 
     public function updateOrderPrices(int $orderId)
     {
-
         $order = $this->orderRepository->find($orderId);
         $order->load('items');
         $subTotal = 0;
         $totalPrice = 0;
         $discount = 0;
         foreach ($order->items as $item) {
-            $subTotal += $item->price;
-            $totalPrice += $item->total_price;
-            $discount += $item->discount;
+            $subTotal += $item->price * $item->quantity;
+            $discount += $item->discount * $item->quantity;
+            $totalPrice += $subTotal - $discount;
         }
         $order = $this->orderRepository->update($order, [
             'subtotal' => $subTotal,
-            'total_price' => $totalPrice,
-            'discount' => $discount,
+            'total_amount' => $totalPrice,
+            'discount_amount' => $discount,
         ]);
 
         return $order;

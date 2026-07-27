@@ -2,8 +2,8 @@
 
 namespace Modules\Inventory\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Core\Http\Controllers\Controller;
 
 class InventoryController extends Controller
 {

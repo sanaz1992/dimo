@@ -12,3 +12,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
     networks:
       - sail
+  laravel.test:
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8

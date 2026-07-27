@@ -2,8 +2,8 @@
 
 namespace Modules\Pages\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Core\Http\Controllers\Controller;
 
 class PagesController extends Controller
 {
