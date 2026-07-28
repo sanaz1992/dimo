@@ -210,6 +210,27 @@ class CartPage extends GuestBaseComponent
             return;
         }
 
+        $item->load('sku');
+        $sku = $item->sku;
+
+        if (! $sku) {
+            $this->notify('error', __('cart::messages.product_not_found'));
+
+            return;
+        }
+        $availableStock = max(0, $sku->stock - $sku->reserved_stock);
+
+        if ($quantity > $availableStock) {
+            $this->notify(
+                'error',
+                __('موجودی کافی نیست. حداکثر تعداد قابل خرید :count عدد است.', [
+                    'count' => $availableStock,
+                ])
+            );
+
+            return;
+        }
+
         $item->update([
             'quantity' => $quantity,
         ]);

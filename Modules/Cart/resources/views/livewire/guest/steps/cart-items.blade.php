@@ -11,7 +11,7 @@
                     alt="{{$cartItem->product->name}}">
             </div>
             <div class="item-info">
-                <h2>{{$cartItem->product->name}}</h2>
+                <h2><a href="{{ route('products.show', $cartItem->product) }}">{{$cartItem->product->name}}</a></h2>
                 <span>{{formatPrice($cartItem->sku->volume_ml)}} @lang('product::attributes.ml')</span>
             </div>
             <div class="item-price">
@@ -19,9 +19,11 @@
             </div>
             <div class="qty">
                 @if(!isset($canChange) || $canChange == true)
-                    <button type="button">−</button>
+                    <button type="button"
+                        wire:click="updateQuantity({{ $cartItem->id }},{{ $cartItem->quantity - 1 }})">−</button>
                     <span>{{ formatPrice($cartItem->quantity) }}</span>
-                    <button type="button">+</button>
+                    <button type="button"
+                        wire:click="updateQuantity({{ $cartItem->id }},{{ $cartItem->quantity + 1 }})">+</button>
                 @else
                     <span>{{ formatPrice($cartItem->quantity) }}</span>
                 @endif
