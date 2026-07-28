@@ -4,6 +4,8 @@ namespace Modules\Product\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Inventory\Entities\InventoryMovement;
+use Modules\Inventory\Entities\InventoryReservation;
 use Modules\Product\Enums\ProductPackagingType;
 
 class ProductSku extends Model
@@ -15,8 +17,11 @@ class ProductSku extends Model
         'volume_ml',
         'price',
         'stock',
+        'reserved_stock',
         'is_active',
     ];
+
+    // available_stock = stock - reserved_stock
 
     protected $casts = [
         'packaging_type' => ProductPackagingType::class,
@@ -45,5 +50,15 @@ class ProductSku extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function inventoryReservations()
+    {
+        return $this->hasMany(InventoryReservation::class);
+    }
+
+    public function inventoryMovements()
+    {
+        return $this->hasMany(InventoryMovement::class);
     }
 }

@@ -27,8 +27,8 @@ class PaymentService
             'gateway' => $gateway->name(),
         ]);
 
-        $settingHelper = app(SettingHelper::class);
-        $currency = $settingHelper->currency();
+        // $settingHelper = app(SettingHelper::class);
+        // $currency = $settingHelper->currency();
         $amount = (int) $order->total_amount;
         // if ($currency == "rial") {
         //     $amount /= 10;
@@ -59,9 +59,9 @@ class PaymentService
                 ],
             ]);
 
-            $order->update([
-                'payment_status' => 'pending',
-            ]);
+            // $order->update([
+            //     'payment_status' => 'pending',
+            // ]);
         });
 
         return $gateway->redirectUrl($requestResult);
@@ -70,7 +70,6 @@ class PaymentService
     public function verify(Order $order, array $callbackData, ?string $driver = null): PaymentVerificationResult
     {
         $gateway = $this->gatewayManager->gateway($driver);
-
         $result = $gateway->verify($order, $callbackData);
 
         DB::transaction(function () use ($order, $gateway, $callbackData, $result) {
@@ -94,16 +93,6 @@ class PaymentService
                 throw new RuntimeException('Transaction not found.');
             }
 
-            if ($transaction->status === 'paid') {
-                if ($order->payment_status !== 'paid') {
-                    $order->update([
-                        'payment_status' => 'paid',
-                    ]);
-                }
-
-                return;
-            }
-
             $payload = $transaction->payload ?? [];
 
             $payload['callback'] = [
@@ -120,13 +109,17 @@ class PaymentService
                 'status' => $result->success ? 'paid' : 'failed',
                 'reference_id' => $result->referenceId,
                 'payload' => $payload,
+                'authority' => $result->authority,
             ]);
 
             $order->update([
+                'status' => $result->success ? 'paid' : $result->success,
                 'payment_status' => $result->success ? 'paid' : 'failed',
             ]);
+
         });
 
         return $result;
+
     }
 }

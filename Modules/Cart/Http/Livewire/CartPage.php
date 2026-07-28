@@ -10,6 +10,7 @@ use Modules\Cart\Services\CartManager;
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Guest\GuestBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
+use Modules\Inventory\Actions\ReserveInventoryForOrderAction;
 use Modules\Order\Exceptions\OutOfStockException;
 use Modules\Order\Services\OrderService;
 use Modules\Transactions\Services\PaymentService;
@@ -283,9 +284,7 @@ class CartPage extends GuestBaseComponent
                 'address_id' => $this->selectedAddressId,
             ]);
 
-            // delete cart
-            // $cartManager->clear();
-
+            app(ReserveInventoryForOrderAction::class)->execute($order);
             // //send to payment
             $url = app(PaymentService::class)->pay($order->id);
 

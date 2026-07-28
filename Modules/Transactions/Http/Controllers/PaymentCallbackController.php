@@ -4,7 +4,10 @@ namespace Modules\Transactions\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Modules\Cart\Services\CartManager;
+use Modules\Inventory\Actions\CommitReservedInventoryForOrderAction;
+use Modules\Inventory\Actions\ReleaseInventoryReservationForOrderAction;
 use Modules\Order\Entities\Order;
 use Modules\Transactions\Services\PaymentService;
 
@@ -17,6 +20,7 @@ class PaymentCallbackController extends Controller
         CartManager $cartManager,
     ) {
         $gateway = $request->string('gateway')->toString();
+        DB::beginTransaction();
         try {
             $result = $paymentService->verify(
                 order: $order,
@@ -32,6 +36,8 @@ class PaymentCallbackController extends Controller
             ]);
             if ($result->success) {
                 $cartManager->clear();
+                app(CommitReservedInventoryForOrderAction::class)->execute($order);
+                DB::commit();
 
                 return redirect()
                     ->route('cart.index', ['step' => 'payment'])
@@ -39,16 +45,16 @@ class PaymentCallbackController extends Controller
                     ->with('reference_id', $result->referenceId)
                     ->with('paid_order_id', $order->id);
             }
-
-            return redirect()
-                ->route('cart.index', ['step' => 'payment'])
-                ->with('error', $result->message ?? 'پرداخت ناموفق بود.');
+            $message = $result->message ?? 'پرداخت ناموفق بود.';
         } catch (\Throwable $e) {
             report($e);
-
-            return redirect()
-                ->route('cart.index', ['step' => 'payment'])
-                ->with('error', 'در پردازش نتیجه پرداخت خطایی رخ داد.');
+            $message = 'در پردازش نتیجه پرداخت خطایی رخ داد.';
         }
+        app(ReleaseInventoryReservationForOrderAction::class)->execute($order);
+        DB::rollBack();
+
+        return redirect()
+            ->route('cart.index', ['step' => 'payment'])
+            ->with('error', $message);
     }
 }

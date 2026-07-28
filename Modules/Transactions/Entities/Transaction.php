@@ -17,6 +17,7 @@ class Transaction extends Model
         'amount',
         'status',
         'payload',
+        'authority',
     ];
 
     protected $casts = [

@@ -4,6 +4,7 @@ namespace Modules\Order\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Inventory\Entities\InventoryReservation;
 use Modules\Product\Entities\ProductSku;
 
 class OrderItem extends Model
@@ -30,5 +31,10 @@ class OrderItem extends Model
     public function product_sku(): BelongsTo
     {
         return $this->belongsTo(ProductSku::class);
+    }
+
+    public function inventoryReservations()
+    {
+        return $this->hasMany(InventoryReservation::class, 'order_item_id');
     }
 }

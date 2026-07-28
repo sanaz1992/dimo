@@ -43,6 +43,10 @@ class CartManager
 
             $newQuantity = $item ? $item->quantity + $data->quantity : $data->quantity;
 
+            if ($sku->stock - $sku->reserved_stock < $newQuantity) {
+                throw new RuntimeException('موجودی محصول کافی نیست.');
+            }
+
             $price = $this->priceResolver->resolveForSku($sku, $newQuantity);
 
             if ($item) {

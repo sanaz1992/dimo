@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Entities\History;
 use Modules\Core\Traits\Filterable;
+use Modules\Inventory\Entities\InventoryReservation;
 use Modules\User\Entities\User;
 
 class Order extends Model
@@ -62,5 +63,10 @@ class Order extends Model
     public function histories(): MorphMany
     {
         return $this->morphMany(History::class, 'historiable');
+    }
+
+    public function inventoryReservations()
+    {
+        return $this->hasMany(InventoryReservation::class);
     }
 }
