@@ -267,7 +267,6 @@ class CartPage extends GuestBaseComponent
 
     public function render()
     {
-
         $items = $this->cart?->items ?? collect();
 
         $subtotal = (int) $items->sum(
@@ -321,11 +320,11 @@ class CartPage extends GuestBaseComponent
 
             // show message
             $this->notify('notify', $e->getMessage());
-        } catch (\Exception $e) {
-            dd($e);
+        } catch (\RuntimeException $e) {
             $this->notify('error', $e->getMessage());
-            $this->notify('error', __('cart::messages.error_in_submit_order'));
-            $this->step = 'cart';
+        } catch (\Exception $e) {
+            $this->notify('error', $e->getMessage());
         }
+        $this->step = 'cart';
     }
 }

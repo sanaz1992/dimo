@@ -45,13 +45,17 @@ class PaymentCallbackController extends Controller
                     ->with('reference_id', $result->referenceId)
                     ->with('paid_order_id', $order->id);
             }
+
             $message = $result->message ?? 'پرداخت ناموفق بود.';
+
+        } catch (\RuntimeException $e) {
+            $message = $e->getMessage();
         } catch (\Throwable $e) {
             report($e);
             $message = 'در پردازش نتیجه پرداخت خطایی رخ داد.';
         }
-        app(ReleaseInventoryReservationForOrderAction::class)->execute($order);
         DB::rollBack();
+        app(ReleaseInventoryReservationForOrderAction::class)->execute($order);
 
         return redirect()
             ->route('cart.index', ['step' => 'payment'])
