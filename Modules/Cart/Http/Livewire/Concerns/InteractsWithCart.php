@@ -17,20 +17,28 @@ trait InteractsWithCart
 
             return;
         }
+        try {
+            app(CartManager::class)->add(
+                new AddToCartData(
+                    productId: $productId,
+                    skuId: $skuId,
+                    quantity: $quantity,
+                ),
+                auth()->user()
+            );
 
-        app(CartManager::class)->add(
-            new AddToCartData(
-                productId: $productId,
-                skuId: $skuId,
-                quantity: $quantity,
-            ),
-            auth()->user()
-        );
-
-        $this->dispatch('cart-updated');
-
-        if (method_exists($this, 'notify')) {
+            $this->dispatch('cart-updated');
             $this->notify('success', 'محصول به سبد خرید اضافه شد.');
+
+        } catch (\RuntimeException $e) {
+            $this->notify('error', $e->getMessage());
+
+            return;
+        } catch (\Exception $e) {
+            $this->notify('error', $e->getMessage());
+
+            return;
         }
+
     }
 }

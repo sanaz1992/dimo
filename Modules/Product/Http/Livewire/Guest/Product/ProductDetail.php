@@ -52,8 +52,10 @@ class ProductDetail extends GuestBaseComponent
     public function incrementQuantity()
     {
         $selectedSku = $this->product->skus->firstWhere('id', $this->selectedSkuId);
-        if ($selectedSku && $this->quantity < $selectedSku->stock) {
+        if ($selectedSku && $this->quantity < $selectedSku->stock - $selectedSku->reserved_stock) {
             $this->quantity++;
+        } else {
+            $this->notify('error', 'موجودی محصول کافی نیست');
         }
     }
 
