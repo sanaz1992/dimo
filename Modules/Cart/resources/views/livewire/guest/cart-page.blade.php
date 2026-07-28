@@ -7,9 +7,35 @@
     ]" />
         </div>
 
-        <section class="{{ $cart->items->count() ? 'grid grid-cols-2' : '' }} cart-layout">
+        @if ($step === 'payment')
+            <section class="cart-layout">
+                <div class="empty-cart">
+                    <h2 class="empty-cart__title">
+                        @if(session('success'))
+                            پرداخت شما با موفقیت انجام شد
+                        @else
+                            پرداخت شما با خطا مواجه شد
+                        @endif
+                    </h2>
 
-            @if ($cart->items->count())
+                    <p class="empty-cart__description">
+                        {{ session('success') ?? session('error') }}
+                    </p>
+
+                    @if (session('reference_id'))
+                        <p class="mt-3">
+                            کد پیگیری:
+                            <strong>{{ session('reference_id') }}</strong>
+                        </p>
+                    @endif
+
+                    <a href="{{ route('products.index') }}" class="empty-cart__button">
+                        ادامه خرید
+                    </a>
+                </div>
+            </section>
+        @elseif ($cart->items->count())
+            <section class="grid grid-cols-2 cart-layout">
                 <div>
                     @if ($step === 'cart')
                         @include('Cart::livewire.guest.steps.cart-items')
@@ -54,55 +80,33 @@
                         @endif
                     </aside>
                 </div>
-            @else
-                @if (session('success'))
-                    <div class="empty-cart">
-                        <h2 class="empty-cart__title">
-                            پرداخت شما با موفقیت انجام شد
-                        </h2>
-
-                        <p class="empty-cart__description">
-                            {{ session('success') }}
-                        </p>
-
-                        @if (session('reference_id'))
-                            <p class="mt-3">
-                                کد پیگیری:
-                                <strong>{{ session('reference_id') }}</strong>
-                            </p>
-                        @endif
-
-                        <a href="{{ route('products.index') }}" class="empty-cart__button">
-                            ادامه خرید
-                        </a>
+            </section>
+        @else
+            <section class=" cart-layout">
+                <div class="empty-cart">
+                    <div class="empty-cart__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="20" r="1"></circle>
+                            <circle cx="19" cy="20" r="1"></circle>
+                            <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.5h7.8a2 2 0 0 0 2-1.6L21 7H6"></path>
+                        </svg>
                     </div>
-                @else
-                    <div class="empty-cart">
-                        <div class="empty-cart__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="9" cy="20" r="1"></circle>
-                                <circle cx="19" cy="20" r="1"></circle>
-                                <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.5h7.8a2 2 0 0 0 2-1.6L21 7H6"></path>
-                            </svg>
-                        </div>
 
-                        <h2 class="empty-cart__title">
-                            @lang('cart::messages.your_cart_is_empty')
-                        </h2>
+                    <h2 class="empty-cart__title">
+                        @lang('cart::messages.your_cart_is_empty')
+                    </h2>
 
-                        <p class="empty-cart__description">
-                            @lang('cart::messages.you_have_no_items_in_your_shopping_cart')
-                        </p>
+                    <p class="empty-cart__description">
+                        @lang('cart::messages.you_have_no_items_in_your_shopping_cart')
+                    </p>
 
-                        <a href="{{ route('products.index') }}" class="empty-cart__button">
-                            @lang('cart::attributes.show_products')
-                        </a>
-                    </div>
-                @endif
-            @endif
-
-        </section>
+                    <a href="{{ route('products.index') }}" class="empty-cart__button">
+                        @lang('cart::attributes.show_products')
+                    </a>
+                </div>
+            </section>
+        @endif
     </div>
 </main>
 
