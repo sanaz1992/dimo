@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Entities\History;
 use Modules\Core\Traits\Filterable;
 use Modules\Inventory\Entities\InventoryReservation;
+use Modules\Order\Enums\OrderStatus;
+use Modules\User\Entities\Address;
 use Modules\User\Entities\User;
 
 class Order extends Model
@@ -30,6 +32,10 @@ class Order extends Model
         'notes',
     ];
 
+    protected $casts = [
+        'status' => OrderStatus::class,
+    ];
+
     public array $historyFields = ['status'];
 
     // description in history table
@@ -40,19 +46,24 @@ class Order extends Model
         return 'order_number';
     }
 
-    public function getCreatedAtJalaliDateAttribute()
+    public function getCreatedAtJalaliAttribute()
     {
-        return verta($this->created_at)->format('Y/m/d');
+        return verta($this->created_at)->format('Y/m/d H:i:s');
     }
 
-    public function getUpdatedAtJalaliDateAttribute()
+    public function getUpdatedAtJalaliAttribute()
     {
-        return verta($this->updated_at)->format('Y/m/d');
+        return verta($this->updated_at)->format('Y/m/d H:i:s');
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
     }
 
     public function items(): HasMany

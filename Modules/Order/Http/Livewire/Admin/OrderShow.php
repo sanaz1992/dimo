@@ -4,11 +4,8 @@ namespace Modules\Order\Http\Livewire\Admin;
 
 use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
-use Modules\Core\Services\NoteService;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Order\Entities\Order;
-use Modules\Order\Enums\OrderStatus;
-use Modules\Order\Services\OrderProductionService;
 use Modules\Order\Services\OrderService;
 
 class OrderShow extends AdminBaseComponent
@@ -18,21 +15,14 @@ class OrderShow extends AdminBaseComponent
 
     public $order;
 
-    public $totalSteps;
-
-    public $doneSteps;
-
     public $currency;
 
     public function mount(Order $order)
     {
         // $this->authorize('orders_show');
-        $order->load('shipment_items');
         $this->order = $order;
         $this->reloadOrderItems();
         $order->load('user');
-        [$this->totalSteps, $this->doneSteps] = resolve(OrderProductionService::class)
-            ->calculateProductionProgress($order);
 
         $this->currency = app(SettingHelper::class)->currencyLabel();
     }
@@ -40,18 +30,8 @@ class OrderShow extends AdminBaseComponent
     public function reloadOrderItems()
     {
         $this->order->load(
-            'notes.creator',
-            'items.product',
-            'items.item_fabrics.fabric',
-            'items.item_fabrics.color',
-            'items.item_fabrics.product_required_fabric',
-            'items.status_logs'
+            'items.product_sku.product',
         );
-        if ($this->order->status == OrderStatus::CANCELED->value) {
-            $this->order->load(['histories' => function ($q) {
-                $q->where('new_value', OrderStatus::CANCELED->value);
-            }]);
-        }
     }
 
     public function approveOrder()
@@ -135,16 +115,16 @@ class OrderShow extends AdminBaseComponent
     public function storeNote()
     {
         $this->showAddNoteModal = false;
-        resolve(NoteService::class)->create($this->order, ['value' => $this->note]);
-        $this->order->load('notes.creator');
+        // resolve(NoteService::class)->create($this->order, ['value' => $this->note]);
+        // $this->order->load('notes.creator');
         $this->note = '';
     }
 
     public function render()
     {
-        return $this->renderView('Order::livewire.order.admin.order-show')
+        return $this->renderView('Order::livewire.admin.order.order-show')
             ->layoutData([
-                'title' => __('order::attributes.orders_show'),
+                'title' => __('order::attributes.orders_show'.' '.$this->order->order_number),
             ]);
     }
 }

@@ -83,6 +83,15 @@ class PermissionSeeder extends Seeder
                 'title' => 'حذف گروه بندی محصول',
             ],
 
+            [
+                'name' => 'orders_list',
+                'title' => 'لیست سفارشات',
+            ],
+            [
+                'name' => 'orders_show',
+                'title' => 'مشاهده سفارش',
+            ],
+
         ];
 
         foreach ($permissions as $permission) {

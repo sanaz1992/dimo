@@ -77,6 +77,14 @@
                 <span>@lang('product::attributes.products')</span>
             </a>
         @endcan
+        @can('orders_list')
+            <a href="{{route('admin.orders.index')}}" data-nav="orders" class="nav-link">
+                <span class="nav-ico">
+                    <img src="{{ asset('icons\sidebar\orders.svg') }}" alt="orders" />
+                </span>
+                <span>@lang('order::attributes.orders')</span>
+            </a>
+        @endcan
         <a href="#" data-nav="transactions" class="nav-link">
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"

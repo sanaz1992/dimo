@@ -17,13 +17,13 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
         // Route::get('/orders/done-orders', [OrderController::class, 'doneAllOrders']);
 
         Route::get('/orders', OrderList::class)->middleware(['can:orders_list'])->name('orders.index');
-        Route::get('/orders/import', OrderImport::class)->middleware(['can:orders_create'])->name('orders.import');
+        // Route::get('/orders/import', OrderImport::class)->middleware(['can:orders_create'])->name('orders.import');
         Route::get('/orders/{order}/show', OrderShow::class)->middleware(['can:orders_show'])->name('orders.show');
-        Route::get('/orders/create', OrderCreate::class)->middleware(['can:orders_create'])->name('orders.create');
-        Route::get('/orders/{order}/edit', OrderEdit::class)->middleware(['can:orders_edit'])->name('orders.edit');
-        Route::get('/orders/tracking/{order?}', OrderTrackingShow::class)->middleware(['can:order_tracking'])
-            ->name('orders.tracking.show');
-        Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->middleware(['can:orders_show'])->name('orders.invoice');
+        // Route::get('/orders/create', OrderCreate::class)->middleware(['can:orders_create'])->name('orders.create');
+        // Route::get('/orders/{order}/edit', OrderEdit::class)->middleware(['can:orders_edit'])->name('orders.edit');
+        // Route::get('/orders/tracking/{order?}', OrderTrackingShow::class)->middleware(['can:order_tracking'])
+        //     ->name('orders.tracking.show');
+        // Route::get('/orders/{order}/invoice', [OrderController::class, 'invoice'])->middleware(['can:orders_show'])->name('orders.invoice');
     });
 
 Route::middleware(['auth', 'verified'])
