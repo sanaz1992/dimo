@@ -6,6 +6,7 @@ use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Order\Entities\Order;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Order\Services\OrderService;
 
 class OrderShow extends AdminBaseComponent
@@ -40,7 +41,27 @@ class OrderShow extends AdminBaseComponent
         try {
             $result = resolve(OrderService::class)->approveOrder($this->order);
             if ($result['status']) {
-                $this->notify('success', __('order::messages.confirm_order_successfully'));
+                $this->notify('success', $result['message']);
+            } else {
+                $this->notify('error', $result['message']);
+            }
+        } catch (\Exception $e) {
+            $this->notify('error', __('order::messages.approved.error'));
+        }
+    }
+
+    public function doneProccessing()
+    {
+        if ($this->order->status != OrderStatus::PROCESSING) {
+            $this->notify('error', 'وضعیت سفارش برای این تغییر معتبر نیست');
+
+            return;
+        }
+        $this->authorize('orders_approved');
+        try {
+            $result = resolve(OrderService::class)->changeStatus($this->order, OrderStatus::AWAITING_SHIPPED->value);
+            if ($result['status']) {
+                $this->notify('success', $result['message']);
             } else {
                 $this->notify('error', $result['message']);
             }
@@ -79,24 +100,24 @@ class OrderShow extends AdminBaseComponent
         }
     }
 
-    public function shipped(int $orderId)
+    public function shipped()
     {
         $this->authorize('orders_shipped');
         try {
             $this->order = resolve(OrderService::class)
-                ->shipped($orderId);
+                ->shipped($this->order->id);
             $this->notify('success', __('order::messages.order_change_status_successfully'));
         } catch (\Exception $e) {
             $this->notify('error', __('order::messages.order_item_change_status_error'));
         }
     }
 
-    public function delivered(int $orderId)
+    public function delivered()
     {
         $this->authorize('orders_shipped');
         try {
             $this->order = resolve(OrderService::class)
-                ->delivered($orderId);
+                ->delivered($this->order->id);
             $this->notify('success', __('order::messages.order_change_status_successfully'));
         } catch (\Exception $e) {
             $this->notify('error', __('order::messages.order_item_change_status_error'));
@@ -124,7 +145,7 @@ class OrderShow extends AdminBaseComponent
     {
         return $this->renderView('Order::livewire.admin.order.order-show')
             ->layoutData([
-                'title' => __('order::attributes.orders_show'.' '.$this->order->order_number),
+                'title' => __('order::attributes.orders_show').' '.$this->order->order_number,
             ]);
     }
 }

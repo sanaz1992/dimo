@@ -11,6 +11,40 @@
         <livewire:order::products-table :order="$order" />
     </section>
 
+    <section class=" gap-4 anim-stagger mt-3">
+        @if ($order->status == Modules\Order\Enums\OrderStatus::PAID)
+            <x-dashboard::buttons.primary-action id="btn-approve-order" tag="button"
+                class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-emerald-600 !to-teal-500 hover:!from-emerald-700 hover:!to-teal-600 text-white"
+                wire:click="approveOrder" target="approveOrder">
+                @lang('order::attributes.approve_order')
+            </x-dashboard::buttons.primary-action>
+
+            <x-dashboard::buttons.primary-action id="btn-approve-order" tag="button"
+                class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-red-600 !to-rose-500 hover:!from-red-700 hover:!to-rose-600 text-white"
+                wire:click="openCancelOrderModal" target="openCancelOrderModal">
+                @lang('order::attributes.cancel_order')
+            </x-dashboard::buttons.primary-action>
+        @elseif($order->status==Modules\Order\Enums\OrderStatus::PROCESSING)
+            <x-dashboard::buttons.primary-action id="btn-done-proccessing" tag="button"
+                class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-blue-600 !to-indigo-600 hover:!from-blue-700 hover:!to-indigo-700 text-white"
+                wire:click="doneProccessing" target="doneProccessing">
+                @lang('order::attributes.awaiting_shipped')
+            </x-dashboard::buttons.primary-action>
+        @elseif($order->status==Modules\Order\Enums\OrderStatus::AWAITING_SHIPPED)
+            <x-dashboard::buttons.primary-action id="btn-shipped" tag="button"
+                class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-blue-600 !to-indigo-600 hover:!from-blue-700 hover:!to-indigo-700 text-white"
+                wire:click="shipped" target="shipped">
+                @lang('order::attributes.shipped')
+            </x-dashboard::buttons.primary-action>
+        @elseif($order->status==Modules\Order\Enums\OrderStatus::SHIPPED)
+            <x-dashboard::buttons.primary-action id="btn-delivered" tag="button"
+                class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-blue-600 !to-indigo-600 hover:!from-blue-700 hover:!to-indigo-700 text-white"
+                wire:click="delivered" target="delivered">
+                @lang('order::attributes.delivered')
+            </x-dashboard::buttons.primary-action>
+        @endif
+    </section>
+
     @if($showCancelOrderModal)
         <div class="fixed inset-0 flex items-center justify-center z-50 p-4" x-data x-cloak>
             <!-- پس‌زمینه تیره و مات (Premium Glassmorphic Blur) -->

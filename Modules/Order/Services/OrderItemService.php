@@ -66,19 +66,6 @@ class OrderItemService
         $this->orderItemRepository->update($orderItem, $data);
     }
 
-    public function updateItemsStatus(Order $order, string $status)
-    {
-        if (! OrderItemStatus::tryFrom($status)) {
-            throw new \InvalidArgumentException("وضعیت مورد نظر معتبر نمیباشد: {$status}");
-        }
-        foreach ($order->items as $item) {
-            $item->status = $status;
-            $item->save();
-        }
-
-        return $order;
-    }
-
     public function removeOrderItem(int $orderItemId)
     {
         $orderItem = $this->orderItemRepository->find($orderItemId);

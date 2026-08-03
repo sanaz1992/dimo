@@ -24,11 +24,11 @@
             @foreach ($orders as $order)
                 <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
                     <x-dashboard::table.cell :label="__('core::attributes.row')">
-                        {{ $loop->index + 1 }}
+                        {{ toPersianNumber($loop->index + 1 )}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('order::attributes.order_code')">
-                        {{$order->order_number}}
+                        {{toPersianNumber($order->order_number)}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('order::attributes.customer_name')">
@@ -36,11 +36,13 @@
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('order::attributes.status')">
-                        {{$order->status}}
+                        <x-dashboard::badge :color="$order->status->color()">
+                            {{$order->status->label()}}</x-dashboard::badge>
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('order::attributes.payment_status')">
-                        {{$order->payment_status}}
+                        <x-dashboard::badge :color="$order->payment_status->color()">
+                            {{$order->payment_status->label()}}</x-dashboard::badge>
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('order::attributes.total_amount')">
@@ -48,7 +50,7 @@
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('order::attributes.created_at')">
-                        {{$order->created_at_jalali}}
+                        {{toPersianNumber($order->created_at_jalali)}}
                     </x-dashboard::table.cell>
 
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">

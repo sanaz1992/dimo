@@ -9,7 +9,7 @@
         <x-Order::order.order-info-box :title="__('order::attributes.created_at')"
             :value="toPersianNumber($order->created_at_jalali)" />
 
-        <x-Order::order.order-info-box :title="__('order::attributes.status')" :value="$order->status->label()" />
+        <x-Order::order.order-info-box :title="__('order::attributes.status')" :color="$order->status->color()" :value="$order->status->label()" />
 
         <x-Order::order.order-info-box :title="__('order::attributes.total_amount')"
             :value="formatPrice($order->total_amount) . ' ' . $currency" />

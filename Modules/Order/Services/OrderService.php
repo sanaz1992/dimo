@@ -140,123 +140,21 @@ class OrderService
         }
     }
 
-    public function confirmFinalApproval(Order $order)
-    {
-        $order->load('items.product.hall_difinations');
-
-        // Every producible line item must have a defined production route
-        // (hall_difinations) before the order can enter the pipeline. Fabric
-        // lines (imported as stub products) are record-only and are ignored.
-        // Instead of a blanket block, tell the admin exactly which products
-        // still need a production route defined.
-        $missing = $this->productsMissingProductionRoute($order);
-        if ($missing->isNotEmpty()) {
-            throw new \RuntimeException(
-                __('order::messages.products_without_production_route', ['products' => $missing->pluck('title')->implode('، ')])
-            );
-        }
-
-        return DB::transaction(function () use ($order) {
-            $order = $this->orderRepository->update($order, [
-                'status' => OrderStatus::AWAITING_SALES_MANAGER_APPROVAL->value,
-            ]);
-            $this->orderItemService->updateItemsStatus($order, OrderItemStatus::AWAITING_SALES_MANAGER_APPROVAL->value);
-            // انتقال مواد اولیه به انبار در حال تولید (پارچه‌ها نادیده گرفته می‌شوند)
-            foreach ($order->items as $orderItem) {
-                if ($this->isFabricItem($orderItem->product)) {
-                    continue;
-                }
-                // $this->inventoryService->transferToPendingProductionWarehouse($orderItem);
-            }
-
-            return $order;
-        });
-    }
-
     public function approveOrder(Order $order): array
     {
-        if ($order->status != OrderStatus::AWAITING_SALES_MANAGER_APPROVAL->value) {
+        if ($order->status != OrderStatus::PAID) {
             return [
                 'status' => false,
                 'message' => 'سفارش امکان تایید توسط مدیر را ندارد',
             ];
         }
 
-        $order->load('items.product.hall_difinations');
-
-        return DB::transaction(function () use ($order) {
-            $this->orderRepository->update($order, ['status' => OrderStatus::APPROVED->value]);
-            $this->orderItemService->updateItemsStatus($order, OrderItemStatus::APPROVED->value);
-
-            foreach ($order->items as $orderItem) {
-                if (! $orderItem->product) {
-                    return [
-                        'status' => false,
-                        'message' => 'امکان ثبت سفارش یکی از آیتم‌ها (بدون محصول) وجود ندارد.',
-                    ];
-                }
-                // Fabric lines are record-only: skip, they build no production items.
-                if ($this->isFabricItem($orderItem->product)) {
-                    continue;
-                }
-                $productHallDifinations = $orderItem->product->hall_difinations;
-                if ($productHallDifinations->isEmpty()) {
-                    return [
-                        'status' => false,
-                        'message' => 'برای محصول '.$orderItem->product->title.' هیچ روند تولیدی ثبت نشده است.',
-                    ];
-                }
-                $parentId = null;
-                $productHallDifinations->load('hall');
-                for ($i = 0; $i < $orderItem->qty; $i++) {
-                    // $groupName = CodeGeneratorHelper::generate(
-                    //     get_class(new ProductionOrderItem()),
-                    //     'group_name',
-                    //     $orderItem->id . $i,
-                    //     [
-                    //         'where' => [
-                    //             'order_item_id' => ['!=', $orderItem->id]
-                    //         ]
-                    //     ]
-                    // );
-                    $groupName = $order->order_number.'-'.$orderItem->id.$i;
-                    foreach ($productHallDifinations as $productHallDifination) {
-                        // if (in_array($productHallDifination->hall->slug, ["painting", "cutting-and-sewing"])) {
-                        //     $parentId = null;
-                        // }
-                        // if ($productHallDifination->hall->slug == "packaging") {
-                        //     $sort = 2;
-                        // } else {
-                        //     $sort = 1;
-                        // }
-
-                        // $parent = $this->productionOrderItemRepository->create([
-                        //     'order_item_id' => $orderItem->id,
-                        //     'qty' => 1,
-                        //     'status' => ProductionOrderItemStatus::PENDING->value,
-                        //     'product_hall_difination_id' => $productHallDifination->id,
-                        //     'parent_id' => $parentId,
-                        //     'sort' => $productHallDifination->sort,
-                        //     'group_name' => $groupName,
-                        // ]);
-
-                        // if ($productHallDifination->hall->slug == "cutting-and-sewing") {
-                        //     $parentId = $parent->id;
-                        // }
-                    }
-                }
-            }
-
-            return [
-                'status' => true,
-                'message' => 'سفارش با موفقیت تایید شد و در صف تولید قرار گرفت.',
-            ];
-        });
+        return $this->changeStatus($order, OrderStatus::PROCESSING->value);
     }
 
     public function canceleOrder(Order $order, string $cancelDescription = '')
     {
-        if ($order->status != OrderStatus::AWAITING_SALES_MANAGER_APPROVAL->value) {
+        if ($order->status != OrderStatus::PAID->value) {
             return [
                 'status' => false,
                 'message' => 'سفارش امکان لغو توسط مدیر را ندارد',
@@ -286,23 +184,20 @@ class OrderService
     {
         $order = $this->orderRepository->find($orderId);
 
-        return DB::transaction(function () use ($order) {
-            $order = $this->orderRepository->update($order, ['status' => OrderStatus::SHIPPED->value]);
-            $this->orderItemService->updateItemsStatus($order, OrderItemStatus::SHIPPED->value);
-
-            return $order;
-        });
+        return $this->changeStatus($order, OrderStatus::SHIPPED->value);
     }
 
     public function delivered($orderId)
     {
         $order = $this->orderRepository->find($orderId);
 
-        return DB::transaction(function () use ($order) {
-            $order = $this->orderRepository->update($order, ['status' => OrderStatus::DELIVERED->value]);
-            $this->orderItemService->updateItemsStatus($order, OrderItemStatus::DELIVERED->value);
+        return $this->changeStatus($order, OrderStatus::DELIVERED->value);
+    }
 
-            return $order;
+    public function changeStatus(Order $order, $status)
+    {
+        return DB::transaction(function () use ($order, $status) {
+            return $this->orderRepository->update($order, ['status' => $status]);
         });
     }
 }

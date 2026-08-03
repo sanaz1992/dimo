@@ -2113,7 +2113,13 @@ body.drawer-open:after {
     font-weight: 600;
     box-shadow: 0 4px 16px #2563eb26
 }
-
+.theme-chip-active {
+    border: 1px solid var(--chip-color);
+    color: var(--chip-color);
+    background-color: var(--chip-bg);
+    font-weight: 600;
+    box-shadow: 0 4px 16px var(--chip-shadow);
+}
 .anim-tab-bump {
     animation: .3s ease-out tab-bump
 }

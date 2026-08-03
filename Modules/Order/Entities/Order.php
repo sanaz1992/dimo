@@ -34,6 +34,7 @@ class Order extends Model
 
     protected $casts = [
         'status' => OrderStatus::class,
+        'payment_status' => OrderStatus::class,
     ];
 
     public array $historyFields = ['status'];

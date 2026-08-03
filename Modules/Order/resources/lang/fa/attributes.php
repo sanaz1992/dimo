@@ -26,5 +26,10 @@ return [
     'receiver_name' => 'نام گیرنده',
     'receiver_mobile' => 'موبایل گیرنده',
     'description' => 'توضیحات سفارش',
+    'approve_order' => 'تایید سفارش',
+    'cancel_order' => 'لغو سفارش',
+    'awaiting_shipped' => 'در انتظار ارسال',
+    'shipped' => 'ارسال شد',
+    'delivered' => 'تحویل داده شده',
 
 ];

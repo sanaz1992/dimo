@@ -7,7 +7,7 @@ enum OrderStatus: string
     case DRAFT = 'draft';
     case AWAITING_PAYMENT = 'awaiting_payment';
     case PAID = 'paid';
-    case AWAITING_MANAGER_APPROVAL = 'awaiting_manager_approval';
+    // case AWAITING_MANAGER_APPROVAL = 'awaiting_manager_approval';
     case PROCESSING = 'processing';
     case PAYMENT_FAILED = 'payment_failed';
     case EXPIRED = 'expired';
@@ -16,6 +16,7 @@ enum OrderStatus: string
     case CANCELED = 'canceled';
     case AWAITING_SHIPPED = 'awaiting_shipped';
     case SHIPPED = 'shipped';
+    case DELIVERED = 'delivered';
 
     public function label(): string
     {
@@ -23,8 +24,8 @@ enum OrderStatus: string
             self::DRAFT => 'پیش نویس',
             self::AWAITING_PAYMENT => 'در انتظار پرداخت',
             self::PAID => 'پرداخت شده',
-            self::AWAITING_MANAGER_APPROVAL => 'در انتظار تایید مدیر',
-            self::PROCESSING => 'در حال پردازش',
+            // self::AWAITING_MANAGER_APPROVAL => 'در انتظار تایید مدیر',
+            self::PROCESSING => 'در حال آماده سازی',
             self::PAYMENT_FAILED => 'ناموفق',
             self::EXPIRED => 'منقضی شده',
             self::MANUAL_REVIEW => 'نیاز به بررسی',
@@ -32,6 +33,25 @@ enum OrderStatus: string
             self::CANCELED => 'لغو شده',
             self::AWAITING_SHIPPED => 'در انتظار ارسال',
             self::SHIPPED => 'ارسال شده',
+            self::DELIVERED => 'تحویل داده شده',
+        };
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::DRAFT => 'gray',
+            self::AWAITING_PAYMENT => 'amber',
+            self::PAID => 'emerald',
+            self::PROCESSING => 'blue',
+            self::PAYMENT_FAILED => 'red',
+            self::EXPIRED => 'slate',
+            self::MANUAL_REVIEW => 'violet',
+            self::COMPLETED => 'green',
+            self::CANCELED => 'rose',
+            self::AWAITING_SHIPPED => 'indigo',
+            self::SHIPPED => 'sky',
+            self::DELIVERED => 'green',
         };
     }
 }
