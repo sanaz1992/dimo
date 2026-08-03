@@ -4,6 +4,8 @@ namespace Modules\Transactions\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Transactions\External\Contracts\TransactionRepositoryInterface;
+use Modules\Transactions\External\TransactionRepository;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -39,6 +41,8 @@ class TransactionsServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        $this->app->bind(TransactionRepositoryInterface::class, TransactionRepository::class);
 
     }
 

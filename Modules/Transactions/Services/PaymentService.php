@@ -3,12 +3,13 @@
 namespace Modules\Transactions\Services;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Helpers\SettingHelper;
 use Modules\Order\Entities\Order;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Order\Services\OrderService;
 use Modules\Transactions\DTOs\PaymentRequestData;
 use Modules\Transactions\DTOs\PaymentVerificationResult;
 use Modules\Transactions\Entities\Transaction;
+use Modules\Transactions\Enums\TransactionStatus;
 use RuntimeException;
 
 class PaymentService
@@ -48,7 +49,7 @@ class PaymentService
                 'order_id' => $order->id,
                 'gateway' => $gateway->name(),
                 'amount' => $requestData->amount,
-                'status' => 'pending',
+                'status' => TransactionStatus::PENDING->value,
                 'payload' => [
                     'request' => [
                         'token' => $requestResult->token,
@@ -84,7 +85,7 @@ class PaymentService
                 $transaction = Transaction::query()
                     ->where('order_id', $order->id)
                     ->where('gateway', $gateway->name())
-                    ->where('status', 'pending')
+                    ->where('status', TransactionStatus::PENDING->value)
                     ->latest('id')
                     ->first();
             }
@@ -106,15 +107,15 @@ class PaymentService
             ];
 
             $transaction->update([
-                'status' => $result->success ? 'paid' : 'failed',
+                'status' => $result->success ? TransactionStatus::PAID->value : TransactionStatus::FAILED->value,
                 'reference_id' => $result->referenceId,
                 'payload' => $payload,
                 'authority' => $result->authority,
             ]);
 
             $order->update([
-                'status' => $result->success ? 'paid' : $result->success,
-                'payment_status' => $result->success ? 'paid' : 'failed',
+                'status' => $result->success ? OrderStatus::PAID->value : $result->success,
+                'payment_status' => $result->success ? OrderStatus::PAID->value : OrderStatus::PAYMENT_FAILED->value,
             ]);
 
         });

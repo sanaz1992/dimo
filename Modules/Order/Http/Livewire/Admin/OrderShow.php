@@ -39,11 +39,11 @@ class OrderShow extends AdminBaseComponent
     {
         $this->authorize('orders_approved');
         try {
-            $result = resolve(OrderService::class)->approveOrder($this->order);
-            if ($result['status']) {
-                $this->notify('success', $result['message']);
+            $order = resolve(OrderService::class)->approveOrder($this->order);
+            if ($order) {
+                $this->notify('success', __('order::messages.approved.success'));
             } else {
-                $this->notify('error', $result['message']);
+                $this->notify('error', __('order::messages.approved.error'));
             }
         } catch (\Exception $e) {
             $this->notify('error', __('order::messages.approved.error'));
@@ -59,11 +59,11 @@ class OrderShow extends AdminBaseComponent
         }
         $this->authorize('orders_approved');
         try {
-            $result = resolve(OrderService::class)->changeStatus($this->order, OrderStatus::AWAITING_SHIPPED->value);
-            if ($result['status']) {
-                $this->notify('success', $result['message']);
+            $order = resolve(OrderService::class)->changeStatus($this->order, OrderStatus::AWAITING_SHIPPED->value);
+            if ($order) {
+                $this->notify('success', __('order::messages.change_status_success'));
             } else {
-                $this->notify('error', $result['message']);
+                $this->notify('error', __('order::messages.change_status_error'));
             }
         } catch (\Exception $e) {
             $this->notify('error', __('order::messages.approved.error'));

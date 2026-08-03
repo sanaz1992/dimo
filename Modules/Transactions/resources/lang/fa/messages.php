@@ -21,7 +21,6 @@ return [
         'error' => 'بازگرداندن اطلاعات با خطا مواجه شد.',
     ],
     'approved' => [
-        'success' => ' سفارش با موفقیت تایید شد.',
         'error' => 'تایید سفارش با خطا مواجه شد. لطفا به پشتیبانی اطلاع دهید.',
     ],
 
@@ -57,7 +56,4 @@ return [
     'Notes_are_used_for_better_coordination_between_team_members' => 'یادداشت‌ها برای هماهنگی بیشتر بین همکاران استفاده می‌شود.',
     'description_for_cancel_order_is_required' => 'توضیحات برای لغو سفارش اجباری است.',
     'customer_not_found' => 'مشتری یافت نشد',
-
-    'change_status_success' => 'وضعیت سفارش با موفقیت تغییر کرد',
-    'change_status_error' => 'تغییر وضعیت سفارش با خطا مواجه شد',
 ];

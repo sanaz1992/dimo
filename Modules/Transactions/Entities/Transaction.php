@@ -3,7 +3,10 @@
 namespace Modules\Transactions\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Traits\Filterable;
+use Modules\Order\Entities\Order;
+use Modules\Transactions\Enums\TransactionStatus;
 
 class Transaction extends Model
 {
@@ -21,11 +24,17 @@ class Transaction extends Model
     ];
 
     protected $casts = [
+        'status' => TransactionStatus::class,
         'payload' => 'array',
     ];
 
-    public function getCreatedAtJalaliDateAttribute()
+    public function getCreatedAtJalaliAttribute()
     {
-        return verta($this->created_at)->format('Y/m/d');
+        return verta($this->created_at)->format('Y/m/d H:i:s');
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }

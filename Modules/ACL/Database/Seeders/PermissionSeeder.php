@@ -99,6 +99,14 @@ class PermissionSeeder extends Seeder
                 'name' => 'orders_shipped',
                 'title' => 'ارسال سفارش',
             ],
+            [
+                'name' => 'transactions_list',
+                'title' => 'لیست تراکنش ها',
+            ],
+            [
+                'name' => 'transactions_show',
+                'title' => 'مشاهده تراکنش',
+            ],
         ];
 
         foreach ($permissions as $permission) {

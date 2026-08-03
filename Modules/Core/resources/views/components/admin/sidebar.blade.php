@@ -85,22 +85,15 @@
                 <span>@lang('order::attributes.orders')</span>
             </a>
         @endcan
-        <a href="#" data-nav="transactions" class="nav-link">
-            <span class="nav-ico">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    class="icon-svg shrink-0" aria-hidden="true">
-                    <rect x="2" y="5" width="20" height="14" rx="3" fill="currentColor" fill-opacity="0.12"></rect>
-                    <path d="M2 10h20" stroke="currentColor" stroke-width="1.5"></path>
-                    <path d="M6 15h4M14 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                    <circle cx="7" cy="15" r="0" fill="currentColor"></circle>
-                    <rect x="2" y="5" width="20" height="14" rx="3" stroke="currentColor" stroke-width="1.5"></rect>
-                    <path d="M6 8h3M15 8h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                        opacity="0.7"></path>
-                </svg>
-            </span>
-            <span>@lang('dashboard::attributes.transactions')</span>
-        </a>
-        <a href="#" data-nav="analytics" class="nav-link">
+        @can('orders_list')
+            <a href="{{route('admin.transactions.index')}}" data-nav="transactions" class="nav-link">
+                <span class="nav-ico">
+                    <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
+                </span>
+                <span>@lang('transactions::attributes.transactions')</span>
+            </a>
+        @endcan
+        {{-- <a href="#" data-nav="analytics" class="nav-link">
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                     class="icon-svg shrink-0" aria-hidden="true">
@@ -116,7 +109,7 @@
                 </svg>
             </span>
             <span>@lang('dashboard::attributes.analytics')</span>
-        </a>
+        </a> --}}
         @can('settings_edit')
             <a href="{{route('admin.settings.edit')}}" data-nav="settings" class="nav-link">
                 <span class="nav-ico">
@@ -134,7 +127,7 @@
         @endcan
     </nav>
 
-    <div class="status-box relative z-[1]">
+    {{-- <div class="status-box relative z-[1]">
         <div class="flex items-center gap-3">
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-soft"
                 id="icon-server"></div>
@@ -143,5 +136,5 @@
                 <p class="text-[13px] font-bold text-emerald-700">آنلاین ۹۹.۹٪</p>
             </div>
         </div>
-    </div>
+    </div> --}}
 </aside>
