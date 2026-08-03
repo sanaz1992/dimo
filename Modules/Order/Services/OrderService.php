@@ -41,7 +41,7 @@ class OrderService
 
     public function createFromCart(Cart $cart, array $data)
     {
-        $data['status'] = 'draft';
+        $data['status'] = OrderStatus::DRAFT->value;
 
         return DB::transaction(function () use ($cart, $data) {
             $order = $this->create($data);

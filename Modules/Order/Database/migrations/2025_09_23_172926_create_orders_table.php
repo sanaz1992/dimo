@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('order_number')->unique(); // Unique order number (e.g., G-10023)
 
             // Statuses: custom enum or string
-            $table->string('status')->default('pending'); // pending, processing, shipped, delivered, cancelled
-            $table->string('payment_status')->default('unpaid'); // unpaid, paid, failed, refunded
+            $table->string('status')->default('draft'); // pending, processing, shipped, delivered, cancelled
+            $table->string('payment_status')->default('awaiting_payment'); // awaiting_payment, paid, failed, refunded
 
             $table->decimal('subtotal', 12, 0)->nullable(); // Total price before discount and shipping cost
             $table->decimal('discount_amount', 12, 0)->default(0);

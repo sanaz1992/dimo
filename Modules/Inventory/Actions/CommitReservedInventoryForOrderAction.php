@@ -5,6 +5,8 @@ namespace Modules\Inventory\Actions;
 use Illuminate\Support\Facades\DB;
 use Modules\Inventory\Entities\InventoryMovement;
 use Modules\Inventory\Entities\InventoryReservation;
+use Modules\Inventory\Enums\InventoryMovementType;
+use Modules\Inventory\Enums\InventoryReservationStatus;
 use Modules\Order\Entities\Order;
 use Modules\Product\Entities\ProductSku;
 use RuntimeException;
@@ -25,7 +27,7 @@ class CommitReservedInventoryForOrderAction
 
             $reservations = InventoryReservation::query()
                 ->where('order_id', $order->id)
-                ->where('status', 'active')
+                ->where('status', InventoryReservationStatus::ACTIVE->value)
                 ->lockForUpdate()
                 ->get();
 
@@ -53,7 +55,7 @@ class CommitReservedInventoryForOrderAction
                 $sku->decrement('stock', $qty);
 
                 $reservation->update([
-                    'status' => 'converted',
+                    'status' => InventoryReservationStatus::CONVERTED->value,
                     'converted_at' => now(),
                 ]);
 
@@ -62,7 +64,7 @@ class CommitReservedInventoryForOrderAction
                     'order_id' => $reservation->order_id,
                     'order_item_id' => $reservation->order_item_id,
                     'inventory_reservation_id' => $reservation->id,
-                    'type' => 'convert',
+                    'type' => InventoryMovementType::CONVERT->value,
                     'quantity' => $qty,
                     'meta' => [
                         'message' => 'Reserved inventory converted after successful payment.',

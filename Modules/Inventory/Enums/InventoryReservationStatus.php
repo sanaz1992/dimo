@@ -2,13 +2,21 @@
 
 namespace Modules\Inventory\Enums;
 
-class InventoryReservationStatus
+enum InventoryReservationStatus: string
 {
-    public const ACTIVE = 'active';
+    case ACTIVE = 'active';
+    case RELEASED = 'released';
+    case CONVERTED = 'converted';
+    case EXPIRED = 'expired';
 
-    public const RELEASED = 'released';
+    public function label(): string
+    {
+        return match ($this) {
+            self::ACTIVE => 'فعال',
+            self::RELEASED => 'RELEASED',
+            self::CONVERTED => 'CONVERTED',
+            self::EXPIRED => 'منقضی شده',
 
-    public const CONVERTED = 'converted';
-
-    public const EXPIRED = 'expired';
+        };
+    }
 }

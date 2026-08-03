@@ -5,6 +5,8 @@ namespace Modules\Inventory\Actions;
 use Illuminate\Support\Facades\DB;
 use Modules\Inventory\Entities\InventoryMovement;
 use Modules\Inventory\Entities\InventoryReservation;
+use Modules\Inventory\Enums\InventoryMovementType;
+use Modules\Inventory\Enums\InventoryReservationStatus;
 use Modules\Order\Entities\Order;
 use Modules\Product\Entities\ProductSku;
 
@@ -20,7 +22,7 @@ class ReleaseInventoryReservationForOrderAction
 
             $reservations = InventoryReservation::query()
                 ->where('order_id', $order->id)
-                ->where('status', 'active')
+                ->where('status', InventoryReservationStatus::ACTIVE->value)
                 ->lockForUpdate()
                 ->get();
 
@@ -43,7 +45,7 @@ class ReleaseInventoryReservationForOrderAction
                 }
 
                 $reservation->update([
-                    'status' => $reason === 'expired' ? 'expired' : 'released',
+                    'status' => $reason === InventoryReservationStatus::EXPIRED->value ?? InventoryReservationStatus::RELEASED->value,
                     'released_at' => now(),
                     'expired_at' => $reason === 'expired' ? now() : null,
                 ]);
@@ -53,7 +55,7 @@ class ReleaseInventoryReservationForOrderAction
                     'order_id' => $reservation->order_id,
                     'order_item_id' => $reservation->order_item_id,
                     'inventory_reservation_id' => $reservation->id,
-                    'type' => 'release',
+                    'type' => InventoryMovementType::RELEASE->value,
                     'quantity' => $reservation->quantity,
                     'meta' => [
                         'reason' => $reason,

@@ -19,11 +19,11 @@
                 @lang('order::attributes.approve_order')
             </x-dashboard::buttons.primary-action>
 
-            <x-dashboard::buttons.primary-action id="btn-approve-order" tag="button"
+            {{-- <x-dashboard::buttons.primary-action id="btn-approve-order" tag="button"
                 class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-red-600 !to-rose-500 hover:!from-red-700 hover:!to-rose-600 text-white"
                 wire:click="openCancelOrderModal" target="openCancelOrderModal">
                 @lang('order::attributes.cancel_order')
-            </x-dashboard::buttons.primary-action>
+            </x-dashboard::buttons.primary-action> --}}
         @elseif($order->status==Modules\Order\Enums\OrderStatus::PROCESSING)
             <x-dashboard::buttons.primary-action id="btn-done-proccessing" tag="button"
                 class="inline-flex items-center justify-center px-4 py-2 text-sm rounded-xl btn-fill btn-new-tx shrink-0 !bg-gradient-to-r !from-blue-600 !to-indigo-600 hover:!from-blue-700 hover:!to-indigo-700 text-white"
@@ -78,7 +78,7 @@
                             <path d="M3.5 10L4.91 18.64C5.23 20.58 6 22 8.86 22H14.89C18 22 18.46 20.64 18.82 18.76L20.5 10"
                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         </svg>
-                        @lang('order::attributes.cancele_order')
+                        @lang('order::attributes.cancel_order')
                     </h2>
                     <button wire:click="$set('showCancelOrderModal', false)"
                         class="text-gray-400 hover:text-gray-600 transition duration-150 rounded-lg p-1 hover:bg-gray-100">

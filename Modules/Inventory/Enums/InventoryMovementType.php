@@ -2,15 +2,26 @@
 
 namespace Modules\Inventory\Enums;
 
-class InventoryMovementType
+enum InventoryMovementType: string
 {
-    public const RESERVE = 'reserve';
+    case RESERVE = 'reserve';
 
-    public const RELEASE = 'release';
+    case RELEASE = 'release';
 
-    public const CONVERT = 'convert';
+    case CONVERT = 'convert';
 
-    public const ADJUST = 'adjust';
+    case ADJUST = 'adjust';
 
-    public const REFUND = 'refund';
+    case REFUND = 'refund';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::RESERVE => 'رزرو',
+            self::RELEASE => 'RELEASE',
+            self::CONVERT => 'CONVERT',
+            self::ADJUST => 'ADJUST',
+            self::REFUND => 'REFUND',
+        };
+    }
 }

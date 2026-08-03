@@ -5,7 +5,9 @@ namespace Modules\Inventory\Actions;
 use Illuminate\Support\Facades\DB;
 use Modules\Inventory\Entities\InventoryMovement;
 use Modules\Inventory\Entities\InventoryReservation;
+use Modules\Inventory\Enums\InventoryReservationStatus;
 use Modules\Order\Entities\Order;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Product\Entities\ProductSku;
 use RuntimeException;
 
@@ -22,7 +24,7 @@ class ReserveInventoryForOrderAction
 
             $existingActiveReservations = InventoryReservation::query()
                 ->where('order_id', $order->id)
-                ->where('status', 'active')
+                ->where('status', InventoryReservationStatus::ACTIVE->value)
                 ->exists();
 
             if ($existingActiveReservations) {
@@ -51,7 +53,7 @@ class ReserveInventoryForOrderAction
                     'order_item_id' => $item->id,
                     'product_sku_id' => $sku->id,
                     'quantity' => $qty,
-                    'status' => 'active',
+                    'status' => InventoryReservationStatus::ACTIVE->value,
                     'expires_at' => now()->addMinutes($ttlMinutes),
                 ]);
 
@@ -72,8 +74,8 @@ class ReserveInventoryForOrderAction
 
             $order->update([
                 // 'inventory_status' => 'reserved',
-                'status' => 'awaiting_payment',
-                'payment_status' => 'pending',
+                'status' => OrderStatus::AWAITING_PAYMENT->value,
+                'payment_status' => OrderStatus::AWAITING_PAYMENT->value,
                 // 'reserved_at' => now(),
                 // 'payment_expires_at' => now()->addMinutes($ttlMinutes),
             ]);
