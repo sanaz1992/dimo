@@ -19,7 +19,7 @@ class EnsureAdminPanelAccess
             return $this->respondError('کاربر یافت نشد', 401);
         }
 
-        if (in_array($user->level, [UserLevel::ADMIN->value, UserLevel::SALES_OPERATOR->value])) {
+        if (in_array($user->level->value, UserLevel::adminLabels())) {
             return $next($request);
         }
 

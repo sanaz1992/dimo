@@ -13,7 +13,10 @@
             <x-dashboard::forms.input label="user::attributes.password_confirmation" name="form.password_confirmation"
                 type="password" wire:model.defer="form.password_confirmation" />
 
-            <x-dashboard::buttons.primary-action id="btn-store-user" tag="button" type="submit">
+            <x-dashboard::forms.select label="user::attributes.level" name="form.level" wire:model.defer="form.level"
+                :options="$userLevels" placeholder="user::messages.select_level" />
+
+            <x-dashboard::buttons.primary-action id="btn-store-user" tag="button" type="submit" class="btn-fill">
                 @lang('core::attributes.store')
             </x-dashboard::buttons.primary-action>
         </div>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('mobile');
             $table->timestamp('mobile_verified_at')->nullable();
             $table->string('password');
-            $table->enum('level', UserLevel::values())->default(UserLevel::USER->value);
+            $table->string('level', 30)->default(UserLevel::USER->value);
             $table->timestamps();
         });
     }

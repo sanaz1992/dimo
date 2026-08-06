@@ -5,7 +5,6 @@ namespace Modules\User\Http\Livewire\Admin\User;
 use Illuminate\Validation\ValidationException;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
-use Modules\User\Enums\UserLevel;
 use Modules\User\Http\Livewire\Admin\Concerns\CreatesUser;
 use Modules\User\Services\UserService;
 
@@ -14,7 +13,10 @@ class UserCreate extends AdminBaseComponent
     use CreatesUser;
     use LivewireNotify;
 
-    public function mount() {}
+    public function mount()
+    {
+        $this->loadFormData();
+    }
 
     public function store(UserService $userService)
     {
@@ -22,8 +24,7 @@ class UserCreate extends AdminBaseComponent
             $this->validateUser();
 
             $this->createUser(
-                $userService,
-                UserLevel::USER->value
+                $userService
             );
 
             $this->notify('success', __('core::messages.create.success'));
@@ -31,6 +32,7 @@ class UserCreate extends AdminBaseComponent
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
+            dd($e->getMessage());
             $this->notify('error', __('core::messages.create.error'));
         }
     }

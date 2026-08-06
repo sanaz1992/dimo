@@ -1,48 +1,82 @@
-<section class="panel p-5 anim-fade-up">
-    <div class="relative z-[1] mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h2 class="text-base font-bold text-ink sm:text-lg">@lang('user::attributes.users_list')</h2>
-            <p class="text-[11px] text-ink-faint sm:text-[12px]">{{count($users)}} @lang('user::attributes.user') </p>
-        </div>
-        <x-dashboard::buttons.primary-action id="btn-add-user" tag="a" href="{{ route('admin.users.create') }}">
+<section class="table-panel anim-fade-up">
+
+    <x-dashboard::card.card-header :title="__('user::attributes.users_list')">
+        <x-slot:icon>
+            <img src="{{ asset('icons\sidebar\sellers.svg') }}" alt="users" />
+        </x-slot:icon>
+        <x-dashboard::buttons.primary-action id="btn-add-user" tag="a" class="btn-fill btn-new-tx shrink-0"
+            href="{{ route('admin.users.create') }}">
             <x-slot:icon>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                    class="icon-svg shrink-0" aria-hidden="true">
-                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                </svg>
+                <img src="{{ asset('icons/header/add.svg') }}" alt="users" />
             </x-slot:icon>
-
-            @lang('user::attributes.new_user')
+            @lang('user::attributes.create_user')
         </x-dashboard::buttons.primary-action>
-    </div>
+    </x-dashboard::card.card-header>
 
-    <div class="relative z-[1] grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 anim-stagger">
-        @foreach ($users as $user)
-            <div class="user-card anim-pop" data-searchable style="animation-delay:0s">
-                <div class="flex items-center gap-3">
-                    <span class="user-dot">{{ substr($user->name, 0, 1) }}</span>
-                    <div>
-                        <p class="font-semibold text-ink">{{$user->name}}</p>
-                        <p class="text-[11px] text-ink-faint">{{$user->mobile}}</p>
-                    </div>
-                </div>
-                {{-- <a class="row-btn mt-3  justify-center">
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            class="icon-svg shrink-0" aria-hidden="true">
-                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor"
-                                stroke-width="1.5"></path>
-                            <circle cx="12" cy="12" r="2.5" fill="currentColor" fill-opacity="0.2" stroke="currentColor"
-                                stroke-width="1.5"></circle>
-                        </svg>
-                    </span>
-                </a> --}}
-                <a class="row-btn mt-3 justify-center" href="{{ route('admin.users.edit', $user) }}">
-                    <span>
-                        <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
-                    </span>
-                </a>
-            </div>
-        @endforeach
-    </div>
+
+    <x-dashboard::table.table>
+        <x-slot:head>
+            <tr>
+                <th>@lang('core::attributes.row')</th>
+                <th>@lang('user::attributes.unique_code')</th>
+                <th>@lang('user::attributes.name')</th>
+                <th>@lang('user::attributes.mobile')</th>
+                <th>@lang('user::attributes.level')</th>
+                <th>@lang('user::attributes.created_at')</th>
+                <th>@lang('user::attributes.status')</th>
+                <th class="col-actions"></th>
+            </tr>
+        </x-slot:head>
+        <x-slot:body>
+            @foreach ($users as $user)
+                <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
+                    <x-dashboard::table.cell :label="__('core::attributes.row')">
+                        {{ $loop->index + 1 }}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('user::attributes.unique_code')">
+                        {{$user->unique_code}}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('user::attributes.name')" class="flex items-center gap-2">
+                        <img alt="{{$user->name}}" class="h-10 w-10 rounded-full object-cover"
+                            src="{{ $user->main_image?->getThumbnailUrl('small') }}">
+                        {{$user->name}}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('user::attributes.mobile')">
+                        {{$user->mobile}}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('user::attributes.level')">
+                        <x-dashboard::badge :color="$user->level->color()">
+                            {{$user->level->label()}}</x-dashboard::badge>
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('user::attributes.created_at')">
+                        {{$user->created_at_jalali_date}}
+                    </x-dashboard::table.cell>
+
+                    <x-dashboard::table.cell :label="__('user::attributes.status')">
+                        @if($user->active)
+                            <x-dashboard::badge color="green">
+                                @lang('user::attributes.active')</x-dashboard::badge>
+                        @else
+                            <x-dashboard::badge color="red">
+                                @lang('user::attributes.inactive')</x-dashboard::badge>
+                        @endif
+                    </x-dashboard::table.cell>
+
+                    <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
+                        <div class="flex gap-1">
+                            <x-dashboard::buttons.primary-action id="btn-edit-user-{{$user->id}}" tag="a"
+                                href="{{ route('admin.users.edit', $user) }}" size="sm">
+                                <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
+                            </x-dashboard::buttons.primary-action>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </x-slot:body>
+    </x-dashboard::table.table>
 </section>

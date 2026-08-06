@@ -4,7 +4,6 @@ namespace Modules\User\Http\Livewire\Admin\User;
 
 use Livewire\WithPagination;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
-use Modules\User\Enums\UserLevel;
 use Modules\User\Services\UserService;
 
 class UserList extends AdminBaseComponent
@@ -35,10 +34,7 @@ class UserList extends AdminBaseComponent
     public function render(UserService $userService)
     {
         $conditions = [
-            'where' => [
-                'level' => ['=', UserLevel::USER->value],
-                'id' => ['!=', 1],
-            ],
+
         ];
 
         $users = $userService->list(null, [10, true], ['mainImageRelation'], $conditions);

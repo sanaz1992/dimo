@@ -2,11 +2,10 @@
 
 namespace Modules\User\Http\Livewire\Admin\Concerns;
 
-use Illuminate\Support\Facades\Hash;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
-use Modules\Core\Helpers\SettingHelper;
 use Modules\User\Entities\User;
+use Modules\User\Enums\UserLevel;
 use Modules\User\Rules\UpdateUserRules;
 use Modules\User\Services\UserService;
 
@@ -27,7 +26,7 @@ trait EditsUser
 
     public $initialImage;
 
-    public $showAdminPasswordMessage;
+    public $userLevels;
 
     protected function fillUserForm(User $user): void
     {
@@ -37,14 +36,10 @@ trait EditsUser
         $this->form['mobile'] = $user->mobile;
         $this->form['level'] = $user->level;
         $this->form['active'] = (bool) $user->active;
-        $settingHelper = app(SettingHelper::class);
-        $this->showAdminPasswordMessage =
-            $settingHelper->setting('user_can_register')->value == '1'
-            && auth()->id() == $user->id
-            && Hash::check($user->mobile, $user->password)
-            ? true : false;
 
         $this->initialImage = $user->avatar?->getThumbnailUrl('original');
+
+        $this->userLevels = UserLevel::labels();
     }
 
     public function getClientOriginalNameProperty()

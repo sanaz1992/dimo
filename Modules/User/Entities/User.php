@@ -14,6 +14,7 @@ use Modules\Core\Traits\Filterable;
 use Modules\Media\Entities\Media;
 use Modules\Media\Entities\NullMedia;
 use Modules\Process\Entities\Process;
+use Modules\User\Enums\UserLevel;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -44,6 +45,7 @@ class User extends Authenticatable
         return [
             'mobile_verified_at' => 'datetime',
             'password' => 'hashed',
+            'level' => UserLevel::class,
         ];
     }
 

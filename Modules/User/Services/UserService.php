@@ -11,7 +11,6 @@ use Modules\Core\Helpers\CodeGeneratorHelper;
 use Modules\Media\Entities\Media;
 use Modules\Media\Services\MediaService;
 use Modules\User\Entities\User;
-use Modules\User\Enums\UserLevel;
 use Modules\User\External\Repositories\Contract\AddressRepositoryInterface;
 use Modules\User\External\Repositories\Contract\UserRepositoryInterface;
 
@@ -83,12 +82,6 @@ class UserService
                 $data['selectedRoles'] = $data['roles'];
                 $data['selectedPermissions'] = $data['permissions'];
                 resolve(UserRoleService::class)->updateUserRoles($user, $data);
-            }
-            if (isset($data['level']) && $data['level'] == UserLevel::SALES_OPERATOR->value) {
-                resolve(UserRoleService::class)->updateUserRoles(
-                    $user,
-                    ['selectedRoles' => 'sales_operator']
-                );
             }
 
             if ($image) {

@@ -3,6 +3,7 @@
 namespace Modules\User\Http\Livewire\Admin\Concerns;
 
 use Livewire\WithFileUploads;
+use Modules\User\Enums\UserLevel;
 use Modules\User\Rules\StoreUserRules;
 use Modules\User\Services\UserService;
 
@@ -16,7 +17,15 @@ trait CreatesUser
         'password' => '',
         'image' => null,
         'active' => true,
+        'level' => '',
     ];
+
+    public $userLevels;
+
+    public function loadFormData()
+    {
+        $this->userLevels = UserLevel::labels();
+    }
 
     protected function userRules(): array
     {
@@ -32,10 +41,8 @@ trait CreatesUser
         );
     }
 
-    protected function createUser(UserService $userService, string $level)
+    protected function createUser(UserService $userService)
     {
-        $this->form['level'] = $level;
-
         return $userService->create($this->form);
     }
 
