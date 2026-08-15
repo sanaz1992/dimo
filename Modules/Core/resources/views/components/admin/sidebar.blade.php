@@ -35,8 +35,7 @@
 
     {{-- <p class="relative z-[1] mb-2 px-2 text-[10px] font-semibold text-ink-faint">منوی اصلی</p> --}}
     <nav class="relative z-[1] flex flex-col gap-1">
-        <a href="{{route('admin.dashboard')}}" data-nav="dashboard" class="nav-link nav-link-active">
-            <span class="nav-pill" aria-hidden="true"></span>
+        <a href="{{route('admin.dashboard')}}" data-nav="dashboard" class="nav-link {{request()->routeIs('admin.dashboard')?'nav-link-active':''}}">
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                     class="icon-svg shrink-0" aria-hidden="true">
@@ -52,7 +51,7 @@
             <span>@lang('dashboard::attributes.dashboard')</span>
         </a>
         @can('users_list')
-            <a href="{{route('admin.users.index')}}" data-nav="users" class="nav-link">
+            <a href="{{route('admin.users.index')}}" data-nav="users" class="nav-link {{request()->routeIs('admin.users.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         class="icon-svg shrink-0" aria-hidden="true">
@@ -70,7 +69,7 @@
             </a>
         @endcan
         @can('products_list')
-            <a href="{{route('admin.products.index')}}" data-nav="products" class="nav-link">
+            <a href="{{route('admin.products.index')}}" data-nav="products" class="nav-link {{request()->routeIs('admin.products.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\products.svg') }}" alt="products" />
                 </span>
@@ -78,7 +77,7 @@
             </a>
         @endcan
         @can('orders_list')
-            <a href="{{route('admin.orders.index')}}" data-nav="orders" class="nav-link">
+            <a href="{{route('admin.orders.index')}}" data-nav="orders" class="nav-link {{request()->routeIs('admin.orders.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\orders.svg') }}" alt="orders" />
                 </span>
@@ -86,7 +85,7 @@
             </a>
         @endcan
         @can('transactions_list')
-            <a href="{{route('admin.transactions.index')}}" data-nav="transactions" class="nav-link">
+            <a href="{{route('admin.transactions.index')}}" data-nav="transactions" class="nav-link {{request()->routeIs('admin.transactions.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
                 </span>
@@ -94,32 +93,16 @@
             </a>
         @endcan
          @can('purchases_list')
-            <a href="{{route('admin.purchases.index')}}" data-nav="purchases" class="nav-link">
+            <a href="{{route('admin.purchases.index')}}" data-nav="purchases" class="nav-link {{request()->routeIs('admin.purchases.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\warehouses.svg') }}" alt="purchases" />
                 </span>
                 <span>@lang('inventory::attributes.purchases')</span>
             </a>
         @endcan
-        {{-- <a href="#" data-nav="analytics" class="nav-link">
-            <span class="nav-ico">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    class="icon-svg shrink-0" aria-hidden="true">
-                    <path d="M4 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                    <path d="M10 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                    <path d="M16 20v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                    <path d="M22 20v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                    <rect x="3" y="9" width="4" height="11" rx="1" fill="currentColor" fill-opacity="0.2"></rect>
-                    <rect x="9" y="3" width="4" height="17" rx="1" fill="currentColor" fill-opacity="0.25"></rect>
-                    <rect x="15" y="14" width="4" height="6" rx="1" fill="currentColor" fill-opacity="0.18"></rect>
-                    <rect x="21" y="11" width="4" height="9" rx="1" fill="currentColor" fill-opacity="0.15"
-                        transform="translate(-3 0)"></rect>
-                </svg>
-            </span>
-            <span>@lang('dashboard::attributes.analytics')</span>
-        </a> --}}
+
         @can('settings_edit')
-            <a href="{{route('admin.settings.edit')}}" data-nav="settings" class="nav-link">
+            <a href="{{route('admin.settings.edit')}}" data-nav="settings" class="nav-link {{request()->routeIs('admin.settings.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         class="icon-svg shrink-0" aria-hidden="true">
@@ -135,14 +118,5 @@
         @endcan
     </nav>
 
-    {{-- <div class="status-box relative z-[1]">
-        <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-soft"
-                id="icon-server"></div>
-            <div class="min-w-0">
-                <p class="text-[11px] text-emerald-700/70">وضعیت سرور</p>
-                <p class="text-[13px] font-bold text-emerald-700">آنلاین ۹۹.۹٪</p>
-            </div>
-        </div>
-    </div> --}}
+
 </aside>
