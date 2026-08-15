@@ -52,13 +52,13 @@
             <span>@lang('dashboard::attributes.dashboard')</span>
         </a>
 
-            <a href="{{route('admin.orders.index')}}" data-nav="orders" class="nav-link">
+            <a href="{{route('orders.index')}}" data-nav="orders" class="nav-link">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\orders.svg') }}" alt="orders" />
                 </span>
                 <span>@lang('order::attributes.orders')</span>
             </a>
-            <a href="{{route('admin.transactions.index')}}" data-nav="transactions" class="nav-link">
+            <a href="{{route('transactions.index')}}" data-nav="transactions" class="nav-link">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
                 </span>

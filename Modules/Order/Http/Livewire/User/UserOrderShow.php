@@ -6,7 +6,6 @@ use Modules\Core\Helpers\SettingHelper;
 use Modules\Core\Http\Livewire\User\UserBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Order\Entities\Order;
-use Modules\Order\Services\OrderProductionService;
 
 class UserOrderShow extends UserBaseComponent
 {
@@ -14,21 +13,26 @@ class UserOrderShow extends UserBaseComponent
 
     public $order;
 
-    public $totalSteps;
-
-    public $doneSteps;
-
-    public $fabrics = [];
-
     public $currency;
 
     public function mount(Order $order)
     {
-        dd($order);
+        if ($order->user_id != auth()->id()) {
+            session()->flash(
+                'error',
+                __('شما اجازه دسترسی به این سفارش را ندارید.')
+            );
+
+            $this->redirectRoute(
+                'orders.index',
+                navigate: true
+            );
+
+            return;
+        }
         $this->order = $order;
-        [$this->totalSteps, $this->doneSteps] = resolve(OrderProductionService::class)
-            ->calculateProductionProgress($order);
         $this->reloadOrderItems();
+        $order->load('user');
 
         $this->currency = app(SettingHelper::class)->currencyLabel();
     }
@@ -36,31 +40,15 @@ class UserOrderShow extends UserBaseComponent
     public function reloadOrderItems()
     {
         $this->order->load(
-            'user',
-            'items.product',
-            'items.item_fabrics.fabric',
-            'items.item_fabrics.color',
-            'items.item_fabrics.product_required_fabric',
-            'items.status_logs'
+            'items.product_sku.product',
         );
-        $this->fabrics = [];
-        foreach ($this->order->items as $item) {
-            foreach ($item->item_fabrics as $itemFabric) {
-                $this->fabrics[$itemFabric->fabric_id] = [
-                    'code' => $itemFabric->fabric->code,
-                    'title' => $itemFabric->fabric->title,
-                    'qty' => ($this->fabrics[$itemFabric->fabric_id]['qty'] ?? 0) + $itemFabric->qty,
-                    'price' => $itemFabric->fabric_price,
-                ];
-            }
-        }
     }
 
     public function render()
     {
-        return $this->renderView('Order::livewire.order.seller.seller-order-show')
+        return $this->renderView('Order::livewire.user.order.order-show')
             ->layoutData([
-                'title' => __('order::attributes.orders_show'),
+                'title' => __('order::attributes.orders_show').' '.$this->order->order_number,
             ]);
     }
 }

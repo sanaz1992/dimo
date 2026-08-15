@@ -1,20 +1,18 @@
 <?php
 
-namespace Modules\Order\Http\Livewire\Admin;
+namespace Modules\Order\Http\Livewire\User;
 
 use Illuminate\Http\Request;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Modules\Core\Helpers\SettingHelper;
-use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
-use Modules\Core\Traits\LivewireNotify;
+use Modules\Core\Http\Livewire\User\UserBaseComponent;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Order\Filters\OrderFilter;
 use Modules\Order\Services\OrderService;
 
-class OrderList extends AdminBaseComponent
+class UserOrderList extends UserBaseComponent
 {
-    // use Authorizable;
-    use LivewireNotify;
     use WithPagination;
 
     public $activeTab;
@@ -36,8 +34,6 @@ class OrderList extends AdminBaseComponent
 
     public function mount()
     {
-        // $this->authorize('orders_list');
-
         $this->currency = app(SettingHelper::class)->currencyLabel();
 
         $this->sortOptions = [
@@ -66,14 +62,19 @@ class OrderList extends AdminBaseComponent
         $request = new Request($this->filterData ?? []);
         $filter = new OrderFilter($request);
 
+        $conditions = [
+            'where' => ['user_id' => ['=', auth()->id()]],
+            'whereNotIn' => ['status' => [[OrderStatus::DRAFT->value, OrderStatus::EXPIRED->value]]],
+        ];
         $orders = $orderService->list(
             $this->sortBy ?? null,
             [10, true],
+            conditions: $conditions,
             filter: $filter
         );
 
         return $this->renderView(
-            'Order::livewire.admin.order.order-list',
+            'Order::livewire.user.order.order-list',
             compact('orders')
         )->layoutData([
             'title' => __('order::attributes.orders'),

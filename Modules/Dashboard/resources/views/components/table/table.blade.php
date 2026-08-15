@@ -6,8 +6,10 @@
         <tbody id="rows">
             {{ $body }}
         </tbody>
-        <tfoot>
-            {{ $footer }}
-        </tfoot>
+        @isset($footer)
+            <tfoot>
+                {{ $footer }}
+            </tfoot>
+        @endisset
     </table>
 </div>

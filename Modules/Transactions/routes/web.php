@@ -13,3 +13,11 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
         Route::get('/transactions/{transaction}/show', TransactionShow::class)->middleware(['can:transactions_show'])->name('transactions.show');
 
     });
+
+Route::middleware(['auth', 'verified'])
+    ->group(function () {
+
+        Route::get('/transactions', TransactionList::class)->middleware(['can:transactions_list'])->name('transactions.index');
+        Route::get('/transactions/{transaction}/show', TransactionShow::class)->middleware(['can:transactions_show'])->name('transactions.show');
+
+    });
