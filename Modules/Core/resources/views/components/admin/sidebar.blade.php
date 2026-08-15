@@ -85,12 +85,20 @@
                 <span>@lang('order::attributes.orders')</span>
             </a>
         @endcan
-        @can('orders_list')
+        @can('transactions_list')
             <a href="{{route('admin.transactions.index')}}" data-nav="transactions" class="nav-link">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
                 </span>
                 <span>@lang('transactions::attributes.transactions')</span>
+            </a>
+        @endcan
+         @can('purchases_list')
+            <a href="{{route('admin.purchases.index')}}" data-nav="purchases" class="nav-link">
+                <span class="nav-ico">
+                    <img src="{{ asset('icons\sidebar\warehouses.svg') }}" alt="purchases" />
+                </span>
+                <span>@lang('inventory::attributes.purchases')</span>
             </a>
         @endcan
         {{-- <a href="#" data-nav="analytics" class="nav-link">

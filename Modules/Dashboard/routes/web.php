@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Dashboard\Http\Livewire\Admin\AdminDashboard;
-use Modules\Dashboard\Http\Livewire\Seller\SellerDashboard;
+use Modules\Dashboard\Http\Livewire\User\UserDashboard;
 
 Route::middleware([
     'auth',
@@ -22,10 +22,10 @@ Route::prefix('admin')
         Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
     });
 
-Route::prefix('seller')
-    ->middleware(['auth', 'seller.panel'])
-    ->name('seller.')
-    ->prefix('/seller')
+Route::prefix('user')
+    ->middleware(['auth'])
+    ->name('user.')
+    ->prefix('/user')
     ->group(function () {
-        Route::get('/dashboard', SellerDashboard::class)->name('dashboard');
+        Route::get('/dashboard', UserDashboard::class)->name('dashboard');
     });

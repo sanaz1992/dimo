@@ -115,4 +115,11 @@ class ProductService
             return false;
         }
     }
+
+    public function getProductSkus($productId)
+    {
+        return $this->productSkuRepository->all(
+            conditions: ['where' => ['product_id' => ['=', $productId]]]
+        );
+    }
 }

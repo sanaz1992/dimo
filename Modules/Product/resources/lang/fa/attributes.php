@@ -27,5 +27,6 @@ return [
 
     'show_products' => ' مشاهده محصولات',
     'product_categories' => 'گروه بندی محصولات',
+    'quantity' => 'تعداد',
 
 ];

@@ -107,6 +107,18 @@ class PermissionSeeder extends Seeder
                 'name' => 'transactions_show',
                 'title' => 'مشاهده تراکنش',
             ],
+            [
+                'name' => 'purchases_list',
+                'title' => 'انبارداری',
+            ],
+            [
+                'name' => 'purchases_create',
+                'title' => 'افزودن فاکتور',
+            ],
+            [
+                'name' => 'purchases_edit',
+                'title' => 'ویرایش فاکتور',
+            ],
         ];
 
         foreach ($permissions as $permission) {

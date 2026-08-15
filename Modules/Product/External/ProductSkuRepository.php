@@ -28,4 +28,16 @@ class ProductSkuRepository extends BaseRepository implements ProductSkuRepositor
             ->where('id', $skuId)
             ->first();
     }
+
+    public function firstOrCreate(array $condition, array $data): ProductSku
+    {
+        if (! isset($data['sku'])) {
+            $data['sku'] = CodeGeneratorHelper::generate(get_class(new ProductSku), 'sku');
+        }
+
+        return $this->model->firstOrCreate(
+            $condition,
+            $data
+        );
+    }
 }

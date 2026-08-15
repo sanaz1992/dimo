@@ -74,18 +74,18 @@ class ProductList extends AdminBaseComponent
         $this->resetPage();
     }
 
-    public function publishProduct($productId)
-    {
-        $this->authorize('products_publish');
-        try {
-            resolve(ProductService::class)->publishProduct($productId);
-            $this->notify('success', __('product::messages.change_publish_status.success'));
-        } catch (InvalidArgumentException $e) {
-            $this->notify('error', $e->getMessage());
-        } catch (\Exception $e) {
-            $this->notify('error', __('product::messages.change_publish_status.error'));
-        }
-    }
+    // public function publishProduct($productId)
+    // {
+    //     $this->authorize('products_publish');
+    //     try {
+    //         resolve(ProductService::class)->publishProduct($productId);
+    //         $this->notify('success', __('product::messages.change_publish_status.success'));
+    //     } catch (InvalidArgumentException $e) {
+    //         $this->notify('error', $e->getMessage());
+    //     } catch (\Exception $e) {
+    //         $this->notify('error', __('product::messages.change_publish_status.error'));
+    //     }
+    // }
 
     public $filterData;
 

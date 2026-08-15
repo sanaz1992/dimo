@@ -16,7 +16,8 @@ class AdminDashboard extends AdminBaseComponent
     public function mount()
     {
         $user = auth()->user();
-        if ($user->level != UserLevel::ADMIN->value) {
+
+        if ($user->level->value != UserLevel::ADMIN->value) {
             $this->notify('error', __('core::messages.access_error'));
 
             return redirect()->route('logout');

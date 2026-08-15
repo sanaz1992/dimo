@@ -6,5 +6,8 @@
         <tbody id="rows">
             {{ $body }}
         </tbody>
+        <tfoot>
+            {{ $footer }}
+        </tfoot>
     </table>
 </div>

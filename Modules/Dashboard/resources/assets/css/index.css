@@ -983,6 +983,19 @@ body.drawer-open:after {
     box-shadow: 0 8px 24px #2563eb1f
 }
 
+button img {
+    min-width: 15px;
+}
+
+button:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 16px 40px #2563eb59;
+}
+
+.btn-fill-padding {
+    padding: .625rem 1rem;
+}
+
 .btn-fill {
     --tw-text-opacity: 1;
     color: rgb(255 255 255/var(--tw-text-opacity, 1));
@@ -1888,6 +1901,7 @@ body.drawer-open:after {
     border-color: #e2e8f0cc;
     border-radius: 1rem;
     padding: .625rem 1rem;
+    padding-right: 2rem;
     font-size: 13px;
     transition-property: all;
     transition-duration: .3s;
@@ -2113,6 +2127,7 @@ body.drawer-open:after {
     font-weight: 600;
     box-shadow: 0 4px 16px #2563eb26
 }
+
 .theme-chip-active {
     border: 1px solid var(--chip-color);
     color: var(--chip-color);
@@ -2120,6 +2135,7 @@ body.drawer-open:after {
     font-weight: 600;
     box-shadow: 0 4px 16px var(--chip-shadow);
 }
+
 .anim-tab-bump {
     animation: .3s ease-out tab-bump
 }

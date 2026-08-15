@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
             ->middleware(['can:products_create'])->name('products.create');
         Route::get('/products/{product}/edit', ProductEdit::class)
             ->middleware(['can:products_edit'])->name('products.edit');
+
     });
 
 Route::get('/products', GuestProductList::class)->name('products.index');

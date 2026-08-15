@@ -1,6 +1,10 @@
-import { defineConfig } from 'vite';
+import {
+    defineConfig
+} from 'vite';
 import laravel from 'laravel-vite-plugin';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+import {
+    viteStaticCopy
+} from 'vite-plugin-static-copy';
 
 
 export default defineConfig({
@@ -28,8 +32,7 @@ export default defineConfig({
             refresh: true,
         }),
         viteStaticCopy({
-            targets: [
-                {
+            targets: [{
                     src: 'Modules/Core/resources/assets/fonts/**/*',
                     dest: 'fonts'
                 },
@@ -40,10 +43,6 @@ export default defineConfig({
                 {
                     src: 'Modules/Core/resources/assets/images/*',
                     dest: 'images'
-                },
-                {
-                    src: 'Modules/Core/resources/assets/plugins/persian-datepicker/*',
-                    dest: 'plugins/persian-datepicker'
                 },
 
             ],

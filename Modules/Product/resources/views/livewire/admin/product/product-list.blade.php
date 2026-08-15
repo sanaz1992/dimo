@@ -69,6 +69,10 @@
                                 href="{{ route('admin.products.edit', $product) }}" size="sm">
                                 <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
                             </x-dashboard::buttons.primary-action>
+                            {{-- <x-dashboard::buttons.primary-action id="btn-add-stock-{{$product->id}}" tag="a"
+                                href="{{ route('admin.products.edit', $product) }}" size="sm">
+                               <x-Core::icons.add class="w-5 h-5 text-green-500" />
+                            </x-dashboard::buttons.primary-action> --}}
                         </div>
                     </td>
                 </tr>

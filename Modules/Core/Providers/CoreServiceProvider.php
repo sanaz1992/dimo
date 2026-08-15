@@ -14,7 +14,6 @@ use Modules\Core\Http\Livewire\Admin\SearchNavbar;
 use Modules\Core\Http\Livewire\Admin\SettingEdit;
 use Modules\Core\Http\Middlewares\SetApiLocale;
 use Modules\User\Http\Middleware\EnsureAdminPanelAccess;
-use Modules\User\Http\Middleware\EnsureSellerPanelAccess;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -37,10 +36,6 @@ class CoreServiceProvider extends ServiceProvider
             EnsureAdminPanelAccess::class
         );
 
-        $router->aliasMiddleware(
-            'seller.panel',
-            EnsureSellerPanelAccess::class
-        );
         $router->aliasMiddleware(
             'set.locale',
             SetApiLocale::class

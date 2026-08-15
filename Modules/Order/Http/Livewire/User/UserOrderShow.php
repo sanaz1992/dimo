@@ -3,12 +3,12 @@
 namespace Modules\Order\Http\Livewire\User;
 
 use Modules\Core\Helpers\SettingHelper;
-use Modules\Core\Http\Livewire\Seller\SellerBaseComponent;
+use Modules\Core\Http\Livewire\User\UserBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Order\Entities\Order;
 use Modules\Order\Services\OrderProductionService;
 
-class UserOrderShow extends SellerBaseComponent
+class UserOrderShow extends UserBaseComponent
 {
     use LivewireNotify;
 

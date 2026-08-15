@@ -5,7 +5,14 @@ namespace Modules\Inventory\Providers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Modules\Inventory\App\Console\CleanupExpiredReservations;
+use Modules\Inventory\External\Contracts\PurchaseItemRepositoryInterface;
+use Modules\Inventory\External\Contracts\PurchaseRepositoryInterface;
+use Modules\Inventory\External\PurchaseItemRepository;
+use Modules\Inventory\External\PurchaseRepository;
+use Modules\Inventory\Http\Livewire\Admin\PurchaseCreate;
+use Modules\Inventory\Http\Livewire\Admin\PurchaseEdit;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -34,6 +41,10 @@ class InventoryServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
+
+        Livewire::component('inventory::purchase-create', PurchaseCreate::class);
+        Livewire::component('inventory::purchase-edit', PurchaseEdit::class);
+
     }
 
     /**
@@ -43,6 +54,10 @@ class InventoryServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        $this->app->bind(PurchaseRepositoryInterface::class, PurchaseRepository::class);
+        $this->app->bind(PurchaseItemRepositoryInterface::class, PurchaseItemRepository::class);
+
     }
 
     /**

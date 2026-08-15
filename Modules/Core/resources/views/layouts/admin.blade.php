@@ -2,7 +2,10 @@
 <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <?php $settingHelper = app(\Modules\Core\Helpers\SettingHelper::class); ?>
+    <?php
+use Modules\Core\Helpers\SettingHelper;
+
+$settingHelper = app(SettingHelper::class); ?>
     <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
@@ -13,6 +16,7 @@
         href="{{$settingHelper->setting('favicon')?->main_image?->getThumbnailUrl('small') ?? asset('build/images/fav2.jpg')}}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="stylesheet" href="{{ asset('plugins/persian-datepicker/persian-datepicker.min.css') }}">
 
     @vite([
         'resources/css/app.css',
@@ -135,6 +139,151 @@
 
     </script>
 
+    <script src="{{ asset('plugins/persian-datepicker/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/persian-datepicker/persian-date.min.js') }}"></script>
+    <script src="{{ asset('plugins/persian-datepicker/persian-datepicker.min.js') }}"></script>
+
+    <script>
+        function adjustDatePickerPosition(datepicker) {
+            const input = $(datepicker.inputElement);
+            const container = datepicker.view.$container;
+
+            setTimeout(() => {
+                const offset = input.offset();
+                const inputHeight = input.outerHeight();
+                const containerHeight = container.outerHeight() || 280;
+                const containerWidth = container.outerWidth() || 260;
+
+                const windowHeight = $(window).height();
+                const windowWidth = $(window).width();
+                const scrollTop = $(window).scrollTop();
+
+                const spaceBelow = windowHeight - (offset.top - scrollTop) - inputHeight;
+                const spaceAbove = offset.top - scrollTop;
+
+                let topVal = offset.top + inputHeight;
+                // If not enough space below, and enough space above, show above
+                if (spaceBelow < containerHeight && spaceAbove > containerHeight) {
+                    topVal = offset.top - containerHeight;
+                }
+
+                let leftVal = offset.left;
+                // Keep within screen boundaries
+                if (leftVal + containerWidth > windowWidth) {
+                    leftVal = windowWidth - containerWidth - 16;
+                }
+                if (leftVal < 16) {
+                    leftVal = 16;
+                }
+
+                container.css({
+                    top: topVal + 'px',
+                    left: leftVal + 'px'
+                });
+            }, 10);
+        }
+
+        function initPersianDatePickers() {
+
+            $('.persianDateTime').each(function () {
+
+                const input = $(this);
+
+                if (input.data('datepicker-initialized')) return;
+                input.data('datepicker-initialized', true);
+
+                input.persianDatepicker({
+                    format: 'YYYY/MM/DD HH:mm',
+                    timePicker: { enabled: true },
+                    initialValue: false,
+                    onShow: adjustDatePickerPosition,
+                    onSelect: function (unix) {
+                        // Dispatch standard events for Alpine/Vanilla JS compatibility
+                        if (input[0]) {
+                            input[0].dispatchEvent(new Event('input', { bubbles: true }));
+                            input[0].dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+
+                        const model =
+                            input.attr('wire:model') ??
+                            input.attr('wire:model.defer');
+                        if (!model) return;
+
+                        /*
+                           const componentId = input.closest('[wire\\:id]').attr('wire:id');
+                           const component = Livewire.find(componentId);
+                           if (!component) return;
+     */
+                        // مقدار واقعی ورودی (فرمت شده)
+                        const value = input.val(); // مثلا: 1403/10/05 11:38
+
+                        /*      component.$wire.set(model, value);*/
+                        const root = input.get(0).closest('[wire\\:id]');
+                        if (!root || !root.__livewire) return;
+                        root.__livewire.$wire.set(model, value);
+
+                    }
+                });
+            });
+
+            $('.persianDate').each(function () {
+                const input = $(this);
+
+                // جلوگیری از دوباره initialize شدن
+                if (input.data('datepicker-initialized')) return;
+                input.data('datepicker-initialized', true);
+
+                input.persianDatepicker({
+                    format: 'YYYY/MM/DD',
+                    timePicker: {
+                        enabled: false
+                    },
+                    initialValue: false,
+                    autoClose: false,
+                    observer: true,
+                    toolbox: {
+                        enabled: true
+                    },
+                    onShow: adjustDatePickerPosition,
+                    onSelect: function () {
+                        // Dispatch standard events for Alpine/Vanilla JS compatibility
+                        if (input[0]) {
+                            input[0].dispatchEvent(new Event('input', { bubbles: true }));
+                            input[0].dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+
+                        const value = input.val();
+                        const model = input.data('model');
+
+                        if (!model) return;
+
+                        const root = input.get(0).closest('[wire\\:id]');
+                        if (!root || !root.__livewire) return;
+
+                        root.__livewire.$wire.set(model, value);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('livewire:init', () => {
+
+            initPersianDatePickers();
+
+            Livewire.on('reinit-datepickers', () => {
+
+                setTimeout(() => {
+                    initPersianDatePickers();
+                }, 50);
+            });
+
+            Livewire.hook('commit', () => {
+                setTimeout(() => {
+                    initPersianDatePickers();
+                }, 50);
+            });
+        });
+    </script>
 
 </body>
 

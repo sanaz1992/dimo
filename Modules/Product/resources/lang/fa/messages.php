@@ -33,5 +33,6 @@ return [
     'select_packaging_type' => 'نوع بسته‌بندی را انتخاب کنید',
 
     'the_selected_variation_is_not_available_for_this_product' => 'متأسفانه این تنوع برای محصول انتخابی شما در دسترس نیست',
+    'enter_quantity' => 'تعداد را وارد کنید',
 
 ];
