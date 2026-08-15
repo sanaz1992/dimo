@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Core\Traits\Filterable;
 use Modules\Order\Entities\Order;
+use Modules\Transactions\Enums\TransactionGateway;
 use Modules\Transactions\Enums\TransactionStatus;
 
 class Transaction extends Model
@@ -26,6 +27,7 @@ class Transaction extends Model
     protected $casts = [
         'status' => TransactionStatus::class,
         'payload' => 'array',
+        'gateway' => TransactionGateway::class,
     ];
 
     public function getCreatedAtJalaliAttribute()
