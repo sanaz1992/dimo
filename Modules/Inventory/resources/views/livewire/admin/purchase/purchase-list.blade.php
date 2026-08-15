@@ -30,7 +30,7 @@
             @foreach ($purchases as $purchase)
                 <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
                     <x-dashboard::table.cell :label="__('core::attributes.row')">
-                        {{ $loop->index + 1 }}
+                        {{ toPersianNumber($loop->index + 1) }}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('inventory::attributes.supplier')">
@@ -38,15 +38,15 @@
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('inventory::attributes.purchase_items_count')" >
-                        {{$purchase->items->count()}}
+                        {{formatPrice($purchase->items->count())}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('inventory::attributes.purchased_at')">
-                        {{$purchase->purchased_at_jalali}}
+                        {{toPersianNumber($purchase->purchased_at_jalali)}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('inventory::attributes.created_at')">
-                        {{$purchase->created_at_jalali}}
+                        {{toPersianNumber($purchase->created_at_jalali)}}
                     </x-dashboard::table.cell>
 
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">

@@ -3,7 +3,7 @@
         class="table-toolbar relative z-[1] mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
         <h2 class="text-base font-bold text-ink sm:text-lg">{{ $title }}</h2>
         @isset($purchase)
-            <span>@lang('inventory::attributes.invoice_number') : {{ $purchase->invoice_number }}</span>
+            <span>@lang('inventory::attributes.invoice_number') : {{ toPersianNumber($purchase->invoice_number )}}</span>
         @endisset
     </div>
 
@@ -100,7 +100,7 @@
                             @foreach ($purchase->items as $item)
                                 <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
                                     <x-dashboard::table.cell :label="__('core::attributes.row')">
-                                        {{ $loop->index + 1 }}
+                                        {{ toPersianNumber($loop->index + 1) }}
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('inventory::attributes.product')">
@@ -112,23 +112,23 @@
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('inventory::attributes.volume_ml')">
-                                        {{number_format($item->product_sku->volume_ml)}}
+                                        {{formatPrice($item->product_sku->volume_ml)}}
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('inventory::attributes.quantity')">
-                                        {{number_format($item->quantity)}}
+                                        {{formatPrice($item->quantity)}}
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('inventory::attributes.purchase_price')">
-                                        {{number_format($item->purchase_price)}}
+                                        {{formatPrice($item->purchase_price)}}
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('inventory::attributes.sale_price')">
-                                        {{number_format($item->sale_price)}}
+                                        {{formatPrice($item->sale_price)}}
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('inventory::attributes.created_at')">
-                                        {{$item->created_at_jalali_date}}
+                                        {{toPersianNumber($item->created_at_jalali_date)}}
                                     </x-dashboard::table.cell>
 
                                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
@@ -162,7 +162,7 @@
                                 </x-dashboard::table.cell>
 
                                 <x-dashboard::table.cell :label="__('inventory::attributes.total_cost')">
-                                    {{ number_format($purchase->items->sum('total_cost')) }}
+                                    {{ formatPrice($purchase->items->sum('total_cost')) }}
                                 </x-dashboard::table.cell>
 
                                 <x-dashboard::table.cell class="justify-start" colspan="3"></x-dashboard::table.cell>

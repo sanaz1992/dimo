@@ -38,7 +38,7 @@
                         @if($icon)
                             {!! $icon !!}
                         @else
-                            {{ $loop->iteration }}
+                            {{ toPersianNumber($loop->iteration) }}
                         @endif
                     </span>
 

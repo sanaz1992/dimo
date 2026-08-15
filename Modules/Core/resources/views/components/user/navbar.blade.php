@@ -24,7 +24,7 @@
         </div>
 
         <div class="header-btns flex shrink-0 flex-wrap items-center justify-end gap-2">
-            <div class="dropdown-wrap search-dropdown-wrap">
+            {{-- <div class="dropdown-wrap search-dropdown-wrap">
                 <button type="button" id="btn-search" class="btn-ghost shrink-0"
                     aria-label="@lang('dashboard::attributes.search')" aria-expanded="false"
                     aria-controls="search-panel">
@@ -57,9 +57,9 @@
                     </label>
                     <p class="search-panel-hint">@lang('dashboard::messages.search_bottom_description')</p>
                 </div>
-            </div>
+            </div> --}}
 
-            <div class="dropdown-wrap">
+            {{-- <div class="dropdown-wrap">
                 <button type="button" id="btn-notify" class="btn-ghost shrink-0"
                     aria-label="@lang('dashboard::attributes.notifications')" aria-expanded="false"
                     aria-controls="dropdown-notify">
@@ -112,7 +112,7 @@
                         @lang('dashboard::messages.mark_all_as_read')
                     </button>
                 </div>
-            </div>
+            </div> --}}
             <div class="dropdown-wrap">
                 <button type="button" id="btn-profile" class="profile-btn shrink-0" aria-expanded="false"
                     aria-controls="dropdown-profile">
@@ -128,11 +128,12 @@
                     <button type="button" class="dropdown-item" data-goto="settings">
                         @lang('dashboard::attributes.profile')
                     </button>
-                    <button type="button" class="dropdown-item"
-                        data-goto="analytics">@lang('dashboard::attributes.reports')</button>
-                    <button type="button" class="dropdown-item" id="btn-logout">
+                    {{-- <button type="button" class="dropdown-item" data-goto="analytics">
+                        @lang('dashboard::attributes.reports')
+                    </button> --}}
+                     <a type="button" class="dropdown-item" id="btn-logout" href="{{ route('logout') }}">
                         @lang('dashboard::attributes.logout')
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

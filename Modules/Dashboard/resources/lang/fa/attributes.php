@@ -13,6 +13,7 @@ return [
 
     'menu' => 'منو',
     'admin_panel' => 'پنل مدیریت',
+    'user_panel' => 'پنل کاربر',
     'close' => 'بستن',
     'users' => 'کاربران',
     'transactions' => 'تراکنش ها',

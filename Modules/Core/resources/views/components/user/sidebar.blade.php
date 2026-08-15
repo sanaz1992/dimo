@@ -17,7 +17,7 @@
             </div>
             <div class="min-w-0">
                 <p class="truncate text-[15px] font-bold text-ink sm:text-base">
-                    @lang('dashboard::attributes.admin_panel')
+                    @lang('dashboard::attributes.user_panel')
                 </p>
                 <p class="text-[11px] text-ink-faint">{{$authUser->name}}</p>
             </div>
