@@ -185,14 +185,18 @@ class CartPage extends GuestBaseComponent
     #[On('cart-updated')]
     public function loadCart(): void
     {
-        $this->cart = app(CartManager::class)
-            ->getCart($this->currentUser());
+        $cartManager = app(CartManager::class);
+        $this->cart = $cartManager->getCart($this->currentUser());
 
-        $this->cart?->load([
-            'items.product',
-            'items.sku',
-            'address',
-        ]);
+        if ($this->cart) {
+            $cartManager->syncPrices($this->cart);
+
+            $this->cart->load([
+                'items.product',
+                'items.sku',
+                'address',
+            ]);
+        }
 
         $items = $this->cart?->items ?? collect();
         $this->cartItemsCount = (int) $items->sum('quantity');
@@ -321,8 +325,10 @@ class CartPage extends GuestBaseComponent
             // show message
             $this->notify('notify', $e->getMessage());
         } catch (\RuntimeException $e) {
+            dd($e);
             $this->notify('error', $e->getMessage());
         } catch (\Exception $e) {
+            dd($e);
             $this->notify('error', $e->getMessage());
         }
         $this->step = 'cart';

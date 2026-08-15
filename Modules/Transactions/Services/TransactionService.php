@@ -2,7 +2,9 @@
 
 namespace Modules\Transactions\Services;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Core\Filters\QueryFilter;
+use Modules\Transactions\Entities\Transaction;
 use Modules\Transactions\External\Contracts\TransactionRepositoryInterface;
 
 class TransactionService
@@ -24,5 +26,15 @@ class TransactionService
     public function findByColumn($col, $value)
     {
         return $this->transactionRepository->findByColumn($col, $value);
+    }
+
+    public function update(Transaction $transaction, array $data)
+    {
+        return DB::transaction(function () use ($transaction, $data) {
+
+            $transaction = $this->transactionRepository->update($transaction, $data);
+
+            return $transaction;
+        });
     }
 }

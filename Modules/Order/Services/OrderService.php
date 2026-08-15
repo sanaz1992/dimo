@@ -86,11 +86,12 @@ class OrderService
         $subTotal = 0;
         $totalPrice = 0;
         $discount = 0;
-        foreach ($order->items as $item) {
+        foreach ($order->items as $key => $item) {
             $subTotal += $item->price * $item->quantity;
             $discount += $item->discount * $item->quantity;
-            $totalPrice += $subTotal - $discount;
         }
+        $totalPrice = $subTotal - $discount;
+
         $order = $this->orderRepository->update($order, [
             'subtotal' => $subTotal,
             'total_amount' => $totalPrice,

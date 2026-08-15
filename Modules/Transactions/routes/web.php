@@ -1,10 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Transactions\Http\Controllers\PaymentCallbackController;
 use Modules\Transactions\Http\Livewire\Admin\TransactionList;
 use Modules\Transactions\Http\Livewire\Admin\TransactionShow;
 use Modules\Transactions\Http\Livewire\User\UserTransactionList;
 use Modules\Transactions\Http\Livewire\User\UserTransactionShow;
+
+Route::prefix('transactions')->name('transactions.')->group(function () {
+    Route::get('/callback/{order}', PaymentCallbackController::class)
+        ->name('callback');
+});
 
 Route::middleware(['auth', 'verified', 'admin.panel'])
     ->name('admin.')

@@ -192,4 +192,20 @@ class CartManager
             return $cart;
         });
     }
+
+    public function syncPrices(Cart $cart): void
+    {
+        $cart->load('items.sku');
+
+        foreach ($cart->items as $item) {
+            $currentPrice = $item->sku->price;
+
+            if ((int) $item->unit_price !== (int) $currentPrice) {
+                $item->update([
+                    'unit_price' => $currentPrice,
+                    'final_price' => $currentPrice,
+                ]);
+            }
+        }
+    }
 }

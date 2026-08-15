@@ -9,7 +9,11 @@ use Modules\Cart\Services\CartManager;
 use Modules\Inventory\Actions\CommitReservedInventoryForOrderAction;
 use Modules\Inventory\Actions\ReleaseInventoryReservationForOrderAction;
 use Modules\Order\Entities\Order;
+use Modules\Order\Enums\OrderStatus;
+use Modules\Order\Services\OrderService;
+use Modules\Transactions\Enums\TransactionStatus;
 use Modules\Transactions\Services\PaymentService;
+use Modules\Transactions\Services\TransactionService;
 
 class PaymentCallbackController extends Controller
 {
@@ -55,7 +59,11 @@ class PaymentCallbackController extends Controller
             $message = 'در پردازش نتیجه پرداخت خطایی رخ داد.';
         }
         DB::rollBack();
+
         app(ReleaseInventoryReservationForOrderAction::class)->execute($order);
+        app(OrderService::class)->update($order, ['payment_status' => OrderStatus::PAYMENT_FAILED->value]);
+        $transaction = app(TransactionService::class)->findByColumn('order_id', $order->id);
+        app(TransactionService::class)->update($transaction, ['status' => TransactionStatus::FAILED->value]);
 
         return redirect()
             ->route('cart.index', ['step' => 'payment'])
