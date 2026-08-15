@@ -35,7 +35,7 @@
 
     {{-- <p class="relative z-[1] mb-2 px-2 text-[10px] font-semibold text-ink-faint">منوی اصلی</p> --}}
     <nav class="relative z-[1] flex flex-col gap-1">
-        <a href="{{route('admin.dashboard')}}" data-nav="dashboard" class="nav-link nav-link-active">
+        <a href="{{route('user.dashboard')}}" data-nav="dashboard" class="nav-link nav-link-active">
             <span class="nav-pill" aria-hidden="true"></span>
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -52,13 +52,13 @@
             <span>@lang('dashboard::attributes.dashboard')</span>
         </a>
 
-            <a href="{{route('orders.index')}}" data-nav="orders" class="nav-link">
+            <a href="{{route('user.orders.index')}}" data-nav="orders" class="nav-link">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\orders.svg') }}" alt="orders" />
                 </span>
                 <span>@lang('order::attributes.orders')</span>
             </a>
-            <a href="{{route('transactions.index')}}" data-nav="transactions" class="nav-link">
+            <a href="{{route('user.transactions.index')}}" data-nav="transactions" class="nav-link">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
                 </span>

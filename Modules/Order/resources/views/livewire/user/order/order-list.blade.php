@@ -56,7 +56,7 @@
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                         <div class="flex gap-1">
                             <x-dashboard::buttons.primary-action id="btn-show-order-{{$order->id}}" tag="a"
-                                href="{{ route('orders.show', $order) }}" size="sm">
+                                href="{{ route('user.orders.show', $order) }}" size="sm">
                                 <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}" alt="show" class="w-5" />
                             </x-dashboard::buttons.primary-action>
                         </div>

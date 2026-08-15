@@ -983,7 +983,7 @@ body.drawer-open:after {
     box-shadow: 0 8px 24px #2563eb1f
 }
 
-button img {
+button img,a img {
     min-width: 15px;
 }
 

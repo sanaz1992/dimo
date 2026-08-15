@@ -15,6 +15,8 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
     });
 
 Route::middleware(['auth', 'verified'])
+    ->name('user.')
+    ->prefix('/user')
     ->group(function () {
 
         Route::get('/transactions', TransactionList::class)->middleware(['can:transactions_list'])->name('transactions.index');

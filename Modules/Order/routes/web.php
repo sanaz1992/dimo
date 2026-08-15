@@ -17,7 +17,8 @@ Route::middleware(['auth', 'verified', 'admin.panel'])
     });
 
 Route::middleware(['auth', 'verified'])
-
+    ->name('user.')
+    ->prefix('/user')
     ->group(function () {
 
         Route::get('/orders', UserOrderList::class)->name('orders.index');
