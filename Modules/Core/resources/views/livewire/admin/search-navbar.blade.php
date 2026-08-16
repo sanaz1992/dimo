@@ -37,7 +37,7 @@
                     </a>
                 @endforeach
             </div>
-            @if(count($products))
+            {{-- @if(count($products))
                 <!-- Footer with view all results link -->
                 <div class="border-t border-gray-100 bg-gray-50 px-4 py-2 text-center">
                     <a href="{{ route('admin.products.index', ['search' => $search]) }}"
@@ -45,7 +45,7 @@
                         مشاهده همه نتایج ({{count($products)}})
                     </a>
                 </div>
-            @endif
+            @endif --}}
         </div>
     @endif
 </div>

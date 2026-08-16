@@ -22,10 +22,6 @@ use Modules\Order\Http\Livewire\Admin\OrderTrackingShow;
 use Modules\Order\Http\Livewire\Component\AdvancedFilters;
 use Modules\Order\Http\Livewire\ProductSelector;
 use Modules\Order\Http\Livewire\ProductsTable;
-use Modules\Order\Http\Livewire\Seller\SellerOrderCreate;
-use Modules\Order\Http\Livewire\Seller\SellerOrderEdit;
-use Modules\Order\Http\Livewire\Seller\SellerOrderList;
-use Modules\Order\Http\Livewire\Seller\SellerOrderShow;
 use Modules\Order\Observers\OrderItemObserver;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -58,11 +54,6 @@ class OrderServiceProvider extends ServiceProvider
         Livewire::component('order::admin-import', OrderImport::class);
         Livewire::component('order::admin-show', OrderShow::class);
         Livewire::component('order::admin-order-tracking', OrderTrackingShow::class);
-
-        Livewire::component('order::seller-create', SellerOrderCreate::class);
-        Livewire::component('order::seller-edit', SellerOrderEdit::class);
-        Livewire::component('order::seller-list', SellerOrderList::class);
-        Livewire::component('order::seller-show', SellerOrderShow::class);
 
         Livewire::component('order::product-selector', ProductSelector::class);
         Livewire::component('order::products-table', ProductsTable::class);

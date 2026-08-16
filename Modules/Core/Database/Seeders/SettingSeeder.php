@@ -3,8 +3,10 @@
 namespace Modules\Core\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 use Modules\Core\Entities\Setting;
 use Modules\Core\Enums\SettingType;
+use Modules\Core\External\Repositories\SettingRepository;
 use Modules\User\Entities\User;
 
 class SettingSeeder extends Seeder
@@ -20,14 +22,14 @@ class SettingSeeder extends Seeder
             [
                 'title' => 'برند',
                 'key' => 'site_title',
-                'value' => 'فروشگاه گلاب',
+                'value' => 'dimo',
                 'type' => SettingType::TEXT->value,
                 'group' => 'general',
             ],
             [
                 'title' => 'حوزه فعالیت',
                 'key' => 'sub_title',
-                'value' => 'گلاب و عرقیات طبیعی',
+                'value' => 'smart direct',
                 'type' => SettingType::TEXT->value,
                 'group' => 'general',
             ],
@@ -77,5 +79,9 @@ class SettingSeeder extends Seeder
                 ]
             );
         }
+
+        Cache::rememberForever('settings', function () {
+            return app(SettingRepository::class)->all(null, [], ['mainImageRelation']);
+        });
     }
 }

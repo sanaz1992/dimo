@@ -5,12 +5,12 @@
     <?php
 use Modules\Core\Helpers\SettingHelper;
 
-$settingHelper = app(SettingHelper::class); ?>
+    $settingHelper = app(SettingHelper::class); ?>
     <meta charset="UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>
-        {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.venus_company_title')}}
+        {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.company_title')}}
         | {{ $title ?? '' }}
     </title>
 

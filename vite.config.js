@@ -23,11 +23,6 @@ export default defineConfig({
                 'Modules/Jetstream/resources/assets/js/login.js',
                 'Modules/Dashboard/resources/assets/css/index.css',
                 'Modules/Dashboard/resources/assets/js/index.js',
-                'Modules/Shop/resources/assets/css/style.css',
-                'Modules/Shop/resources/assets/css/products.css',
-                'Modules/Shop/resources/assets/css/product-detail.css',
-                'Modules/Shop/resources/assets/css/comments.css',
-                'Modules/Cart/resources/assets/css/cart.css',
 
             ],
             refresh: true,
@@ -35,10 +30,6 @@ export default defineConfig({
         viteStaticCopy({
             targets: [{
                     src: 'Modules/Core/resources/assets/fonts/**/*',
-                    dest: 'fonts'
-                },
-                {
-                    src: 'Modules/Shop/resources/assets/fonts/**/*',
                     dest: 'fonts'
                 },
                 {

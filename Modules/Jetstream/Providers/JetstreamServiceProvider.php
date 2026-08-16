@@ -49,17 +49,17 @@ class JetstreamServiceProvider extends ServiceProvider
             return;
         }
 
-        $settingHelper = app(SettingHelper::class);
+        // $settingHelper = app(SettingHelper::class);
 
-        if ($settingHelper->setting('login_with_password')?->value) {
-            Fortify::loginView(function () {
-                return view('jetstream::auth.login');
-            });
-        } else {
-            Fortify::loginView(function () {
-                return view('jetstream::auth.login-without-password');
-            });
-        }
+        // if ($settingHelper->setting('login_with_password')?->value) {
+        Fortify::loginView(function () {
+            return view('jetstream::auth.login');
+        });
+        // } else {
+        //     Fortify::loginView(function () {
+        //         return view('jetstream::auth.login-without-password');
+        //     });
+        // }
 
         Fortify::registerView(function () {
             return view('jetstream::auth.register');

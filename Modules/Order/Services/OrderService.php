@@ -3,8 +3,6 @@
 namespace Modules\Order\Services;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Cart\Entities\Cart;
-use Modules\Cart\Services\CartManager;
 use Modules\Core\Filters\QueryFilter;
 use Modules\Core\Helpers\CodeGeneratorHelper;
 use Modules\Core\Helpers\ConvertDatesHelper;
@@ -21,7 +19,6 @@ class OrderService
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
         protected OrderItemService $orderItemService,
-        protected CartManager $cartManager
     ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
@@ -39,31 +36,31 @@ class OrderService
         return $this->orderRepository->findByColumn($col, $value);
     }
 
-    public function createFromCart(Cart $cart, array $data)
-    {
-        $data['status'] = OrderStatus::DRAFT->value;
+    // public function createFromCart(Cart $cart, array $data)
+    // {
+    //     $data['status'] = OrderStatus::DRAFT->value;
 
-        return DB::transaction(function () use ($cart, $data) {
-            $order = $this->create($data);
+    //     return DB::transaction(function () use ($cart, $data) {
+    //         $order = $this->create($data);
 
-            // create order items
-            $cart->load('items');
-            foreach ($cart->items as $item) {
-                $orderItem = $this->orderItemService->createOrderItem($order, $item);
-                // error if it doesnt have enough stock
-                if (! $orderItem instanceof OrderItem) {
-                    throw new OutOfStockException(
-                        __('messages.out_of_stock_item', ['product' => $item->product->name]),
-                        $item
-                    );
-                }
-            }
-            // update order prices
-            $this->updateOrderPrices($order->id);
+    //         // create order items
+    //         $cart->load('items');
+    //         foreach ($cart->items as $item) {
+    //             $orderItem = $this->orderItemService->createOrderItem($order, $item);
+    //             // error if it doesnt have enough stock
+    //             if (! $orderItem instanceof OrderItem) {
+    //                 throw new OutOfStockException(
+    //                     __('messages.out_of_stock_item', ['product' => $item->product->name]),
+    //                     $item
+    //                 );
+    //             }
+    //         }
+    //         // update order prices
+    //         $this->updateOrderPrices($order->id);
 
-            return $order;
-        });
-    }
+    //         return $order;
+    //     });
+    // }
 
     public function create(array $orderData): Order
     {

@@ -5,7 +5,6 @@ namespace Modules\Jetstream\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Modules\Cart\Services\CartManager;
 use Modules\Core\Services\SmsIr;
 use Modules\Jetstream\External\Repositories\Contract\OtpRepositoryInterface;
 use Modules\Jetstream\Rules\LoginCheckCodeRules;
@@ -24,19 +23,18 @@ class JetstreamController
         protected UserService $userService
     ) {}
 
-    public function login(LoginRules $request, CartManager $cartManager)
+    public function login(LoginRules $request)
     {
         $data = $request->all();
         $user = $this->userService->findByColumn('mobile', $data['mobile']);
         if (! $user) {
             return redirect()->route('login')->withErrors(['message' => 'کاربر مورد نظر یافت نشد لطفا از طریق فرم ثبت نام اقدام نمایید.']);
         }
+
         if (Hash::check($data['password'], $user->password)) {
             return redirect()->route('login')->withErrors(['message' => 'رمز عبور وارد شده صحیح نیست.']);
         }
         Auth::loginUsingId($user->id);
-
-        $cartManager->mergeGuestCartIntoUser($request->user());
 
         if ($user->level == 'admin') {
             // return redirect()->route('admin.dashboard');
@@ -181,7 +179,7 @@ class JetstreamController
         return redirect()->route('admin.admins.edit', $user);
     }
 
-    public function register(RegisterRules $request, CartManager $cartManager)
+    public function register(RegisterRules $request)
     {
         $data = $request->all();
         $user = $this->userService->findByColumn('mobile', $data['mobile']);
@@ -197,8 +195,6 @@ class JetstreamController
         ]);
         // $user->assignRole(['super_admin']);
         Auth::loginUsingId($user->id);
-
-        $cartManager->mergeGuestCartIntoUser($request->user());
 
         if ($user->level == 'admin') {
             // return redirect()->route('admin.dashboard');

@@ -17,7 +17,7 @@
         <div class="min-w-0 flex-1">
             <h1 class="truncate text-lg font-bold text-ink sm:text-xl" data-page-title>
                 <a href="{{ route('home') }}">
-                    {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.venus_company_title')}}
+                    {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.company_title')}}
                 </a>
             </h1>
             <p class="truncate text-[11px] text-ink-faint sm:text-[12px]" data-page-subtitle>{{$authUser->name}}</p>
@@ -58,10 +58,10 @@
                     <p class="search-panel-hint">@lang('dashboard::messages.search_bottom_description')</p>
                 </div>
             </div> --}}
-            <button type="button" id="btn-new-tx" class="btn-fill btn-new-tx shrink-0">
+            {{-- <button type="button" id="btn-new-tx" class="btn-fill btn-new-tx shrink-0">
                 <span data-icon="plus" data-icon-size="sm"></span>
                 <span class="btn-label">@lang('product::attributes.create_product')</span>
-            </button>
+            </button> --}}
             {{-- <div class="dropdown-wrap">
                 <button type="button" id="btn-notify" class="btn-ghost shrink-0"
                     aria-label="@lang('dashboard::attributes.notifications')" aria-expanded="false"

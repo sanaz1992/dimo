@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'company_title' => 'dimo',
     'dashboard' => 'داشبورد',
     'logout' => 'خروج',
 

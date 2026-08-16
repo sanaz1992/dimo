@@ -68,38 +68,38 @@
                 <span>@lang('dashboard::attributes.users')</span>
             </a>
         @endcan
-        @can('products_list')
+        {{-- @can('products_list')
             <a href="{{route('admin.products.index')}}" data-nav="products" class="nav-link {{request()->routeIs('admin.products.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\products.svg') }}" alt="products" />
                 </span>
                 <span>@lang('product::attributes.products')</span>
             </a>
-        @endcan
-        @can('orders_list')
+        @endcan --}}
+        {{-- @can('orders_list')
             <a href="{{route('admin.orders.index')}}" data-nav="orders" class="nav-link {{request()->routeIs('admin.orders.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\orders.svg') }}" alt="orders" />
                 </span>
                 <span>@lang('order::attributes.orders')</span>
             </a>
-        @endcan
-        @can('transactions_list')
+        @endcan --}}
+        {{-- @can('transactions_list')
             <a href="{{route('admin.transactions.index')}}" data-nav="transactions" class="nav-link {{request()->routeIs('admin.transactions.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
                 </span>
                 <span>@lang('transactions::attributes.transactions')</span>
             </a>
-        @endcan
-         @can('purchases_list')
+        @endcan --}}
+         {{-- @can('purchases_list')
             <a href="{{route('admin.purchases.index')}}" data-nav="purchases" class="nav-link {{request()->routeIs('admin.purchases.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\warehouses.svg') }}" alt="purchases" />
                 </span>
                 <span>@lang('inventory::attributes.purchases')</span>
             </a>
-        @endcan
+        @endcan --}}
 
         @can('settings_edit')
             <a href="{{route('admin.settings.edit')}}" data-nav="settings" class="nav-link {{request()->routeIs('admin.settings.*')?'nav-link-active':''}}">

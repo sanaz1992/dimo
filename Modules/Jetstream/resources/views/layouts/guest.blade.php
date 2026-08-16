@@ -2,10 +2,13 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 
 <head>
-    <?php $settingHelper = app(\Modules\Core\Helpers\SettingHelper::class); ?>
+    <?php
+use Modules\Core\Helpers\SettingHelper;
+
+$settingHelper = app(SettingHelper::class); ?>
     <meta charset="UTF-8" />
     <title>
-        {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.venus_company_title')}}
+        {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.company_title')}}
         | {{ $title ?? '' }}
     </title>
     <link rel="icon" type="image/x-icon"

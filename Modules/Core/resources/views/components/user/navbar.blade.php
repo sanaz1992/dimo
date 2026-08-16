@@ -17,7 +17,7 @@
         <div class="min-w-0 flex-1">
             <h1 class="truncate text-lg font-bold text-ink sm:text-xl" data-page-title>
                 <a href="{{ route('home') }}">
-                    {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.venus_company_title')}}
+                    {{$settingHelper->setting('site_title') ? $settingHelper->setting('site_title')?->value : __('core::attributes.company_title')}}
                 </a>
             </h1>
             <p class="truncate text-[11px] text-ink-faint sm:text-[12px]" data-page-subtitle>{{$authUser->name}}</p>
