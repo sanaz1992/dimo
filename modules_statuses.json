@@ -7,12 +7,5 @@
     "ACL": true,
     "Jetstream": true,
     "Category": true,
-    "Product": true,
-    "Order": true,
-    "Transactions": true,
-    "Inventory": true,
-    "Shop": true,
-    "Pages": true,
-    "Blog": true,
-    "Cart": true
+    "Blog": true
 }
