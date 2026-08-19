@@ -34,6 +34,10 @@ class User extends Authenticatable
         'level',
         'unique_code',
         'active',
+        'email',
+        'email_verified_at',
+        'tenant_id',
+        'last_login_at',
     ];
 
     protected $hidden = [
