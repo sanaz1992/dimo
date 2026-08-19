@@ -8,5 +8,6 @@
     "Jetstream": true,
     "Category": true,
     "Blog": true,
-    "Instagram": true
+    "Instagram": true,
+    "Tenant": true
 }
