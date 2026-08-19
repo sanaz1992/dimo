@@ -51,19 +51,6 @@
             <span>@lang('dashboard::attributes.dashboard')</span>
         </a>
 
-            <a href="{{route('user.orders.index')}}" data-nav="orders" class="nav-link {{request()->routeIs('user.orders.*')?'nav-link-active':''}}">
-                <span class="nav-ico">
-                    <img src="{{ asset('icons\sidebar\orders.svg') }}" alt="orders" />
-                </span>
-                <span>@lang('order::attributes.orders')</span>
-            </a>
-            <a href="{{route('user.transactions.index')}}" data-nav="transactions" class="nav-link {{request()->routeIs('user.transactions.*')?'nav-link-active':''}}">
-                <span class="nav-ico">
-                    <img src="{{ asset('icons\sidebar\card-pos.svg') }}" alt="transactions" />
-                </span>
-                <span>@lang('transactions::attributes.transactions')</span>
-            </a>
-
 
     </nav>
 

@@ -7,5 +7,6 @@
     "ACL": true,
     "Jetstream": true,
     "Category": true,
-    "Blog": true
+    "Blog": true,
+    "Instagram": true
 }

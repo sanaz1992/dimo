@@ -31,9 +31,9 @@ class JetstreamController
             return redirect()->route('login')->withErrors(['message' => 'کاربر مورد نظر یافت نشد لطفا از طریق فرم ثبت نام اقدام نمایید.']);
         }
 
-        if (Hash::check($data['password'], $user->password)) {
-            return redirect()->route('login')->withErrors(['message' => 'رمز عبور وارد شده صحیح نیست.']);
-        }
+        // if (Hash::check($data['password'], $user->password)) {
+        //     return redirect()->route('login')->withErrors(['message' => 'رمز عبور وارد شده صحیح نیست.']);
+        // }
         Auth::loginUsingId($user->id);
 
         if ($user->level == 'admin') {

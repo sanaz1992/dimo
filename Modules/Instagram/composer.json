@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/instagram",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Instagram\\": "",
+            "Modules\\Instagram\\Database\\Factories\\": "Database/factories/",
+            "Modules\\Instagram\\Database\\Seeders\\": "Database/Seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Instagram\\Tests\\": "tests/"
+        }
+    }
+}

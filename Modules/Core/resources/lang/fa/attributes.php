@@ -32,4 +32,6 @@ return [
     'cancel' => 'انصراف',
     'edit' => 'ویرایش',
 
+    'connect_to_instagram' => 'اتصال اکانت اینستاگرام',
+
 ];
