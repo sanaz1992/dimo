@@ -4,8 +4,8 @@ namespace Modules\Instagram\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Instagram\Enums\InstagramAccountStatus;
+use Modules\Tenant\Entities\Tenant;
 
 // use Modules\User\Database\Factories\AddressFactory;
 
@@ -18,7 +18,7 @@ class InstagramAccount extends Model
      */
     protected $fillable = [
         'tenant_id',
-        'facebook_page_id',
+        // 'facebook_page_id',
         'instagram_account_id',
         'username',
         'name',
@@ -33,10 +33,15 @@ class InstagramAccount extends Model
 
     protected $casts = [
         'status' => InstagramAccountStatus::class,
+        'access_token' => 'encrypted', // رمزنگاری خودکار در دیتابیس
+        'scopes' => 'array',
+        'token_expires_at' => 'datetime',
+        'connected_at' => 'datetime',
+        'last_synced_at' => 'datetime',
     ];
 
-    // public function city(): BelongsTo
-    // {
-    //     return $this->belongsTo(City::class);
-    // }
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 }

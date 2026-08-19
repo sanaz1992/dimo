@@ -4,6 +4,7 @@ namespace Modules\Core\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Modules\Core\External\Repositories\BaseRepository;
@@ -31,6 +32,10 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot(Router $router): void
     {
+        if (app()->environment('local')) {
+            URL::forceScheme('https');
+        }
+
         $router->aliasMiddleware(
             'admin.panel',
             EnsureAdminPanelAccess::class

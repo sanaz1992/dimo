@@ -58,10 +58,11 @@
                     <p class="search-panel-hint">@lang('dashboard::messages.search_bottom_description')</p>
                 </div>
             </div> --}}
-            <button type="button" id="btn-new-tx" class="btn-fill btn-new-tx shrink-0">
+            <a type="button" href="{{ route('instagram.connect') }}" traget="_blank" id="btn-new-tx"
+                class="btn-fill btn-new-tx shrink-0">
                 <span data-icon="plus" data-icon-size="sm"></span>
                 <span class="btn-label">@lang('core::attributes.connect_to_instagram')</span>
-            </button>
+            </a>
             {{-- <div class="dropdown-wrap">
                 <button type="button" id="btn-notify" class="btn-ghost shrink-0"
                     aria-label="@lang('dashboard::attributes.notifications')" aria-expanded="false"

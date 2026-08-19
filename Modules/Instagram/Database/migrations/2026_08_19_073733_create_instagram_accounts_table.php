@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('instagram_accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
-            $table->string('facebook_page_id')->nullable();
             $table->string('instagram_account_id')->unique(); // شناسه IG از متا
             $table->string('username', 50)->nullable();
             $table->string('name', 50)->nullable();
