@@ -15,10 +15,14 @@ class MetaAuthService
 
     protected string $redirectUri;
 
+    protected string $graphVersion = 'v26.0';
+
     public function __construct()
     {
         $this->appId = config('instagram.meta.app_id');
+
         $this->appSecret = config('instagram.meta.app_secret');
+
         $this->redirectUri = config('instagram.meta.redirect_uri');
     }
 
@@ -54,7 +58,9 @@ class MetaAuthService
         try {
             $data = decrypt($state);
         } catch (\Throwable $e) {
-            throw new Exception('Instagram OAuth state نامعتبر است.');
+            throw new Exception(
+                'Instagram OAuth state نامعتبر است.'
+            );
         }
 
         if (
@@ -62,12 +68,20 @@ class MetaAuthService
             ! isset($data['nonce']) ||
             ! isset($data['created_at'])
         ) {
-            throw new Exception('اطلاعات OAuth state ناقص است.');
+            throw new Exception(
+                'اطلاعات OAuth state ناقص است.'
+            );
         }
 
-        // State should not be accepted indefinitely.
-        if (now()->timestamp - $data['created_at'] > 600) {
-            throw new Exception('Instagram OAuth session منقضی شده است.');
+        /*
+         * State expiration: 10 minutes.
+         */
+        if (
+            now()->timestamp - $data['created_at'] > 600
+        ) {
+            throw new Exception(
+                'Instagram OAuth session منقضی شده است.'
+            );
         }
 
         return $data;
@@ -82,30 +96,46 @@ class MetaAuthService
 
         $params = [
             'force_reauth' => 'true',
+
             'client_id' => $this->appId,
+
             'redirect_uri' => $this->redirectUri,
+
             'response_type' => 'code',
-            'scope' => implode(',', $this->getScopes()),
+
+            'scope' => implode(
+                ',',
+                $this->getScopes()
+            ),
+
             'state' => $state,
         ];
 
-        $url = 'https://www.instagram.com/oauth/authorize?'.
-        http_build_query($params);
+        $url =
+            'https://www.instagram.com/oauth/authorize?'.
+            http_build_query($params);
 
         Log::info('Instagram OAuth URL', [
             'app_id' => $this->appId,
+
             'redirect_uri' => $this->redirectUri,
-            'url' => $url,
+
+            /*
+             * Do not log access tokens or secrets.
+             */
+            'scopes' => $this->getScopes(),
         ]);
 
         return $url;
     }
 
     /**
-     * Exchange authorization code for short-lived Instagram token.
+     * Exchange authorization code
+     * for short-lived Instagram token.
      */
-    public function exchangeCodeForAccessToken(string $code): array
-    {
+    public function exchangeCodeForAccessToken(
+        string $code
+    ): array {
         $response = Http::asMultipart()->post(
             'https://api.instagram.com/oauth/access_token',
             [
@@ -131,10 +161,12 @@ class MetaAuthService
                 ],
             ]
         );
-        // dd($response);
+
         Log::info('Instagram Token Exchange', [
             'app_id' => $this->appId,
+
             'redirect_uri' => $this->redirectUri,
+
             'code_length' => strlen($code),
         ]);
 
@@ -149,17 +181,19 @@ class MetaAuthService
     }
 
     /**
-     * Exchange short-lived token for long-lived token.
+     * Exchange short-lived token
+     * for long-lived token.
      */
     public function exchangeForLongLivedToken(
         string $shortLivedToken
     ): array {
-
         $response = Http::get(
             'https://graph.instagram.com/access_token',
             [
                 'grant_type' => 'ig_exchange_token',
+
                 'client_secret' => $this->appSecret,
+
                 'access_token' => $shortLivedToken,
             ]
         );
@@ -180,11 +214,11 @@ class MetaAuthService
     public function getInstagramAccount(
         string $accessToken
     ): array {
-
         $response = Http::get(
             'https://graph.instagram.com/me',
             [
                 'fields' => 'id,username,name,account_type,profile_picture_url',
+
                 'access_token' => $accessToken,
             ]
         );
@@ -197,5 +231,67 @@ class MetaAuthService
         }
 
         return $response->json();
+    }
+
+    /**
+     * Subscribe Instagram account to webhook events.
+     *
+     * Equivalent to:
+     *
+     * POST /{instagram-user-id}/subscribed_apps
+     *
+     * Fields:
+     * - messages
+     * - comments
+     */
+    public function subscribedApps(
+        string $instagramUserId,
+        string $accessToken
+    ): array {
+        $url =
+            "https://graph.instagram.com/{$this->graphVersion}/".
+            "{$instagramUserId}/subscribed_apps";
+
+        $response = Http::withToken($accessToken)
+            ->post(
+                $url,
+                [
+                    'subscribed_fields' => [
+                        'messages',
+                        'comments',
+                    ],
+                ]
+            );
+
+        if ($response->failed()) {
+            Log::error(
+                'Instagram subscribed_apps failed',
+                [
+                    'instagram_user_id' => $instagramUserId,
+
+                    'status' => $response->status(),
+
+                    'response' => $response->json(),
+                ]
+            );
+
+            throw new Exception(
+                'خطا در فعال‌سازی Instagram Webhook: '.
+                $response->body()
+            );
+        }
+
+        $data = $response->json();
+
+        Log::info(
+            'Instagram subscribed_apps success',
+            [
+                'instagram_user_id' => $instagramUserId,
+
+                'response' => $data,
+            ]
+        );
+
+        return $data;
     }
 }

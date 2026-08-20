@@ -7,4 +7,6 @@ return [
 
     'redirect_uri' => env('INSTAGRAM_REDIRECT_URI'),
 
+    'webhook_verify_token' => env('META_WEBHOOK_VERIFY_TOKEN'),
+
 ];

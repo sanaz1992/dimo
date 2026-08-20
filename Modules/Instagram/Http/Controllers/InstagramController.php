@@ -2,10 +2,10 @@
 
 namespace Modules\Instagram\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Core\Http\Controllers\CoreController;
 
-class InstagramController extends Controller
+class InstagramController extends CoreController
 {
     /**
      * Display a listing of the resource.

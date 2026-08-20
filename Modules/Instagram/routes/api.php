@@ -1,8 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Instagram\Http\Controllers\InstagramController;
+use Modules\Instagram\Http\Controllers\InstagramWebhookController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('instagrams', InstagramController::class)->names('instagram');
-});
+Route::get(
+    '/instagram/webhook',
+    [InstagramWebhookController::class, 'verify']
+)->name('instagram.webhook.verify');
+
+Route::post(
+    '/instagram/webhook',
+    [InstagramWebhookController::class, 'handle']
+)->name('instagram.webhook.handle');
