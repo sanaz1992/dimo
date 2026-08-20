@@ -19,4 +19,6 @@ return [
     'active' => 'فعال',
     'inactive' => 'غیرفعال',
 
+    'last_login_at' => 'آخرین ورود',
+
 ];

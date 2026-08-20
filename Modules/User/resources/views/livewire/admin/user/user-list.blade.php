@@ -24,6 +24,7 @@
                 <th>@lang('user::attributes.level')</th>
                 <th>@lang('user::attributes.created_at')</th>
                 <th>@lang('user::attributes.status')</th>
+                <th>@lang('user::attributes.last_login_at')</th>
                 <th class="col-actions"></th>
             </tr>
         </x-slot:head>
@@ -65,6 +66,10 @@
                             <x-dashboard::badge color="red">
                                 @lang('user::attributes.inactive')</x-dashboard::badge>
                         @endif
+                    </x-dashboard::table.cell>
+
+                     <x-dashboard::table.cell :label="__('user::attributes.last_login_at')">
+                        {{$user->last_login_at_jalali}}
                     </x-dashboard::table.cell>
 
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">

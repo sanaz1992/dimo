@@ -13,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Modules\Core\Traits\Filterable;
 use Modules\Media\Entities\Media;
 use Modules\Media\Entities\NullMedia;
-use Modules\Process\Entities\Process;
+use Modules\Tenant\Entities\Tenant;
 use Modules\User\Enums\UserLevel;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -36,7 +36,6 @@ class User extends Authenticatable
         'active',
         'email',
         'email_verified_at',
-        'tenant_id',
         'last_login_at',
     ];
 
@@ -92,6 +91,11 @@ class User extends Authenticatable
         return verta($this->expired_at)->format('Y/m/d H:i:s');
     }
 
+    public function getLastLoginAtJalaliDateAttribute()
+    {
+        return verta($this->last_login_at)->format('Y/m/d H:i:s');
+    }
+
     public function mainImageRelation(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediaable')
@@ -112,34 +116,8 @@ class User extends Authenticatable
         return $this->hasMany(Address::class);
     }
 
-    public function processes(): BelongsToMany
+    public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Process::class,
-            'process_assignments'
-        );
+        return $this->belongsToMany(Tenant::class);
     }
-
-    // public function sellerOrders(): HasMany
-    // {
-    //     return $this->hasMany(Order::class, 'seller_id');
-    // }
-
-    // public function userOrders()
-    // {
-    //     return $this->hasMany(Order::class, 'user_id');
-    // }
-
-    // public function charts(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Chart::class, 'user_chart');
-    // }
-    // public function hasChart($chart): bool
-    // {
-    //     if (is_numeric($chart)) {
-    //         return $this->charts->contains('id', $chart);
-    //     }
-
-    //     return $this->charts->contains('name', $chart);
-    // }
 }
