@@ -41,6 +41,26 @@ class PermissionSeeder extends Seeder
                 'name' => 'users_delete',
                 'title' => 'حذف کاربر',
             ],
+            [
+                'name' => 'tenants_list',
+                'title' => 'لیست کسب و کارها',
+            ],
+            [
+                'name' => 'tenants_show',
+                'title' => 'مشاهده کسب و کار',
+            ],
+            [
+                'name' => 'tenants_create',
+                'title' => 'ایجاد کسب و کار',
+            ],
+            [
+                'name' => 'tenants_edit',
+                'title' => 'ویرایش کسب و کار',
+            ],
+            [
+                'name' => 'tenants_delete',
+                'title' => 'حذف کسب و کار',
+            ],
 
         ];
 

@@ -10,21 +10,17 @@ use Modules\User\External\Repositories\CityRepository;
 use Modules\User\External\Repositories\Contract\AddressRepositoryInterface;
 use Modules\User\External\Repositories\Contract\CityRepositoryInterface;
 use Modules\User\External\Repositories\Contract\ProvinceRepositoryInterface;
+use Modules\User\External\Repositories\Contract\TenantRepositoryInterface;
 use Modules\User\External\Repositories\Contract\UserRepositoryInterface;
 use Modules\User\External\Repositories\ProvinceRepository;
+use Modules\User\External\Repositories\TenantRepository;
 use Modules\User\External\Repositories\UserRepository;
+use Modules\User\Http\Livewire\Admin\Tenant\TenantCreate;
+use Modules\User\Http\Livewire\Admin\Tenant\TenantEdit;
+use Modules\User\Http\Livewire\Admin\Tenant\TenantList;
 use Modules\User\Http\Livewire\Admin\User\UserCreate;
 use Modules\User\Http\Livewire\Admin\User\UserEdit;
 use Modules\User\Http\Livewire\Admin\User\UserList;
-// use Modules\User\Http\Livewire\Admin\Admin\AdminCreate;
-// use Modules\User\Http\Livewire\Admin\Admin\AdminEdit;
-// use Modules\User\Http\Livewire\Admin\Admin\AdminList;
-// use Modules\User\Http\Livewire\Admin\Seller\SellerCreate;
-// use Modules\User\Http\Livewire\Admin\Seller\SellerEdit;
-// use Modules\User\Http\Livewire\Admin\Seller\SellerList;
-// use Modules\User\Http\Livewire\Admin\User\UserCreate;
-// use Modules\User\Http\Livewire\Admin\User\UserEdit;
-// use Modules\User\Http\Livewire\Admin\User\UserList;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -51,17 +47,13 @@ class UserServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
 
-        // Livewire::component('admin::list', AdminList::class);
-        // Livewire::component('admin::create', AdminCreate::class);
-        // Livewire::component('admin::edit', AdminEdit::class);
-
-        // Livewire::component('seller::list', SellerList::class);
-        // Livewire::component('seller::create', SellerCreate::class);
-        // Livewire::component('seller::edit', SellerEdit::class);
-
         Livewire::component('user::list', UserList::class);
         Livewire::component('user::create', UserCreate::class);
         Livewire::component('user::edit', UserEdit::class);
+
+        Livewire::component('tenant::list', TenantList::class);
+        Livewire::component('tenant::create', TenantCreate::class);
+        Livewire::component('tenant::edit', TenantEdit::class);
 
     }
 
@@ -74,6 +66,7 @@ class UserServiceProvider extends ServiceProvider
         $this->app->register(RouteServiceProvider::class);
 
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(TenantRepositoryInterface::class, TenantRepository::class);
         $this->app->bind(AddressRepositoryInterface::class, AddressRepository::class);
         $this->app->bind(ProvinceRepositoryInterface::class, ProvinceRepository::class);
         $this->app->bind(CityRepositoryInterface::class, CityRepository::class);

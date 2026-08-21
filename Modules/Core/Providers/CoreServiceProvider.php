@@ -38,9 +38,9 @@ class CoreServiceProvider extends ServiceProvider
         // dd(
         //     strlen($account->access_token),substr($account->access_token, 0, 10)
         // );
-        if (app()->environment('local')) {
-            URL::forceScheme('https');
-        }
+        // if (app()->environment('local')) {
+        //     URL::forceScheme('https');
+        // }
 
         $router->aliasMiddleware(
             'admin.panel',

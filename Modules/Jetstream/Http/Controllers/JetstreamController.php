@@ -36,6 +36,9 @@ class JetstreamController
         // }
         Auth::loginUsingId($user->id);
 
+        $user->last_login_at = now();
+        $user->save();
+
         if ($user->level == 'admin') {
             // return redirect()->route('admin.dashboard');
             return redirect()->intended(route('admin.dashboard'));
@@ -111,6 +114,9 @@ class JetstreamController
         }
         Auth::loginUsingId($user->id);
 
+        $user->last_login_at = now();
+        $user->save();
+
         return redirect()->route('admin.dashboard');
     }
 
@@ -176,6 +182,9 @@ class JetstreamController
         $user->assignRole(['super_admin']);
         Auth::loginUsingId($user->id);
 
+        $user->last_login_at = now();
+        $user->save();
+
         return redirect()->route('admin.admins.edit', $user);
     }
 
@@ -195,6 +204,9 @@ class JetstreamController
         ]);
         // $user->assignRole(['super_admin']);
         Auth::loginUsingId($user->id);
+
+        $user->last_login_at = now();
+        $user->save();
 
         if ($user->level == 'admin') {
             // return redirect()->route('admin.dashboard');

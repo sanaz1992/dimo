@@ -36,3 +36,13 @@ if (! function_exists('formatPrice')) {
         return toPersianNumber(number_format((float) $value));
     }
 }
+
+if (! function_exists('toEnglishNumber')) {
+    function toEnglishNumber(int|float|string|null $value): string
+    {
+        $persian = ['۰', '۱', '۲', '۳', '۴', '٤', '۵', '٥', '٦', '۶', '۷', '۸', '۹'];
+        $english = [0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9];
+
+        return str_replace($persian, $english, $value);
+    }
+}

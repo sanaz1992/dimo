@@ -32,11 +32,11 @@
             @foreach ($users as $user)
                 <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
                     <x-dashboard::table.cell :label="__('core::attributes.row')">
-                        {{ $loop->index + 1 }}
+                        {{ toPersianNumber($loop->index + 1 )}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('user::attributes.unique_code')">
-                        {{$user->unique_code}}
+                        {{toPersianNumber($user->unique_code)}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('user::attributes.name')" class="flex items-center gap-2">
@@ -46,7 +46,7 @@
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('user::attributes.mobile')">
-                        {{$user->mobile}}
+                        {{toPersianNumber($user->mobile)}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('user::attributes.level')">
@@ -55,7 +55,7 @@
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('user::attributes.created_at')">
-                        {{$user->created_at_jalali_date}}
+                        {{toPersianNumber($user->created_at_jalali_date)}}
                     </x-dashboard::table.cell>
 
                     <x-dashboard::table.cell :label="__('user::attributes.status')">
@@ -69,7 +69,7 @@
                     </x-dashboard::table.cell>
 
                      <x-dashboard::table.cell :label="__('user::attributes.last_login_at')">
-                        {{$user->last_login_at_jalali}}
+                        {{toPersianNumber($user->last_login_at_jalali_date)}}
                     </x-dashboard::table.cell>
 
                     <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">

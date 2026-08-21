@@ -68,6 +68,14 @@
                 <span>@lang('dashboard::attributes.users')</span>
             </a>
         @endcan
+        @can('tenants_list')
+            <a href="{{route('admin.tenants.index')}}" data-nav="tenants" class="nav-link {{request()->routeIs('admin.tenants.*')?'nav-link-active':''}}">
+                <span class="nav-ico">
+                    <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
+                </span>
+                <span>@lang('dashboard::attributes.tenants')</span>
+            </a>
+        @endcan
         {{-- @can('products_list')
             <a href="{{route('admin.products.index')}}" data-nav="products" class="nav-link {{request()->routeIs('admin.products.*')?'nav-link-active':''}}">
                 <span class="nav-ico">
