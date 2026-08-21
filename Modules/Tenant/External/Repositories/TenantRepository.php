@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\User\External\Repositories;
+namespace Modules\Tenant\External\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\External\Repositories\BaseRepository;
 use Modules\Core\Helpers\SlugHelper;
 use Modules\Tenant\Entities\Tenant;
 use Modules\Tenant\Enums\TenantStatus;
-use Modules\User\External\Repositories\Contract\TenantRepositoryInterface;
+use Modules\Tenant\External\Repositories\Contract\TenantRepositoryInterface;
 
 class TenantRepository extends BaseRepository implements TenantRepositoryInterface
 {
@@ -20,7 +20,7 @@ class TenantRepository extends BaseRepository implements TenantRepositoryInterfa
     {
         return Tenant::create([
             'name' => $data['name'],
-            'slug' => SlugHelper::generate(get_class(new Tenant), $data['name'], 'slug'),
+            'slug' => SlugHelper::generate(get_class(new Tenant()), $data['name'], 'slug'),
             'timezone' => $data['timezone'] ?? 'Asia/Tehran',
             'local' => $data['local'] ?? 'fa',
             'status' => $data['status'] ?? TenantStatus::ACTIVE->value,

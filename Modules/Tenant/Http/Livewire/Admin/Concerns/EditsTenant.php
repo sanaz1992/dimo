@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\User\Http\Livewire\Admin\Concerns;
+namespace Modules\Tenant\Http\Livewire\Admin\Concerns;
 
 use Livewire\WithFileUploads;
 use Modules\Core\Enums\LocalEnum;
 use Modules\Core\Enums\TimeZoneEnum;
 use Modules\Tenant\Entities\Tenant;
-use Modules\User\Rules\StoreTenantRules;
-use Modules\User\Services\TenantService;
+use Modules\Tenant\Rules\StoreTenantRules;
+use Modules\Tenant\Services\TenantService;
 
 trait EditsTenant
 {

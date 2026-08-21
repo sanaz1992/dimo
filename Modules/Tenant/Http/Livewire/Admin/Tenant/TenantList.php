@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\User\Http\Livewire\Admin\Tenant;
+namespace Modules\Tenant\Http\Livewire\Admin\Tenant;
 
 use Illuminate\Validation\Rules\Enum;
 use Livewire\WithPagination;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Tenant\Enums\TenantStatus;
-use Modules\User\Services\TenantService;
+use Modules\Tenant\Services\TenantService;
 
 class TenantList extends AdminBaseComponent
 {
@@ -59,9 +59,9 @@ class TenantList extends AdminBaseComponent
     {
         $tenants = $tenantService->list(null, [10, true]);
 
-        return $this->renderView('User::livewire.admin.tenant.tenant-list', compact('tenants'))
+        return $this->renderView('Tenant::livewire.admin.tenant.tenant-list', compact('tenants'))
             ->layoutData([
-                'title' => __('user::attributes.tenants_list'),
+                'title' => __('tenant::attributes.tenants_list'),
             ]);
     }
 }

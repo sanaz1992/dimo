@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\External\Repositories\Contract;
+namespace Modules\Tenant\External\Repositories\Contract;
 
 use Modules\Core\External\Repositories\Contract\BaseRepositoryInterface;
 use Modules\Tenant\Entities\Tenant;

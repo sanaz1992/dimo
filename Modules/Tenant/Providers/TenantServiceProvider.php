@@ -4,7 +4,12 @@ namespace Modules\Tenant\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Modules\Jetstream\Providers\RouteServiceProvider;
+use Livewire\Livewire;
+use Modules\Tenant\External\Repositories\Contract\TenantRepositoryInterface;
+use Modules\Tenant\External\Repositories\TenantRepository;
+use Modules\Tenant\Http\Livewire\Admin\Tenant\TenantCreate;
+use Modules\Tenant\Http\Livewire\Admin\Tenant\TenantEdit;
+use Modules\Tenant\Http\Livewire\Admin\Tenant\TenantList;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -31,6 +36,9 @@ class TenantServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
 
+        Livewire::component('tenant::list', TenantList::class);
+        Livewire::component('tenant::create', TenantCreate::class);
+        Livewire::component('tenant::edit', TenantEdit::class);
     }
 
     /**
@@ -41,8 +49,7 @@ class TenantServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
 
-        // $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-
+        $this->app->bind(TenantRepositoryInterface::class, TenantRepository::class);
     }
 
     /**

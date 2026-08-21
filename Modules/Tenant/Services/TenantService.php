@@ -1,18 +1,19 @@
 <?php
 
-namespace Modules\User\Services;
+namespace Modules\Tenant\Services;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Filters\QueryFilter;
 use Modules\Tenant\Entities\Tenant;
 use Modules\Tenant\Enums\TenantStatus;
-use Modules\User\External\Repositories\Contract\TenantRepositoryInterface;
+use Modules\Tenant\External\Repositories\Contract\TenantRepositoryInterface;
 
 class TenantService
 {
     public function __construct(
         protected TenantRepositoryInterface $tenantRepository,
-    ) {}
+    ) {
+    }
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {

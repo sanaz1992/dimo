@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Rules;
+namespace Modules\Tenant\Rules;
 
 use Illuminate\Validation\Rules\Enum;
 use Modules\Core\Enums\LocalEnum;

@@ -1,6 +1,6 @@
 <section class="table-panel anim-fade-up">
 
-    <x-dashboard::card.card-header :title="__('user::attributes.tenants_list')">
+    <x-dashboard::card.card-header :title="__('tenant::attributes.tenants_list')">
         <x-slot:icon>
             <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
         </x-slot:icon>
@@ -9,7 +9,7 @@
             <x-slot:icon>
                 <img src="{{ asset('icons/header/add.svg') }}" alt="tenants" />
             </x-slot:icon>
-            @lang('user::attributes.create_tenant')
+            @lang('tenant::attributes.create_tenant')
         </x-dashboard::buttons.primary-action>
     </x-dashboard::card.card-header>
 
@@ -18,11 +18,11 @@
         <x-slot:head>
             <tr>
                 <th>@lang('core::attributes.row')</th>
-                <th>@lang('user::attributes.name')</th>
-                <th>@lang('user::attributes.timezone')</th>
-                <th>@lang('user::attributes.local')</th>
-                <th>@lang('user::attributes.status')</th>
-                <th>@lang('user::attributes.created_at')</th>
+                <th>@lang('tenant::attributes.name')</th>
+                <th>@lang('tenant::attributes.timezone')</th>
+                <th>@lang('tenant::attributes.local')</th>
+                <th>@lang('tenant::attributes.status')</th>
+                <th>@lang('tenant::attributes.created_at')</th>
                 <th class="col-actions"></th>
             </tr>
         </x-slot:head>
@@ -33,25 +33,26 @@
                         {{toPersianNumber($loop->index + 1)}}
                     </x-dashboard::table.cell>
 
-                    <x-dashboard::table.cell :label="__('user::attributes.name')">
+                    <x-dashboard::table.cell :label="__('tenant::attributes.name')">
                         {{$tenant->name}}
                     </x-dashboard::table.cell>
 
-                    <x-dashboard::table.cell :label="__('user::attributes.timezone')">
+                    <x-dashboard::table.cell :label="__('tenant::attributes.timezone')">
                         {{$tenant->timezone}}
                     </x-dashboard::table.cell>
 
-                    <x-dashboard::table.cell :label="__('user::attributes.local')">
+                    <x-dashboard::table.cell :label="__('tenant::attributes.local')">
                         {{$tenant->local}}
                     </x-dashboard::table.cell>
 
-                    <x-dashboard::table.cell :label="__('user::attributes.status')">
-                        <x-dashboard::badge :color="$tenant->status->color()" class="cursor-pointer" wire:click="selectStatus({{$tenant->id}})">
+                    <x-dashboard::table.cell :label="__('tenant::attributes.status')">
+                        <x-dashboard::badge :color="$tenant->status->color()" class="cursor-pointer"
+                             wire:click="selectStatus({{$tenant->id}})">
                             {{$tenant->status->label()}}
                         </x-dashboard::badge>
                     </x-dashboard::table.cell>
 
-                    <x-dashboard::table.cell :label="__('user::attributes.created_at')">
+                    <x-dashboard::table.cell :label="__('tenant::attributes.created_at')">
                         {{toPersianNumber($tenant->created_at_jalali_date)}}
                     </x-dashboard::table.cell>
 
@@ -89,12 +90,12 @@
                 </div>
 
                 <form id="form-tx" class="modal-body space-y-3">
-                    <x-dashboard::forms.select label="user::attributes.status" name="form.status" wire:model.defer="form.status"
-                        :options="$tenantStatuses" placeholder="user::messages.select_status" />
+                    <x-dashboard::forms.select label="tenant::attributes.status" name="form.status" wire:model.defer="form.status"
+                        :options="$tenantStatuses" placeholder="tenant::messages.select_status" />
 
                     <x-dashboard::buttons.primary-action id="btn-update-item-status" tag="button" wire:click="updateItemStatus" size="sm"
                         class="btn-fill" wire:target="updateItemStatus">
-                        @lang('user::attributes.update_status')
+                        @lang('tenant::attributes.update_status')
                     </x-dashboard::buttons.primary-action>
                 </form>
 

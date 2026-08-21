@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\User\Http\Livewire\Admin\Tenant;
+namespace Modules\Tenant\Http\Livewire\Admin\Tenant;
 
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Tenant\Entities\Tenant;
-use Modules\User\Http\Livewire\Admin\Concerns\EditsTenant;
-use Modules\User\Services\TenantService;
+use Modules\Tenant\Http\Livewire\Admin\Concerns\EditsTenant;
+use Modules\Tenant\Services\TenantService;
 
 class TenantEdit extends AdminBaseComponent
 {
@@ -31,9 +31,9 @@ class TenantEdit extends AdminBaseComponent
 
     public function render()
     {
-        return $this->renderView('User::livewire.admin.tenant.tenant-edit')
+        return $this->renderView('Tenant::livewire.admin.tenant.tenant-edit')
             ->layoutData([
-                'title' => __('user::attributes.edit_tenant').' '.$this->tenant->name,
+                'title' => __('tenant::attributes.edit_tenant').' '.$this->tenant->name,
             ]);
     }
 }

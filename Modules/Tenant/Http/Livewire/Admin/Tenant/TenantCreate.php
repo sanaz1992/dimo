@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\User\Http\Livewire\Admin\Tenant;
+namespace Modules\Tenant\Http\Livewire\Admin\Tenant;
 
 use Illuminate\Validation\ValidationException;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
-use Modules\User\Http\Livewire\Admin\Concerns\EditsTenant;
-use Modules\User\Services\TenantService;
+use Modules\Tenant\Http\Livewire\Admin\Concerns\EditsTenant;
+use Modules\Tenant\Services\TenantService;
 
 class TenantCreate extends AdminBaseComponent
 {
@@ -41,9 +41,9 @@ class TenantCreate extends AdminBaseComponent
     public function render()
     {
         return $this->renderView(
-            'User::livewire.admin.tenant.tenant-create'
+            'Tenant::livewire.admin.tenant.tenant-create'
         )->layoutData([
-            'title' => __('user::attributes.create_tenant'),
+            'title' => __('tenant::attributes.create_tenant'),
         ]);
     }
 }
