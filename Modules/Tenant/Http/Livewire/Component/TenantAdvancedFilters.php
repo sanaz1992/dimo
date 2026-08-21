@@ -10,10 +10,10 @@ use Modules\Tenant\Enums\TenantStatus;
 
 class TenantAdvancedFilters extends Component
 {
-    public $showFilterModal = false;
+    public $isOpen = false;
 
     public $filterData = [
-        'name' => '',
+        'search' => '',
         'timezone' => '',
         'local' => '',
         'status' => '',
@@ -24,7 +24,7 @@ class TenantAdvancedFilters extends Component
     ) {
         $this->filterData = array_merge(
             [
-                'name' => '',
+                'search' => '',
                 'timezone' => '',
                 'local' => '',
                 'status' => '',
@@ -41,14 +41,10 @@ class TenantAdvancedFilters extends Component
             ->count();
     }
 
-    public function openFilterModal(): void
+    public function toggleModal()
     {
-        $this->showFilterModal = true;
-    }
-
-    public function closeFilterModal(): void
-    {
-        $this->showFilterModal = false;
+        // $this->dispatch('reinit-datepickers');
+        $this->isOpen = ! $this->isOpen;
     }
 
     public function apply()
@@ -58,13 +54,13 @@ class TenantAdvancedFilters extends Component
             filterData: $this->filterData
         );
 
-        $this->showFilterModal = false;
+        $this->isOpen = false;
     }
 
     public function clearAll()
     {
         $this->filterData = [
-            'name' => '',
+            'search' => '',
             'timezone' => '',
             'local' => '',
             'status' => '',
@@ -75,7 +71,7 @@ class TenantAdvancedFilters extends Component
             filterData: $this->filterData
         );
 
-        $this->showFilterModal = false;
+        $this->isOpen = false;
     }
 
     public function render()
