@@ -2,8 +2,8 @@
     <h3 class="relative z-[1] mb-4 text-base font-bold text-ink">{{$title}}</h3>
     <form wire:submit.prevent="store">
         <div class="relative z-[1] space-y-3">
+            {{ $slot }}
             <x-dashboard::forms.input label="tenant::attributes.name" name="form.name" wire:model.defer="form.name" />
-
 
             <x-dashboard::forms.select label="tenant::attributes.timezone" name="form.timezone" wire:model.defer="form.timezone"
                 :options="$timezones" placeholder="tenant::messages.select_timezone" />

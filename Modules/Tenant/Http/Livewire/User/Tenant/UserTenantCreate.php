@@ -3,12 +3,12 @@
 namespace Modules\Tenant\Http\Livewire\User\Tenant;
 
 use Illuminate\Validation\ValidationException;
-use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
+use Modules\Core\Http\Livewire\User\UserBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Tenant\Http\Livewire\Admin\Concerns\EditsTenant;
 use Modules\Tenant\Services\TenantService;
 
-class UserTenantCreate extends AdminBaseComponent
+class UserTenantCreate extends UserBaseComponent
 {
     use EditsTenant;
     use LivewireNotify;
@@ -23,6 +23,8 @@ class UserTenantCreate extends AdminBaseComponent
 
         try {
             $this->validateTenant();
+
+            $this->form['user'] = auth()->user()->unique_code;
 
             $this->createTenant(
                 $tenantService
@@ -41,7 +43,7 @@ class UserTenantCreate extends AdminBaseComponent
     public function render()
     {
         return $this->renderView(
-            'Tenant::livewire.admin.tenant.tenant-create'
+            'Tenant::livewire.user.tenant.tenant-create'
         )->layoutData([
             'title' => __('tenant::attributes.create_tenant'),
         ]);

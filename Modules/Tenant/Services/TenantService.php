@@ -7,13 +7,13 @@ use Modules\Core\Filters\QueryFilter;
 use Modules\Tenant\Entities\Tenant;
 use Modules\Tenant\Enums\TenantStatus;
 use Modules\Tenant\External\Repositories\Contract\TenantRepositoryInterface;
+use Modules\User\Services\UserService;
 
 class TenantService
 {
     public function __construct(
         protected TenantRepositoryInterface $tenantRepository,
-    ) {
-    }
+    ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
@@ -28,9 +28,11 @@ class TenantService
     public function create(array $data): Tenant
     {
         $data['status'] = $data['status'] ?? TenantStatus::ACTIVE->value;
+        $user = app(UserService::class)->findByColumn('unique_code', $data['user']);
 
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($data, $user) {
             $tenant = $this->tenantRepository->create($data);
+            $tenant->users()->attach($user->id);
 
             return $tenant;
         });
@@ -40,6 +42,10 @@ class TenantService
     {
         return DB::transaction(function () use ($tenant, $data) {
             $tenant = $this->tenantRepository->update($tenant, $data);
+            if (isset($data['user']) && $data['user'] != '') {
+                $user = app(UserService::class)->findByColumn('unique_code', $data['user']);
+                $tenant->users()->sync($user->id);
+            }
 
             return $tenant;
         });

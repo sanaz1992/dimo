@@ -8,6 +8,7 @@ use Modules\Core\Enums\TimeZoneEnum;
 use Modules\Tenant\Entities\Tenant;
 use Modules\Tenant\Rules\StoreTenantRules;
 use Modules\Tenant\Services\TenantService;
+use Modules\User\Services\UserService;
 
 trait EditsTenant
 {
@@ -16,6 +17,7 @@ trait EditsTenant
     public Tenant $tenant;
 
     public $form = [
+        'user' => '',
         'name' => '',
         'timezone' => '',
         'local' => '',
@@ -25,9 +27,12 @@ trait EditsTenant
 
     public $locals;
 
+    public $users;
+
     protected function fillForm(?Tenant $tenant = null): void
     {
         if ($tenant) {
+
             $this->tenant = $tenant;
 
             $this->form['name'] = $tenant->name;
@@ -37,6 +42,8 @@ trait EditsTenant
 
         $this->timezones = TimeZoneEnum::labels();
         $this->locals = LocalEnum::labels();
+        $this->users = app(UserService::class)->list();
+
     }
 
     protected function tenantRules(): array

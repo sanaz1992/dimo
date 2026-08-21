@@ -8,6 +8,7 @@ return [
     'edit_tenant' => 'ویرایش کسب و کار',
     'update_status' => 'ویرایش وضعیت',
 
+    'user' => 'کاربر',
     'name' => 'نام',
     'created_at' => 'تاریخ ایجاد',
     'status' => 'وضعیت',

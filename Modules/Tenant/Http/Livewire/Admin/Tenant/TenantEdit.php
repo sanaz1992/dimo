@@ -16,6 +16,9 @@ class TenantEdit extends AdminBaseComponent
     public function mount(Tenant $tenant)
     {
         $this->fillForm($tenant);
+
+        $tenant->load('users');
+        $this->form['user'] = $tenant->users?->first()?->unique_code;
     }
 
     public function store(TenantService $tenantService)

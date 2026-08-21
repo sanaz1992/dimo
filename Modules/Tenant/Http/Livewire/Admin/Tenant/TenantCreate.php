@@ -16,6 +16,7 @@ class TenantCreate extends AdminBaseComponent
     public function mount()
     {
         $this->fillForm();
+
     }
 
     public function store(TenantService $tenantService)
@@ -23,6 +24,14 @@ class TenantCreate extends AdminBaseComponent
 
         try {
             $this->validateTenant();
+
+            $this->validate(
+                [
+                    'form.user' => ['required', 'string', 'exists:users,unique_code'],
+                ],
+                trans('user::validation'),
+                trans('user::attributes')
+            );
 
             $this->createTenant(
                 $tenantService
