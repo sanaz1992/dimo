@@ -13,6 +13,4 @@ Route::name('admin.')->prefix('/admin')
         Route::get('/tenants/create', TenantCreate::class)->middleware(['can:tenants_create'])->name('tenants.create');
         Route::get('/tenants/{tenant}/edit', TenantEdit::class)->middleware(['can:tenants_edit'])->name('tenants.edit');
 
-        Route::get('/tenants/{tenant}/instagram-accounts', TenantEdit::class)->middleware(['can:tenants_edit'])->name('tenants.instagrams.index');
-
     });

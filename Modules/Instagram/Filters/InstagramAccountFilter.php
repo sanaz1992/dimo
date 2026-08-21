@@ -7,7 +7,7 @@ use Modules\Core\Filters\QueryFilter;
 
 class InstagramAccountFilter extends QueryFilter
 {
-    protected array $searchable = ['name', 'timezone', 'local'];
+    protected array $searchable = ['name'];
 
     public function __construct(
         Request $request,
@@ -15,8 +15,10 @@ class InstagramAccountFilter extends QueryFilter
         parent::__construct($request);
     }
 
-    public function status($value)
+    public function tenant($value)
     {
-        return $this->builder->where('status', $value);
+        return $this->builder->whereHas('tenant', function ($q) use ($value) {
+            $q->where('slug', $value);
+        });
     }
 }

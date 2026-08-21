@@ -69,7 +69,8 @@
                                 </x-dashboard::buttons.primary-action>
 
                                 <x-dashboard::buttons.primary-action id="btn-tenant-{{$tenant->id}}-instagram-accounts"
-                                    tag="a" href="{{ route('admin.tenants.instagrams.index', $tenant) }}" size="sm">
+                                    tag="a" href="{{ route('admin.instagram_accounts.index', ['tenant' => $tenant]) }}"
+                                    size="sm">
                                     <img src="{{ asset('icons/dashboard/instagram.svg') }}" alt="add" class="w-5" />
                                 </x-dashboard::buttons.primary-action>
                             </div>
