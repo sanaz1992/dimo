@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Tenant\Enums\TenantStatus;
 use Modules\User\Entities\User;
@@ -14,6 +15,7 @@ use Modules\User\Entities\User;
 
 class Tenant extends Model
 {
+    use Filterable;
     use HasFactory;
     use SoftDeletes;
 

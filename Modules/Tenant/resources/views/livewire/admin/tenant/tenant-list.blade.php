@@ -4,6 +4,22 @@
         <x-slot:icon>
             <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
         </x-slot:icon>
+
+        {{-- filter btn --}}
+        {{-- <x-dashboard::buttons.primary-action id="btn-filter" tag="button"
+            class="btn-ghost w-full justify-center sm:w-auto">
+            <x-slot:icon>
+                <x-Core::icons.filter />
+            </x-slot:icon>
+            @lang('core::attributes.filter')
+            @if($activeFiltersCount ?? 0 > 0)
+                <span class="ms-2 rounded-full bg-brand-blue px-2 py-0.5 text-[10px] text-white">
+                    {{ $activeFiltersCount }}
+                </span>
+            @endif
+        </x-dashboard::buttons.primary-action> --}}
+         <livewire:tenant::tenant-advanced-filters  />
+
         <x-dashboard::buttons.primary-action id="btn-add-user" tag="a" class="btn-fill btn-new-tx shrink-0"
             href="{{ route('admin.tenants.create') }}">
             <x-slot:icon>
@@ -11,6 +27,7 @@
             </x-slot:icon>
             @lang('tenant::attributes.create_tenant')
         </x-dashboard::buttons.primary-action>
+
     </x-dashboard::card.card-header>
 
 
@@ -47,7 +64,7 @@
 
                     <x-dashboard::table.cell :label="__('tenant::attributes.status')">
                         <x-dashboard::badge :color="$tenant->status->color()" class="cursor-pointer"
-                             wire:click="selectStatus({{$tenant->id}})">
+                            wire:click="selectStatus({{$tenant->id}})">
                             {{$tenant->status->label()}}
                         </x-dashboard::badge>
                     </x-dashboard::table.cell>
@@ -77,7 +94,7 @@
                     <h2 id="modal-tx-title" class="text-lg font-bold text-ink">
                         @lang('core::attributes.edit')
                         {{ $selectedTenant?->name }}
-                      </h2>
+                    </h2>
                     <button type="button" data-modal-close class="btn-ghost" aria-label="بستن"
                         wire:click="$set('showChangeStatusModal', false)">
                         <span data-icon="close" data-icon-size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="18"
@@ -90,11 +107,12 @@
                 </div>
 
                 <form id="form-tx" class="modal-body space-y-3">
-                    <x-dashboard::forms.select label="tenant::attributes.status" name="form.status" wire:model.defer="form.status"
-                        :options="$tenantStatuses" placeholder="tenant::messages.select_status" />
+                    <x-dashboard::forms.select label="tenant::attributes.status" name="form.status"
+                        wire:model.defer="form.status" :options="$tenantStatuses"
+                        placeholder="tenant::messages.select_status" />
 
-                    <x-dashboard::buttons.primary-action id="btn-update-item-status" tag="button" wire:click="updateItemStatus" size="sm"
-                        class="btn-fill" wire:target="updateItemStatus">
+                    <x-dashboard::buttons.primary-action id="btn-update-item-status" tag="button"
+                        wire:click="updateItemStatus" size="sm" class="btn-fill" wire:target="updateItemStatus">
                         @lang('tenant::attributes.update_status')
                     </x-dashboard::buttons.primary-action>
                 </form>

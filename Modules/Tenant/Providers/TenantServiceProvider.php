@@ -10,6 +10,7 @@ use Modules\Tenant\External\Repositories\TenantRepository;
 use Modules\Tenant\Http\Livewire\Admin\Tenant\TenantCreate;
 use Modules\Tenant\Http\Livewire\Admin\Tenant\TenantEdit;
 use Modules\Tenant\Http\Livewire\Admin\Tenant\TenantList;
+use Modules\Tenant\Http\Livewire\Component\TenantAdvancedFilters;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -39,6 +40,8 @@ class TenantServiceProvider extends ServiceProvider
         Livewire::component('tenant::list', TenantList::class);
         Livewire::component('tenant::create', TenantCreate::class);
         Livewire::component('tenant::edit', TenantEdit::class);
+
+        Livewire::component('tenant::tenant-advanced-filters', TenantAdvancedFilters::class);
     }
 
     /**

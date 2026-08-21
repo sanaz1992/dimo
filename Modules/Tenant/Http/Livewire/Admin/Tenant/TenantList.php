@@ -2,11 +2,14 @@
 
 namespace Modules\Tenant\Http\Livewire\Admin\Tenant;
 
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Tenant\Enums\TenantStatus;
+use Modules\Tenant\Filters\TenantFilter;
 use Modules\Tenant\Services\TenantService;
 
 class TenantList extends AdminBaseComponent
@@ -55,9 +58,21 @@ class TenantList extends AdminBaseComponent
         }
     }
 
+    public $filterData;
+
+    #[On('updateTenantListFilters')]
+    public function handleFilters($filters)
+    {
+        dd($filters);
+        $this->filterData = $filters;
+    }
+
     public function render(TenantService $tenantService)
     {
-        $tenants = $tenantService->list(null, [10, true]);
+        $request = new Request($this->filterData ?? []);
+        $filter = new TenantFilter($request);
+
+        $tenants = $tenantService->list(null, [10, true], filter: $filter);
 
         return $this->renderView('Tenant::livewire.admin.tenant.tenant-list', compact('tenants'))
             ->layoutData([

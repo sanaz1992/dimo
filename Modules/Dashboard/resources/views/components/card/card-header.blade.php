@@ -23,4 +23,5 @@
     <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
         {{ $slot }}
     </div>
+
 </div>
