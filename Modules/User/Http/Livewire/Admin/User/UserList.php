@@ -33,11 +33,8 @@ class UserList extends AdminBaseComponent
 
     public function render(UserService $userService)
     {
-        $conditions = [
 
-        ];
-
-        $users = $userService->list(null, [10, true], ['mainImageRelation'], $conditions);
+        $users = $userService->list(null, [10, true], ['mainImageRelation']);
 
         return $this->renderView('User::livewire.admin.user.user-list', compact('users'))
             ->layoutData([

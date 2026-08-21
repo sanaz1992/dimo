@@ -5,7 +5,7 @@
             <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
         </x-slot:icon>
 
-        <livewire:tenant::tenant-advanced-filters  />
+        <livewire:tenant::tenant-advanced-filters />
 
         <x-dashboard::buttons.primary-action id="btn-add-user" tag="a" class="btn-fill btn-new-tx shrink-0"
             href="{{ route('admin.tenants.create') }}">
@@ -17,66 +17,70 @@
 
     </x-dashboard::card.card-header>
 
-
-    <x-dashboard::table.table>
-        <x-slot:head>
-            <tr>
-                <th>@lang('core::attributes.row')</th>
-                <th>@lang('tenant::attributes.name')</th>
-                <th>@lang('tenant::attributes.timezone')</th>
-                <th>@lang('tenant::attributes.local')</th>
-                <th>@lang('tenant::attributes.status')</th>
-                <th>@lang('tenant::attributes.created_at')</th>
-                <th class="col-actions"></th>
-            </tr>
-        </x-slot:head>
-        <x-slot:body>
-            @foreach ($tenants as $tenant)
-                <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
-                    <x-dashboard::table.cell :label="__('core::attributes.row')">
-                        {{toPersianNumber($loop->index + 1)}}
-                    </x-dashboard::table.cell>
-
-                    <x-dashboard::table.cell :label="__('tenant::attributes.name')">
-                        {{$tenant->name}}
-                    </x-dashboard::table.cell>
-
-                    <x-dashboard::table.cell :label="__('tenant::attributes.timezone')">
-                        {{$tenant->timezone}}
-                    </x-dashboard::table.cell>
-
-                    <x-dashboard::table.cell :label="__('tenant::attributes.local')">
-                        {{$tenant->local}}
-                    </x-dashboard::table.cell>
-
-                    <x-dashboard::table.cell :label="__('tenant::attributes.status')">
-                        <x-dashboard::badge :color="$tenant->status->color()" class="cursor-pointer"
-                            wire:click="selectStatus({{$tenant->id}})">
-                            {{$tenant->status->label()}}
-                        </x-dashboard::badge>
-                    </x-dashboard::table.cell>
-
-                    <x-dashboard::table.cell :label="__('tenant::attributes.created_at')">
-                        {{toPersianNumber($tenant->created_at_jalali_date)}}
-                    </x-dashboard::table.cell>
-
-                    <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
-                        <div class="flex gap-1">
-                            <x-dashboard::buttons.primary-action id="btn-edit-tenant-{{$tenant->id}}" tag="a"
-                                href="{{ route('admin.tenants.edit', $tenant) }}" size="sm">
-                                <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
-                            </x-dashboard::buttons.primary-action>
-
-                            <x-dashboard::buttons.primary-action id="btn-tenant-{{$tenant->id}}-instagram-accounts" tag="a"
-                                href="{{ route('admin.tenants.instagrams.index', $tenant) }}" size="sm">
-                                <img src="{{ asset('icons/dashboard/instagram.svg') }}" alt="add" class="w-5" />
-                            </x-dashboard::buttons.primary-action>
-                        </div>
-                    </td>
+    <div>
+        <x-dashboard::table.table>
+            <x-slot:head>
+                <tr>
+                    <th>@lang('core::attributes.row')</th>
+                    <th>@lang('tenant::attributes.name')</th>
+                    <th>@lang('tenant::attributes.timezone')</th>
+                    <th>@lang('tenant::attributes.local')</th>
+                    <th>@lang('tenant::attributes.status')</th>
+                    <th>@lang('tenant::attributes.created_at')</th>
+                    <th class="col-actions"></th>
                 </tr>
-            @endforeach
-        </x-slot:body>
-    </x-dashboard::table.table>
+            </x-slot:head>
+            <x-slot:body>
+                @foreach ($tenants as $tenant)
+                    <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
+                        <x-dashboard::table.cell :label="__('core::attributes.row')">
+                            {{toPersianNumber($loop->index + 1)}}
+                        </x-dashboard::table.cell>
+
+                        <x-dashboard::table.cell :label="__('tenant::attributes.name')">
+                            {{$tenant->name}}
+                        </x-dashboard::table.cell>
+
+                        <x-dashboard::table.cell :label="__('tenant::attributes.timezone')">
+                            {{$tenant->timezone}}
+                        </x-dashboard::table.cell>
+
+                        <x-dashboard::table.cell :label="__('tenant::attributes.local')">
+                            {{$tenant->local}}
+                        </x-dashboard::table.cell>
+
+                        <x-dashboard::table.cell :label="__('tenant::attributes.status')">
+                            <x-dashboard::badge :color="$tenant->status->color()" class="cursor-pointer"
+                                wire:click="selectStatus({{$tenant->id}})">
+                                {{$tenant->status->label()}}
+                            </x-dashboard::badge>
+                        </x-dashboard::table.cell>
+
+                        <x-dashboard::table.cell :label="__('tenant::attributes.created_at')">
+                            {{toPersianNumber($tenant->created_at_jalali_date)}}
+                        </x-dashboard::table.cell>
+
+                        <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
+                            <div class="flex gap-1">
+                                <x-dashboard::buttons.primary-action id="btn-edit-tenant-{{$tenant->id}}" tag="a"
+                                    href="{{ route('admin.tenants.edit', $tenant) }}" size="sm">
+                                    <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add"
+                                        class="w-5" />
+                                </x-dashboard::buttons.primary-action>
+
+                                <x-dashboard::buttons.primary-action id="btn-tenant-{{$tenant->id}}-instagram-accounts"
+                                    tag="a" href="{{ route('admin.tenants.instagrams.index', $tenant) }}" size="sm">
+                                    <img src="{{ asset('icons/dashboard/instagram.svg') }}" alt="add" class="w-5" />
+                                </x-dashboard::buttons.primary-action>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </x-slot:body>
+        </x-dashboard::table.table>
+
+        {{ $tenants->links('Core::pagination') }}
+    </div>
 
     @if($showChangeStatusModal)
         <div class="modal-backdrop modal-backdrop--show" wire:click="$set('showChangeStatusModal', false)">

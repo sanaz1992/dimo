@@ -28,8 +28,8 @@ enum TenantStatus: string
     public function color(): string
     {
         return match ($this) {
-            self::ACTIVE => 'violet',
-            self::SUSPENDED => 'slate',
+            self::ACTIVE => 'green',
+            self::SUSPENDED => 'red',
         };
     }
 }

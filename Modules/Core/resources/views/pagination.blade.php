@@ -1,102 +1,92 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="ناوبری صفحه‌بندی" class="flex items-center justify-between rtl mt-2">
-        {{-- Mobile --}}
-        <div class="flex justify-between flex-1 sm:hidden">
-            <button
-                type="button"
-                wire:click="previousPage"
-                @disabled($paginator->onFirstPage())
-                class="relative inline-flex items-center px-4 py-2 text-sm font-medium border rounded-md
-                    {{ $paginator->onFirstPage()
-                        ? 'text-gray-500 bg-white border-gray-300 cursor-default'
-                        : 'text-gray-700 bg-white border-gray-300 hover:text-gray-500' }}">
-                قبلی
-            </button>
+    <nav role="navigation" aria-label="ناوبری صفحه‌بندی"
+        class="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
 
-            <button
-                type="button"
-                wire:click="nextPage"
-                @disabled(! $paginator->hasMorePages())
-                class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium border rounded-md
-                    {{ ! $paginator->hasMorePages()
-                        ? 'text-gray-500 bg-white border-gray-300 cursor-default'
-                        : 'text-gray-700 bg-white border-gray-300 hover:text-gray-500' }}">
-                بعدی
-            </button>
-        </div>
+        {{-- اطلاعات pagination --}}
+        <div class="text-[12px] text-ink-faint">
+            نمایش
 
-        {{-- Desktop --}}
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-            <div>
-                <p class="text-sm text-gray-700 leading-5">
-                    نمایش
-                    @if ($paginator->firstItem())
-                        <span class="font-medium">{{ $paginator->firstItem() }}</span>
-                        تا
-                        <span class="font-medium">{{ $paginator->lastItem() }}</span>
-                    @else
-                        {{ $paginator->count() }}
-                    @endif
-                    از
-                    <span class="font-medium">{{ $paginator->total() }}</span>
-                    نتیجه
-                </p>
-            </div>
-
-            <div>
-                <span class="relative z-0 inline-flex rtl:flex-row-reverse shadow-sm rounded-md">
-                    {{-- Previous --}}
-                    <button
-                        type="button"
-                        wire:click="previousPage"
-                        @disabled($paginator->onFirstPage())
-                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium border rounded-l-md
-                            {{ $paginator->onFirstPage()
-                                ? 'text-gray-500 bg-white border-gray-300 cursor-default'
-                                : 'text-gray-500 bg-white border-gray-300 hover:text-gray-400' }}">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </button>
-
-                    {{-- Pages --}}
-                    @foreach ($elements as $element)
-                        @if (is_string($element))
-                            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 cursor-default">
-                                {{ $element }}
-                            </span>
-                        @endif
-
-                        @if (is_array($element))
-                            @foreach ($element as $page => $url)
-                                <button
-                                    type="button"
-                                    wire:click="gotoPage({{ $page }})"
-                                    class="relative inline-flex items-center px-4 py-2 text-sm font-medium border
-                                        {{ $page == $paginator->currentPage()
-                                            ? 'text-gray-500 bg-white border-gray-300 cursor-default'
-                                            : 'text-gray-700 bg-white border-gray-300 hover:text-gray-500' }}">
-                                    {{ $page }}
-                                </button>
-                            @endforeach
-                        @endif
-                    @endforeach
-
-                    {{-- Next --}}
-                    <button
-                        type="button"
-                        wire:click="nextPage"
-                        @disabled(! $paginator->hasMorePages())
-                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium border rounded-r-md
-                            {{ ! $paginator->hasMorePages()
-                                ? 'text-gray-500 bg-white border-gray-300 cursor-default'
-                                : 'text-gray-500 bg-white border-gray-300 hover:text-gray-400' }}">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </button>
+            @if ($paginator->firstItem())
+                <span class="font-semibold text-ink">
+                    {{ $paginator->firstItem() }}
                 </span>
-            </div>
+
+                تا
+
+                <span class="font-semibold text-ink">
+                    {{ $paginator->lastItem() }}
+                </span>
+            @else
+                <span class="font-semibold text-ink">
+                    {{ $paginator->count() }}
+                </span>
+            @endif
+
+            از
+
+            <span class="font-semibold text-ink">
+                {{ $paginator->total() }}
+            </span>
+
+            نتیجه
         </div>
+
+
+        {{-- pagination --}}
+        <div class="flex items-center gap-1">
+
+            {{-- صفحه قبل --}}
+            <button type="button" wire:click="previousPage" wire:loading.attr="disabled"
+                @disabled($paginator->onFirstPage()) class="row-btn disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="صفحه قبل">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+
+
+            {{-- شماره صفحات --}}
+            @foreach ($elements as $element)
+
+                {{-- ... --}}
+                @if (is_string($element))
+                    <span
+                        class="flex h-9 min-w-9 items-center justify-center rounded-xl px-2 text-[12px] font-semibold text-ink-faint">
+                        {{ $element }}
+                    </span>
+                @endif
+
+
+                {{-- صفحات --}}
+                @if (is_array($element))
+                    @foreach ($element as $page => $url)
+
+                        <button type="button" wire:click="gotoPage({{ $page }})" class="flex h-9 min-w-9 items-center justify-center rounded-xl px-2 text-[12px] font-semibold transition
+                                                {{ $page == $paginator->currentPage()
+                                    ? 'bg-blue-600 text-white'
+                                    : 'text-ink-faint hover:bg-slate-100 hover:text-ink'
+                                                }}">
+                            {{ $page }}
+                        </button>
+
+                    @endforeach
+                @endif
+
+            @endforeach
+
+
+            {{-- صفحه بعد --}}
+            <button type="button" wire:click="nextPage" wire:loading.attr="disabled" @disabled(!$paginator->hasMorePages())
+                class="row-btn disabled:cursor-not-allowed disabled:opacity-40" aria-label="صفحه بعد">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+
+            </button>
+
+        </div>
+
     </nav>
 @endif
