@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Tenant\Http\Livewire\Component;
+namespace Modules\Instagram\Http\Livewire\Component;
 
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -8,7 +8,7 @@ use Modules\Core\Enums\LocalEnum;
 use Modules\Core\Enums\TimeZoneEnum;
 use Modules\Tenant\Enums\TenantStatus;
 
-class TenantAdvancedFilters extends Component
+class InstagramAccountAdvancedFilters extends Component
 {
     public $isOpen = false;
 
