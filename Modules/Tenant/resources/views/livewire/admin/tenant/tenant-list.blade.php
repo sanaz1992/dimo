@@ -5,20 +5,7 @@
             <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
         </x-slot:icon>
 
-        {{-- filter btn --}}
-        {{-- <x-dashboard::buttons.primary-action id="btn-filter" tag="button"
-            class="btn-ghost w-full justify-center sm:w-auto">
-            <x-slot:icon>
-                <x-Core::icons.filter />
-            </x-slot:icon>
-            @lang('core::attributes.filter')
-            @if($activeFiltersCount ?? 0 > 0)
-                <span class="ms-2 rounded-full bg-brand-blue px-2 py-0.5 text-[10px] text-white">
-                    {{ $activeFiltersCount }}
-                </span>
-            @endif
-        </x-dashboard::buttons.primary-action> --}}
-         <livewire:tenant::tenant-advanced-filters  />
+        <livewire:tenant::tenant-advanced-filters  />
 
         <x-dashboard::buttons.primary-action id="btn-add-user" tag="a" class="btn-fill btn-new-tx shrink-0"
             href="{{ route('admin.tenants.create') }}">
@@ -78,6 +65,11 @@
                             <x-dashboard::buttons.primary-action id="btn-edit-tenant-{{$tenant->id}}" tag="a"
                                 href="{{ route('admin.tenants.edit', $tenant) }}" size="sm">
                                 <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add" class="w-5" />
+                            </x-dashboard::buttons.primary-action>
+
+                            <x-dashboard::buttons.primary-action id="btn-tenant-{{$tenant->id}}-instagram-accounts" tag="a"
+                                href="{{ route('admin.tenants.instagrams.index', $tenant) }}" size="sm">
+                                <img src="{{ asset('icons/dashboard/instagram.svg') }}" alt="add" class="w-5" />
                             </x-dashboard::buttons.primary-action>
                         </div>
                     </td>

@@ -32,10 +32,10 @@ enum InstagramAccountStatus: string
     public function color(): string
     {
         return match ($this) {
-            self::CONNECTED => 'violet',
-            self::EXPIRED => 'blue',
-            self::REVOKED => 'amber',
-            self::ERROR => 'slate',
+            self::CONNECTED => 'green',
+            self::EXPIRED => 'red',
+            self::REVOKED => 'slate',
+            self::ERROR => 'amber',
         };
     }
 }

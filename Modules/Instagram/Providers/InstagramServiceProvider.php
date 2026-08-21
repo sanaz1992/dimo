@@ -5,6 +5,8 @@ namespace Modules\Instagram\Providers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Instagram\External\Repositories\Contract\InstagramAccountRepositoryInterface;
+use Modules\Instagram\External\Repositories\InstagramAccountRepository;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -41,7 +43,7 @@ class InstagramServiceProvider extends ServiceProvider
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
 
-        // $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(InstagramAccountRepositoryInterface::class, InstagramAccountRepository::class);
 
     }
 

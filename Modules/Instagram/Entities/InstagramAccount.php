@@ -4,6 +4,7 @@ namespace Modules\Instagram\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\InstagramAccountStatus;
 use Modules\Tenant\Entities\Tenant;
 
@@ -11,6 +12,7 @@ use Modules\Tenant\Entities\Tenant;
 
 class InstagramAccount extends Model
 {
+    use Filterable;
     use HasFactory;
 
     /**
@@ -39,6 +41,21 @@ class InstagramAccount extends Model
         'connected_at' => 'datetime',
         'last_synced_at' => 'datetime',
     ];
+
+    public function getTokenExpiresAtJalaliAttribute()
+    {
+        return verta($this->created_at)->format('Y/m/d');
+    }
+
+    public function getConnectedAtJalaliAttribute()
+    {
+        return verta($this->created_at)->format('Y/m/d');
+    }
+
+    public function getLastSyncedAtJalaliAttribute()
+    {
+        return verta($this->created_at)->format('Y/m/d');
+    }
 
     public function tenant()
     {

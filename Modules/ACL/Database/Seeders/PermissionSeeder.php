@@ -62,6 +62,11 @@ class PermissionSeeder extends Seeder
                 'title' => 'حذف کسب و کار',
             ],
 
+            [
+                'name' => 'instagram_accounts_list',
+                'title' => 'لیست پیج های اینستاگرام',
+            ],
+
         ];
 
         foreach ($permissions as $permission) {
