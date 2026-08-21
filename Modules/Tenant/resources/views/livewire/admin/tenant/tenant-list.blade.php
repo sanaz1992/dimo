@@ -1,109 +1,21 @@
-<section class="table-panel anim-fade-up">
-
-    <x-dashboard::card.card-header :title="__('tenant::attributes.tenants_list')">
-        <x-slot:icon>
-            <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
-        </x-slot:icon>
-
-        <livewire:tenant::tenant-advanced-filters />
-
-        <x-dashboard::buttons.primary-action id="btn-add-user" tag="a" class="btn-fill btn-new-tx shrink-0"
-            href="{{ route('admin.tenants.create') }}">
-            <x-slot:icon>
-                <img src="{{ asset('icons/header/add.svg') }}" alt="tenants" />
-            </x-slot:icon>
-            @lang('tenant::attributes.create_tenant')
-        </x-dashboard::buttons.primary-action>
-
-    </x-dashboard::card.card-header>
-
-    <div>
-        <x-dashboard::table.table>
-            <x-slot:head>
-                <tr>
-                    <th>@lang('core::attributes.row')</th>
-                    <th>@lang('tenant::attributes.name')</th>
-                    <th>@lang('tenant::attributes.timezone')</th>
-                    <th>@lang('tenant::attributes.local')</th>
-                    <th>@lang('tenant::attributes.status')</th>
-                    <th>@lang('tenant::attributes.created_at')</th>
-                    <th class="col-actions"></th>
-                </tr>
-            </x-slot:head>
-            <x-slot:body>
-                @foreach ($tenants as $tenant)
-                    <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
-                        <x-dashboard::table.cell :label="__('core::attributes.row')">
-                            {{toPersianNumber($loop->index + 1)}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('tenant::attributes.name')">
-                            {{$tenant->name}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('tenant::attributes.timezone')">
-                            {{$tenant->timezone}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('tenant::attributes.local')">
-                            {{$tenant->local}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('tenant::attributes.status')">
-                            <x-dashboard::badge :color="$tenant->status->color()" class="cursor-pointer"
-                                wire:click="selectStatus({{$tenant->id}})">
-                                {{$tenant->status->label()}}
-                            </x-dashboard::badge>
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('tenant::attributes.created_at')">
-                            {{toPersianNumber($tenant->created_at_jalali_date)}}
-                        </x-dashboard::table.cell>
-
-                        <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
-                            <div class="flex gap-1">
-                                <x-dashboard::buttons.primary-action id="btn-edit-tenant-{{$tenant->id}}" tag="a"
-                                    href="{{ route('admin.tenants.edit', $tenant) }}" size="sm">
-                                    <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="add"
-                                        class="w-5" />
-                                </x-dashboard::buttons.primary-action>
-
-                                <x-dashboard::buttons.primary-action id="btn-tenant-{{$tenant->id}}-instagram-accounts"
-                                    tag="a" href="{{ route('admin.instagram_accounts.index', ['tenant' => $tenant]) }}"
-                                    size="sm">
-                                    <img src="{{ asset('icons/dashboard/instagram.svg') }}" alt="add" class="w-5" />
-                                </x-dashboard::buttons.primary-action>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </x-slot:body>
-        </x-dashboard::table.table>
-
-        {{ $tenants->links('Core::pagination') }}
-    </div>
+<x-Tenant::tenant.tenant-table :title="__('tenant::attributes.tenants_list')" :tenants="$tenants" :create-route-name="'admin.tenants.create'"
+    :edit-route-name="'admin.tenants.edit'" :instagram-route-name="'admin.instagram_accounts.index'" :can-edit-status="true">
 
     @if($showChangeStatusModal)
         <div class="modal-backdrop modal-backdrop--show" wire:click="$set('showChangeStatusModal', false)">
             <div class="modal modal--show" role="dialog" aria-modal="true" wire:click.stop>
-
                 <div class="modal-head">
-                    <h2 id="modal-tx-title" class="text-lg font-bold text-ink">
+                    <h2 class="text-lg font-bold text-ink">
                         @lang('core::attributes.edit')
                         {{ $selectedTenant?->name }}
                     </h2>
-                    <button type="button" data-modal-close class="btn-ghost" aria-label="بستن"
+                    <button type="button" class="btn-ghost" aria-label="بستن"
                         wire:click="$set('showChangeStatusModal', false)">
-                        <span data-icon="close" data-icon-size="sm"><svg xmlns="http://www.w3.org/2000/svg" width="18"
-                                height="18" viewBox="0 0 24 24" fill="none" class="icon-svg shrink-0" aria-hidden="true">
-                                <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round"></path>
-                            </svg>
-                        </span>
+                        ×
                     </button>
                 </div>
 
-                <form id="form-tx" class="modal-body space-y-3">
+                <form class="modal-body space-y-3">
                     <x-dashboard::forms.select label="tenant::attributes.status" name="form.status"
                         wire:model.defer="form.status" :options="$tenantStatuses"
                         placeholder="tenant::messages.select_status" />
@@ -112,9 +24,9 @@
                         wire:click="updateItemStatus" size="sm" class="btn-fill" wire:target="updateItemStatus">
                         @lang('tenant::attributes.update_status')
                     </x-dashboard::buttons.primary-action>
-                </form>
 
+                </form>
             </div>
         </div>
     @endif
-</section>
+</x-Tenant::tenant.tenant-table>

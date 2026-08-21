@@ -24,3 +24,11 @@ Route::name('admin.')->prefix('/admin')
         Route::get('/instagram-accounts', InstagramAccountList::class)
             ->middleware(['can:instagram_accounts_list'])->name('instagram_accounts.index');
     });
+
+Route::name('user.')->prefix('/user')
+    ->middleware(['auth'])
+    ->group(function () {
+
+        Route::get('/instagram-accounts', InstagramAccountList::class)
+            ->middleware(['can:instagram_accounts_list'])->name('instagram_accounts.index');
+    });

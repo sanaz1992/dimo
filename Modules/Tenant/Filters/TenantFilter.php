@@ -19,4 +19,11 @@ class TenantFilter extends QueryFilter
     {
         return $this->builder->where('status', $value);
     }
+
+    public function user($value)
+    {
+        return $this->builder->whereHas('users', function ($q) use ($value) {
+            $q->where('unique_code', $value);
+        });
+    }
 }

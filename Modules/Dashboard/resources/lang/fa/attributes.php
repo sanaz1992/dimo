@@ -22,6 +22,8 @@ return [
     'products' => 'محصولات',
 
     'tenants' => 'کسب و کارها',
+    'my_tenants' => 'کسب و کارهای من',
+
     'instagram_accounts' => 'اکانت های اینستاگرام',
 
 ];
