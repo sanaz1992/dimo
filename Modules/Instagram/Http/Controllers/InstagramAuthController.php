@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 use Modules\Core\Http\Controllers\CoreController;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Services\MetaAuthService;
+use Modules\Tenant\Enums\TenantStatus;
+use Modules\Tenant\Services\TenantService;
 
 class InstagramAuthController extends CoreController
 {
@@ -20,17 +22,36 @@ class InstagramAuthController extends CoreController
      */
     public function redirect(Request $request)
     {
-        $tenantId = $request->user()->tenant_id;
+        $tenantSlug = $request->get('tenant');
+        if (! $tenantSlug) {
+            if (request()->routeIs('admin.*')) {
+                $routeName = 'admin.tenants.index';
+            } else {
+                $routeName = 'user.tenants.index';
+            }
 
-        if (! $tenantId) {
-            return back()->with(
+            return redirect()->route($routeName)->with(
                 'error',
-                'هیچ فضای کاری (Tenant) فعالی انتخاب نشده است.'
+                'هیچ  کسب و کار فعالی انتخاب نشده است.لطفا از لیست کسب و کارها دکمه اتصال برای کسب و کار مورد نظر را انتخاب کنید.'
+            );
+        }
+
+        $tenant = app(TenantService::class)->findByColumn('slug', $tenantSlug);
+        if (! $tenant || $tenant->status != TenantStatus::ACTIVE) {
+            if (request()->routeIs('admin.*')) {
+                $routeName = 'admin.tenants.index';
+            } else {
+                $routeName = 'user.tenants.index';
+            }
+
+            return redirect()->route($routeName)->with(
+                'error',
+                'هیچ  کسب و کار فعالی انتخاب نشده است.لطفا از لیست کسب و کارها دکمه اتصال برای کسب و کار مورد نظر را انتخاب کنید.'
             );
         }
 
         return redirect()->away(
-            $this->metaService->getAuthorizationUrl($tenantId)
+            $this->metaService->getAuthorizationUrl($tenant->id)
         );
     }
 
@@ -152,10 +173,10 @@ class InstagramAuthController extends CoreController
                     'access_token' => $accessToken,
 
                     'token_expires_at' => isset($longTokenData['expires_in'])
-                            ? now()->addSeconds(
-                                $longTokenData['expires_in']
-                            )
-                            : now()->addDays(60),
+                        ? now()->addSeconds(
+                            $longTokenData['expires_in']
+                        )
+                        : now()->addDays(60),
 
                     'scopes' => $shortTokenData['permissions']
                         ?? $this->metaService->getScopes(),
@@ -175,7 +196,6 @@ class InstagramAuthController extends CoreController
                 'success',
                 'اکانت Instagram با موفقیت متصل و Webhook آن فعال شد.'
             );
-
         } catch (\Throwable $e) {
 
             report($e);

@@ -95,6 +95,15 @@
                                         <img src="{{ asset('icons/dashboard/instagram.svg') }}" alt="instagram" class="w-5" />
                                     </x-dashboard::buttons.primary-action>
                                 @endisset
+                                @if(isset($connectInstagramRouteName) && $tenant->status == Modules\Tenant\Enums\TenantStatus::ACTIVE)
+                                    {{-- Add Instagram --}}
+                                    <x-dashboard::buttons.primary-action
+                                        id="btn-tenant-{{ $tenant->id }}-add-instagram-accounts" tag="a"
+                                        href="{{ route($connectInstagramRouteName, ['tenant' => $tenant]) }}" size="sm">
+                                        <img src="{{ asset('icons/dashboard/connect.svg') }}" alt="connect-instagram"
+                                            class="w-5" />
+                                    </x-dashboard::buttons.primary-action>
+                                @endif
                             </div>
                         </td>
                     </tr>

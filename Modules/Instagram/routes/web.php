@@ -6,11 +6,10 @@ use Modules\Instagram\Http\Livewire\Admin\InstagramAccount\InstagramAccountList;
 use Modules\Instagram\Http\Livewire\User\InstagramAccount\UserInstagramAccountList;
 
 Route::middleware(['auth'])->group(function () {
-
-    Route::get(
-        '/instagram/connect',
-        [InstagramAuthController::class, 'redirect']
-    )->name('instagram.connect');
+    // Route::get(
+    //     '/instagram/connect',
+    //     [InstagramAuthController::class, 'redirect']
+    // )->name('instagram.connect');
 });
 
 Route::get(
@@ -22,6 +21,11 @@ Route::name('admin.')->prefix('/admin')
     ->middleware(['auth', 'verified', 'admin.panel'])
     ->group(function () {
 
+        Route::get(
+            '/instagram/connect',
+            [InstagramAuthController::class, 'redirect']
+        )->name('instagram.connect');
+
         Route::get('/instagram-accounts', InstagramAccountList::class)
             ->middleware(['can:instagram_accounts_list'])->name('instagram_accounts.index');
     });
@@ -29,6 +33,11 @@ Route::name('admin.')->prefix('/admin')
 Route::name('user.')->prefix('/user')
     ->middleware(['auth'])
     ->group(function () {
+
+        Route::get(
+            '/instagram/connect',
+            [InstagramAuthController::class, 'redirect']
+        )->name('instagram.connect');
 
         Route::get('/instagram-accounts', UserInstagramAccountList::class)
             ->middleware(['can:instagram_accounts_list'])->name('instagram_accounts.index');

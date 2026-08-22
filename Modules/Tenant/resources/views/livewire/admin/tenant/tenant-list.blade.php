@@ -1,5 +1,7 @@
 <x-Tenant::tenant.tenant-table :title="__('tenant::attributes.tenants_list')" :tenants="$tenants" :create-route-name="'admin.tenants.create'"
-    :edit-route-name="'admin.tenants.edit'" :instagram-route-name="'admin.instagram_accounts.index'" :can-edit-status="true">
+    :edit-route-name="'admin.tenants.edit'" :instagram-route-name="'admin.instagram_accounts.index'"
+    :can-edit-status="true"
+    :connect-instagram-route-name="'admin.instagram.connect'">
 
     @if($showChangeStatusModal)
         <div class="modal-backdrop modal-backdrop--show" wire:click="$set('showChangeStatusModal', false)">

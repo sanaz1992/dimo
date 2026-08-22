@@ -58,7 +58,7 @@
                     <p class="search-panel-hint">@lang('dashboard::messages.search_bottom_description')</p>
                 </div>
             </div> --}}
-            <a type="button" href="{{ route('instagram.connect') }}" traget="_blank" id="btn-new-tx"
+            <a type="button" href="{{ route('admin.instagram.connect') }}" traget="_blank" id="btn-new-tx"
                 class="btn-fill btn-new-tx shrink-0">
                 <span data-icon="plus" data-icon-size="sm"></span>
                 <span class="btn-label">@lang('core::attributes.connect_to_instagram')</span>

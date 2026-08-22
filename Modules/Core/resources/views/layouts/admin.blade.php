@@ -43,6 +43,8 @@ use Modules\Core\Helpers\SettingHelper;
         <div class="main-column flex min-w-0 flex-1 flex-col gap-3 p-3 sm:gap-4 sm:p-4 lg:gap-5 lg:p-6">
             <x-Core::admin.navbar />
 
+            <x-dashboard::errors />
+
             {{ $slot }}
         </div>
     </div>
