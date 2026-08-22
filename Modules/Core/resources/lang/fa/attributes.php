@@ -3,6 +3,7 @@
 return [
     'company_title' => 'dimo',
     'dashboard' => 'داشبورد',
+    'user_dashboard' => 'داشبورد',
     'logout' => 'خروج',
 
     'row' => 'ردیف',

@@ -25,5 +25,6 @@ return [
     'my_tenants' => 'کسب و کارهای من',
 
     'instagram_accounts' => 'اکانت های اینستاگرام',
+    'my_instagram_accounts' => 'اکانت های اینستاگرام من',
 
 ];

@@ -59,14 +59,14 @@
             </span>
             <span>@lang('dashboard::attributes.my_tenants')</span>
         </a>
-{{--         
+
         <a href="{{route('user.instagram_accounts.index')}}" data-nav="instagram_accounts"
-            class="nav-link {{request()->routeIs('user.instagram_accountss.*') ? 'nav-link-active' : ''}}">
+            class="nav-link {{request()->routeIs('user.instagram_accounts.*') ? 'nav-link-active' : ''}}">
             <span class="nav-ico">
                 <img src="{{ asset('icons\sidebar\instagram-white.svg') }}" alt="instagram_accounts" />
             </span>
             <span>@lang('dashboard::attributes.my_instagram_accounts')</span>
-        </a> --}}
+        </a>
 
     </nav>
 

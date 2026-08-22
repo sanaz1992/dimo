@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Instagram\Http\Controllers\InstagramAuthController;
 use Modules\Instagram\Http\Livewire\Admin\InstagramAccount\InstagramAccountList;
+use Modules\Instagram\Http\Livewire\User\InstagramAccount\UserInstagramAccountList;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -29,6 +30,6 @@ Route::name('user.')->prefix('/user')
     ->middleware(['auth'])
     ->group(function () {
 
-        Route::get('/instagram-accounts', InstagramAccountList::class)
+        Route::get('/instagram-accounts', UserInstagramAccountList::class)
             ->middleware(['can:instagram_accounts_list'])->name('instagram_accounts.index');
     });
