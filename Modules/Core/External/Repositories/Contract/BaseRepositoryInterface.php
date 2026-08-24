@@ -17,6 +17,8 @@ interface BaseRepositoryInterface
 
     public function find(int $id): ?Model;
 
+    public function findOrFail($id): ?Model;
+
     public function findByColumn(string $col, string $val, bool $withTrashed = false): ?Model;
 
     public function firstOrCreate(array $condition, array $data): Model;

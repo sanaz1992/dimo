@@ -238,6 +238,11 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->query()->where('id', $id)->first();
     }
 
+    public function findOrFail($id): ?Model
+    {
+        return $this->model->findOrFail($id);
+    }
+
     public function findByColumn(string $col, string $val, bool $withTrashed = false): ?Model
     {
         $query = $this->model->query();

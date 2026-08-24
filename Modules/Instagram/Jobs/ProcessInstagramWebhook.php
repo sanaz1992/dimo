@@ -8,10 +8,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Modules\Instagram\Entities\InstagramAccount;
-use Modules\Instagram\Entities\WebhookEvent;
 use Modules\Instagram\Enums\WebhookEventStatus;
 use Modules\Instagram\Enums\WebhookEventType;
+use Modules\Instagram\Services\InstagramAccountService;
+use Modules\Instagram\Services\WebhookEventService;
 
 class ProcessInstagramWebhook implements ShouldQueue
 {
@@ -20,32 +20,27 @@ class ProcessInstagramWebhook implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public int $webhookEventId) {}
+    public function __construct(
+        public int $webhookEventId,
+        protected WebhookEventService $webhookService
+    ) {}
 
     public function handle(): void
     {
-        $webhookEvent = WebhookEvent::findOrFail(
-            $this->webhookEventId
-        );
+        $webhookEvent = $this->webhookService->findOrFail($this->webhookEventId);
 
-        $webhookEvent->update([
+        $webhookEvent = $this->webhookService->update($webhookEvent, [
             'status' => WebhookEventStatus::PROCESSING->value,
         ]);
 
         try {
-
             $payload = $webhookEvent->payload;
-
             foreach ($payload['entry'] ?? [] as $entry) {
 
                 $instagramUserId = $entry['id'] ?? null;
-
-                $instagramAccount = InstagramAccount::query()
-                    ->where('instagram_user_id', $instagramUserId)
-                    ->first();
+                $instagramAccount = app(InstagramAccountService::class)->findByColumn('instagram_user_id', $instagramUserId);
 
                 if (! $instagramAccount) {
-
                     Log::warning(
                         'Instagram account not found',
                         [
@@ -58,9 +53,7 @@ class ProcessInstagramWebhook implements ShouldQueue
                 }
 
                 foreach ($entry['messaging'] ?? [] as $event) {
-
                     $eventType = $this->detectEventType($event);
-
                     Log::info(
                         '=== INSTAGRAM EVENT DETECTED ===',
                         [
@@ -78,17 +71,16 @@ class ProcessInstagramWebhook implements ShouldQueue
                 }
             }
 
-            $webhookEvent->update([
+            $webhookEvent = $this->webhookService->update($webhookEvent, [
                 'status' => WebhookEventStatus::PROCESSED->value,
                 'processed_at' => now(),
             ]);
-        } catch (\Throwable $e) {
 
-            $webhookEvent->update([
+        } catch (\Throwable $e) {
+            $webhookEvent = $this->webhookService->update($webhookEvent, [
                 'status' => WebhookEventStatus::FAILED->value,
                 'error' => $e->getMessage(),
             ]);
-
             throw $e;
         }
     }
