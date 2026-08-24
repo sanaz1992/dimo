@@ -262,6 +262,14 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->create($data);
     }
 
+    public function updateOrCreate(array $condition, array $data): Model
+    {
+        return $this->model->updateOrCreate(
+            $condition,
+            $data
+        );
+    }
+
     public function update(Model $record, array $data): ?Model
     {
 

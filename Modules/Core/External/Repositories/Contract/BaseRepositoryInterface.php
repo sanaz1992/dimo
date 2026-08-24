@@ -23,6 +23,8 @@ interface BaseRepositoryInterface
 
     public function create(array $data): Model;
 
+    public function updateOrCreate(array $condition, array $data): Model;
+
     public function update(Model $record, array $data): ?Model;
 
     public function delete(int $id);

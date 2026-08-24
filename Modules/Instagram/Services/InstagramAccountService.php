@@ -20,4 +20,12 @@ class InstagramAccountService
     {
         return $this->instagramAccountRepository->findByColumn($col, $value);
     }
+
+    public function updateOrCreate(array $condition, array $data)
+    {
+        return $this->instagramAccountRepository->updateOrCreate(
+            $condition,
+            $data
+        );
+    }
 }

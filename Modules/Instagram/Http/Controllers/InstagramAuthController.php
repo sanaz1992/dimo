@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Modules\Core\Http\Controllers\CoreController;
-use Modules\Instagram\Entities\InstagramAccount;
+use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\MetaAuthService;
 use Modules\Tenant\Enums\TenantStatus;
 use Modules\Tenant\Services\TenantService;
@@ -157,34 +157,19 @@ class InstagramAuthController extends CoreController
              *    We only save the account as connected
              *    after webhook subscription succeeds.
              */
-            InstagramAccount::updateOrCreate(
-                [
-                    'instagram_account_id' => $instagram['id'],
-                ],
+            app(InstagramAccountService::class)->updateOrCreate(
+                ['instagram_account_id' => $instagram['id']],
                 [
                     'tenant_id' => $tenantId,
                     'instagram_user_id' => $instagram['user_id'],
                     'username' => $instagram['username'] ?? null,
-
                     'name' => $instagram['name'] ?? null,
-
                     'profile_picture_url' => $instagram['profile_picture_url'] ?? null,
-
                     'access_token' => $accessToken,
-
-                    'token_expires_at' => isset($longTokenData['expires_in'])
-                        ? now()->addSeconds(
-                            $longTokenData['expires_in']
-                        )
-                        : now()->addDays(60),
-
-                    'scopes' => $shortTokenData['permissions']
-                        ?? $this->metaService->getScopes(),
-
+                    'token_expires_at' => isset($longTokenData['expires_in']) ? now()->addSeconds($longTokenData['expires_in']) : now()->addDays(60),
+                    'scopes' => $shortTokenData['permissions'] ?? $this->metaService->getScopes(),
                     'status' => 'connected',
-
                     'connected_at' => Carbon::now(),
-
                     'last_synced_at' => Carbon::now(),
                 ]
             );
