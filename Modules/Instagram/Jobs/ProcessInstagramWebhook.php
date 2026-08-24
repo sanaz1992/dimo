@@ -20,9 +20,7 @@ class ProcessInstagramWebhook implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(
-        public int $webhookEventId
-    ) {}
+    public function __construct(public int $webhookEventId) {}
 
     public function handle(): void
     {
