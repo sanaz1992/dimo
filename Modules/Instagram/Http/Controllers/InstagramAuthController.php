@@ -64,7 +64,7 @@ class InstagramAuthController extends CoreController
          * User cancelled OAuth.
          */
         if ($request->filled('error')) {
-            return redirect('/admin/dashboard')->with(
+            return redirect('/user/dashboard')->with(
                 'error',
                 'اتصال Instagram توسط کاربر لغو شد.'
             );
@@ -74,7 +74,7 @@ class InstagramAuthController extends CoreController
         $state = $request->input('state');
 
         if (! $code || ! $state) {
-            return redirect('/admin/dashboard')->with(
+            return redirect('/user/dashboard')->with(
                 'error',
                 'پاسخ نامعتبر از Instagram دریافت شد.'
             );
@@ -192,7 +192,7 @@ class InstagramAuthController extends CoreController
             /*
              * 7. Redirect user back to dashboard
              */
-            return redirect('/admin/dashboard')->with(
+            return redirect('/user/dashboard')->with(
                 'success',
                 'اکانت Instagram با موفقیت متصل و Webhook آن فعال شد.'
             );
@@ -200,7 +200,7 @@ class InstagramAuthController extends CoreController
 
             report($e);
 
-            return redirect('/admin/dashboard')->with(
+            return redirect('/user/dashboard')->with(
                 'error',
                 'خطا در اتصال Instagram: '.$e->getMessage()
             );

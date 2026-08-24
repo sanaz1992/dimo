@@ -39,6 +39,5 @@ Route::name('user.')->prefix('/user')
             [InstagramAuthController::class, 'redirect']
         )->name('instagram.connect');
 
-        Route::get('/instagram-accounts', UserInstagramAccountList::class)
-            ->middleware(['can:instagram_accounts_list'])->name('instagram_accounts.index');
+        Route::get('/instagram-accounts', UserInstagramAccountList::class)->name('instagram_accounts.index');
     });
