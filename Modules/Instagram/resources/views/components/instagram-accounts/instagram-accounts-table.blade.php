@@ -17,6 +17,7 @@
                 <tr>
                     <th>@lang('core::attributes.row')</th>
                     <th>@lang('instagram::attributes.tenant_name')</th>
+                    <th>@lang('instagram::attributes.username')</th>
                     <th>@lang('instagram::attributes.name')</th>
                     <th>@lang('instagram::attributes.token_expires_at')</th>
                     <th>@lang('instagram::attributes.status')</th>
@@ -38,12 +39,16 @@
                             {{$instagramAccount->tenant->name}}
                         </x-dashboard::table.cell>
 
+                        <x-dashboard::table.cell :label="__('instagram::attributes.username')">
+                            {{($instagramAccount->username)}}
+                        </x-dashboard::table.cell>
+
                         <x-dashboard::table.cell :label="__('instagram::attributes.name')">
-                            {{$instagramAccount->name}}
+                            {{toPersianNumber($instagramAccount->name)}}
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.token_expires_at')">
-                            {{$instagramAccount->token_expires_at_jalali}}
+                            {{toPersianNumber($instagramAccount->token_expires_at_jalali)}}
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.status')">

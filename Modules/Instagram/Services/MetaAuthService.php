@@ -217,7 +217,7 @@ class MetaAuthService
         $response = Http::get(
             'https://graph.instagram.com/me',
             [
-                'fields' => 'id,username,name,account_type,profile_picture_url',
+                'fields' => 'id,username,name,account_type,profile_picture_url,user_id',
 
                 'access_token' => $accessToken,
             ]

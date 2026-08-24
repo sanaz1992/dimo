@@ -22,6 +22,7 @@ class InstagramAccount extends Model
         'tenant_id',
         // 'facebook_page_id',
         'instagram_account_id',
+        'instagram_user_id',
         'username',
         'name',
         'profile_picture_url',
@@ -44,17 +45,17 @@ class InstagramAccount extends Model
 
     public function getTokenExpiresAtJalaliAttribute()
     {
-        return verta($this->created_at)->format('Y/m/d');
+        return verta($this->token_expires_at)->format('Y/m/d');
     }
 
     public function getConnectedAtJalaliAttribute()
     {
-        return verta($this->created_at)->format('Y/m/d');
+        return verta($this->connected_at)->format('Y/m/d');
     }
 
     public function getLastSyncedAtJalaliAttribute()
     {
-        return verta($this->created_at)->format('Y/m/d');
+        return verta($this->last_synced_at)->format('Y/m/d');
     }
 
     public function tenant()

@@ -163,7 +163,7 @@ class InstagramAuthController extends CoreController
                 ],
                 [
                     'tenant_id' => $tenantId,
-
+                    'instagram_user_id' => $instagram['user_id'],
                     'username' => $instagram['username'] ?? null,
 
                     'name' => $instagram['name'] ?? null,
