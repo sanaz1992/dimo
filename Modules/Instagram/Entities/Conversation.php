@@ -39,4 +39,14 @@ class Conversation extends Model
     {
         return $this->belongsTo(Tenant::class);
     }
+
+    public function instagramAccount()
+    {
+        return $this->belongsTo(InstagramAccount::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

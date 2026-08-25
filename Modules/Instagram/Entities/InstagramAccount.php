@@ -20,7 +20,6 @@ class InstagramAccount extends Model
      */
     protected $fillable = [
         'tenant_id',
-        // 'facebook_page_id',
         'instagram_account_id',
         'instagram_user_id',
         'username',
@@ -61,5 +60,10 @@ class InstagramAccount extends Model
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class);
     }
 }
