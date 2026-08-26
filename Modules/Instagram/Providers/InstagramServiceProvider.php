@@ -5,8 +5,10 @@ namespace Modules\Instagram\Providers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\InstagramAccountRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\WebhookEventRepositoryInterface;
+use Modules\Instagram\External\Repositories\ConversationRepository;
 use Modules\Instagram\External\Repositories\InstagramAccountRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -46,6 +48,7 @@ class InstagramServiceProvider extends ServiceProvider
 
         $this->app->bind(InstagramAccountRepositoryInterface::class, InstagramAccountRepository::class);
         $this->app->bind(WebhookEventRepositoryInterface::class, WebhookEventRepository::class);
+        $this->app->bind(ConversationRepositoryInterface::class, ConversationRepository::class);
     }
 
     /**

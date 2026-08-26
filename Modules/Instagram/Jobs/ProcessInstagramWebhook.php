@@ -9,13 +9,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Modules\Instagram\Entities\Conversation;
 use Modules\Instagram\Entities\Message;
 use Modules\Instagram\Enums\ConversationStatus;
 use Modules\Instagram\Enums\MessageDirection;
 use Modules\Instagram\Enums\MessageType;
 use Modules\Instagram\Enums\WebhookEventStatus;
 use Modules\Instagram\Enums\WebhookEventType;
+use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\WebhookEventService;
 
@@ -33,6 +33,7 @@ class ProcessInstagramWebhook implements ShouldQueue
     public function handle(
         WebhookEventService $webhookService
     ): void {
+
         $webhookEvent = $webhookService->findOrFail(
             $this->webhookEventId
         );
@@ -158,7 +159,7 @@ class ProcessInstagramWebhook implements ShouldQueue
             return 'continue';
         }
 
-        $conversation = Conversation::firstOrCreate(
+        $conversation = app(ConversationService::class)->firstOrCreate(
             [
                 'tenant_id' => $instagramAccount->tenant_id,
                 'instagram_account_id' => $instagramAccount->id,
