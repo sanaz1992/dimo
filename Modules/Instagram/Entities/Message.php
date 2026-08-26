@@ -32,6 +32,7 @@ class Message extends Model
         'direction' => MessageDirection::class,
         'type' => MessageType::class,
         'sent_at' => 'datetime',
+        'payload' => 'array',
     ];
 
     public function getSentAtJalaliAttribute()

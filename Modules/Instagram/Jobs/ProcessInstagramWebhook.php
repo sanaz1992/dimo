@@ -2,12 +2,18 @@
 
 namespace Modules\Instagram\Jobs;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Modules\Instagram\Entities\Conversation;
+use Modules\Instagram\Entities\Message;
+use Modules\Instagram\Enums\ConversationStatus;
+use Modules\Instagram\Enums\MessageDirection;
+use Modules\Instagram\Enums\MessageType;
 use Modules\Instagram\Enums\WebhookEventStatus;
 use Modules\Instagram\Enums\WebhookEventType;
 use Modules\Instagram\Services\InstagramAccountService;
@@ -21,68 +27,181 @@ class ProcessInstagramWebhook implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public int $webhookEventId,
-        protected WebhookEventService $webhookService
+        public int $webhookEventId
     ) {}
 
-    public function handle(): void
-    {
-        $webhookEvent = $this->webhookService->findOrFail($this->webhookEventId);
+    public function handle(
+        WebhookEventService $webhookService
+    ): void {
+        $webhookEvent = $webhookService->findOrFail(
+            $this->webhookEventId
+        );
 
-        $webhookEvent = $this->webhookService->update($webhookEvent, [
+        $webhookEvent = $webhookService->update($webhookEvent, [
             'status' => WebhookEventStatus::PROCESSING->value,
         ]);
 
         try {
             $payload = $webhookEvent->payload;
+
             foreach ($payload['entry'] ?? [] as $entry) {
 
-                $instagramUserId = $entry['id'] ?? null;
-                $instagramAccount = app(InstagramAccountService::class)->findByColumn('instagram_user_id', $instagramUserId);
+                foreach ($entry['messaging'] ?? [] as $event) {
 
-                if (! $instagramAccount) {
-                    Log::warning(
-                        'Instagram account not found',
-                        [
+                    $eventType = $this->detectEventType($event);
+
+                    Log::info('=== INSTAGRAM EVENT DETECTED ===', [
+                        'webhook_event_id' => $webhookEvent->id,
+                        'entry_id' => $entry['id'] ?? null,
+                        'event_type' => $eventType,
+                        'event' => $event,
+                    ]);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Ignore events that we don't want to process
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if ($eventType === WebhookEventType::MESSAGE_EDIT->value || $eventType === WebhookEventType::MESSAGE_ECHO->value) {
+                        Log::info('=== INSTAGRAM EVENT IGNORED ===', [
+                            'webhook_event_id' => $webhookEvent->id,
+                            'event_type' => $eventType,
+                        ]);
+
+                        continue;
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Resolve Instagram Account
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $instagramUserId = $entry['id'] ?? null;
+                    if (! $instagramUserId) {
+                        Log::warning('Instagram entry ID missing', [
+                            'webhook_event_id' => $webhookEvent->id,
+                        ]);
+
+                        continue;
+                    }
+
+                    $instagramAccount = app(InstagramAccountService::class)->findByColumn('instagram_user_id', $instagramUserId);
+                    if (! $instagramAccount) {
+                        Log::warning('Instagram account not found', [
                             'instagram_user_id' => $instagramUserId,
                             'webhook_event_id' => $webhookEvent->id,
-                        ]
-                    );
-
-                    continue;
-                }
-
-                foreach ($entry['messaging'] ?? [] as $event) {
-                    $eventType = $this->detectEventType($event);
-                    Log::info(
-                        '=== INSTAGRAM EVENT DETECTED ===',
-                        [
-                            'webhook_event_id' => $webhookEvent->id,
-                            'instagram_account_id' => $instagramAccount->id,
-                            'tenant_id' => $instagramAccount->tenant_id,
-                            'instagram_user_id' => $instagramAccount->instagram_user_id,
                             'event_type' => $eventType,
-                            'event' => $event,
-                        ]
-                    );
+                        ]);
 
-                    // فعلاً فقط تشخیص می‌دهیم.
-                    // مرحله بعد processing واقعی را اضافه می‌کنیم.
+                        continue;
+                    }
+
+                    Log::info('=== INSTAGRAM ACCOUNT RESOLVED ===', [
+                        'instagram_account_id' => $instagramAccount->id,
+                        'tenant_id' => $instagramAccount->tenant_id,
+                        'instagram_user_id' => $instagramAccount->instagram_user_id,
+                    ]);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Process Message
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if ($eventType === WebhookEventType::MESSAGE->value) {
+                        $result = $this->handleMessage($event, $instagramAccount);
+                        if ($result == 'continue') {
+                            continue;
+                        }
+                    }
                 }
             }
 
-            $webhookEvent = $this->webhookService->update($webhookEvent, [
+            $webhookService->update($webhookEvent, [
                 'status' => WebhookEventStatus::PROCESSED->value,
                 'processed_at' => now(),
             ]);
-
         } catch (\Throwable $e) {
-            $webhookEvent = $this->webhookService->update($webhookEvent, [
+            $webhookService->update($webhookEvent, [
                 'status' => WebhookEventStatus::FAILED->value,
                 'error' => $e->getMessage(),
             ]);
             throw $e;
         }
+    }
+
+    private function handleMessage(array $event, $instagramAccount)
+    {
+        $message = $event['message'] ?? [];
+        $senderId = $event['sender']['id'] ?? null;
+        $recipientId = $event['recipient']['id'] ?? null;
+        $instagramMessageId = $message['mid'] ?? null;
+        $text = $message['text'] ?? null;
+
+        Log::info('=== INSTAGRAM MESSAGE DATA ===', [
+            'sender_id' => $senderId,
+            'recipient_id' => $recipientId,
+            'instagram_message_id' => $instagramMessageId,
+            'text' => $text,
+        ]);
+
+        if (! $senderId || ! $recipientId || ! $instagramMessageId) {
+            Log::warning('Instagram message data incomplete', [
+                'sender_id' => $senderId,
+                'recipient_id' => $recipientId,
+                'instagram_message_id' => $instagramMessageId,
+                'event' => $event,
+            ]);
+
+            return 'continue';
+        }
+
+        $conversation = Conversation::firstOrCreate(
+            [
+                'tenant_id' => $instagramAccount->tenant_id,
+                'instagram_account_id' => $instagramAccount->id,
+                'customer_ig_id' => $senderId,
+            ],
+            [
+                'customer_username' => null,
+                'status' => ConversationStatus::OPEN->value,
+                'last_message_at' => now(),
+            ]
+        );
+
+        Log::info('=== CONVERSATION CREATED/FOUND ===', [
+            'conversation_id' => $conversation->id,
+        ]);
+
+        $messageModel = Message::firstOrCreate(
+            [
+                'conversation_id' => $conversation->id,
+                'instagram_message_id' => $instagramMessageId,
+            ],
+            [
+                'sender_ig_id' => $senderId,
+                'recipient_ig_id' => $recipientId,
+                'direction' => MessageDirection::INCOMING->value,
+                'type' => MessageType::TEXT->value,
+                'message_body' => $text,
+                'payload' => $event,
+                'sent_at' => isset($event['timestamp'])
+                    ? Carbon::createFromTimestampMs($event['timestamp'])
+                    : null,
+            ]
+        );
+
+        Log::info('=== MESSAGE CREATED/FOUND ===', [
+            'message_id' => $messageModel->id,
+        ]);
+
+        $conversation->update([
+            'last_message_at' => $messageModel->sent_at ?? now(),
+        ]);
+
+        return true;
     }
 
     private function detectEventType(array $event): string
@@ -93,7 +212,9 @@ class ProcessInstagramWebhook implements ShouldQueue
 
         if (isset($event['message'])) {
 
-            if (($event['message']['is_echo'] ?? false) === true) {
+            if (
+                ($event['message']['is_echo'] ?? false) === true
+            ) {
                 return WebhookEventType::MESSAGE_ECHO->value;
             }
 
