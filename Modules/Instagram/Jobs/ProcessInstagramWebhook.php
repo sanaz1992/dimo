@@ -17,6 +17,7 @@ use Modules\Instagram\Enums\WebhookEventStatus;
 use Modules\Instagram\Enums\WebhookEventType;
 use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
+use Modules\Instagram\Services\MessageService;
 use Modules\Instagram\Services\WebhookEventService;
 
 class ProcessInstagramWebhook implements ShouldQueue
@@ -176,7 +177,7 @@ class ProcessInstagramWebhook implements ShouldQueue
             'conversation_id' => $conversation->id,
         ]);
 
-        $messageModel = Message::firstOrCreate(
+        $messageModel = app(MessageService::class)->firstOrCreate(
             [
                 'conversation_id' => $conversation->id,
                 'instagram_message_id' => $instagramMessageId,
@@ -198,7 +199,7 @@ class ProcessInstagramWebhook implements ShouldQueue
             'message_id' => $messageModel->id,
         ]);
 
-        $conversation->update([
+        app(ConversationService::class)->update($conversation, [
             'last_message_at' => $messageModel->sent_at ?? now(),
         ]);
 

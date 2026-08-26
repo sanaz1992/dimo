@@ -36,9 +36,9 @@ class ConversationService
     public function create(array $data): Conversation
     {
         return DB::transaction(function () use ($data) {
-            $webhookEvent = $this->conversationRepository->create($data);
+            $conversation = $this->conversationRepository->create($data);
 
-            return $webhookEvent;
+            return $conversation;
         });
     }
 
