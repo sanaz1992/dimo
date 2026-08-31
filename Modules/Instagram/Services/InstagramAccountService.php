@@ -3,6 +3,8 @@
 namespace Modules\Instagram\Services;
 
 use Modules\Core\Filters\QueryFilter;
+use Modules\Core\Helpers\CodeGeneratorHelper;
+use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\External\Repositories\Contract\InstagramAccountRepositoryInterface;
 
 class InstagramAccountService
@@ -23,6 +25,8 @@ class InstagramAccountService
 
     public function updateOrCreate(array $condition, array $data)
     {
+        $data['unique_code'] = CodeGeneratorHelper::generate(get_class(new InstagramAccount), 'unique_code');
+
         return $this->instagramAccountRepository->updateOrCreate(
             $condition,
             $data
