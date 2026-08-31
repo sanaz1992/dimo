@@ -5,6 +5,7 @@ namespace Modules\Instagram\Providers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\InstagramAccountRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\MessageRepositoryInterface;
@@ -13,6 +14,7 @@ use Modules\Instagram\External\Repositories\ConversationRepository;
 use Modules\Instagram\External\Repositories\InstagramAccountRepository;
 use Modules\Instagram\External\Repositories\MessageRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
+use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -38,6 +40,8 @@ class InstagramServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
+
+        Livewire::component('instagram::conversation-list', UserConversationList::class);
     }
 
     /**

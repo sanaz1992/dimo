@@ -1,0 +1,463 @@
+/* =========================================================
+   Chat Layout
+========================================================= */
+
+.chat-layout {
+    display: grid;
+    grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr);
+    gap: 1rem;
+    /* * مهم: * باید ارتفاع مشخص داشته باشیم تا chat-thread * بتواند فضای باقی‌مانده را بگیرد. */
+    /* height: calc(100dvh - var(--header-height) - 8rem); */
+    height: 350px;
+    min-height: 300px;
+    /* * اجازه نده محتوا ارتفاع Grid را بیشتر کند. */
+    min-width: 0;
+}
+
+.d2 {
+    animation-delay: 90ms;
+}
+
+
+/* =========================================================
+   Cards
+========================================================= */
+
+.ui-card {
+    background: var(--surface);
+    border: 2px solid #dee6fd;
+    border-radius: 15px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+
+.ui-card-interactive {
+    transition: transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s var(--ease);
+}
+
+.ui-card-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-float);
+    border-color: var(--border-strong);
+}
+
+.ui-card-interactive:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 35%, hsla(0, 0%, 100%, .07) 50%, transparent 65%);
+    transform: translateX(120%);
+    transition: transform .7s var(--ease);
+    pointer-events: none;
+}
+
+.ui-card-interactive:hover:after {
+    transform: translateX(-120%);
+}
+
+
+/* =========================================================
+   Conversations Panel
+========================================================= */
+
+.chat-conversations {
+    display: flex;
+    flex-direction: column;
+    /* * بسیار مهم برای Flex داخل Grid */
+    min-height: 0;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/* ========================================================= Conversations Header ========================================================= */
+.chat-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.chat-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: var(--brand-blue);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ========================================================= Conversations List ========================================================= */
+.chat-conversations-list {
+    flex: 1;
+    /* * بسیار مهم */
+    min-height: 0;
+    overflow-y: auto;
+    padding: .5rem;
+}
+
+
+/* =========================================================
+   Conversation Item
+========================================================= */
+
+.dropdown-item,
+.conversation-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: .75rem;
+    padding: .7rem;
+    border-radius: .8rem;
+    text-decoration: none;
+    color: inherit;
+    text-align: right;
+    transition: background-color .2s ease, transform .2s ease;
+}
+
+.dropdown-item:hover,
+.conversation-item:hover {
+    background: #f5f7ff;
+}
+
+.dropdown-item.is-active,
+.conversation-item.is-active {
+    background: #dee6fd;
+}
+
+.conversation-item:active {
+    transform: scale(.99);
+}
+
+
+/* =========================================================
+   Avatar
+========================================================= */
+.chat-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: var(--brand-blue);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.conversation-item .avatar,
+.chat-header .avatar {
+    color: #ffffff;
+    background: #ffffff;
+    box-shadow: none;
+}
+
+/* =========================================================
+   Unread Count
+========================================================= */
+.chat-unread {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--brand-blue);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* ========================================================= Main Chat Panel ========================================================= */
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+    /* * اجازه نده Grid item به خاطر محتوا بزرگ شود. */
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ========================================================= Chat Header ========================================================= */
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+    padding: .9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+/* ========================================================= Message Thread ========================================================= */
+.chat-thread {
+    display: flex;
+    flex-direction: column;
+    /* * فضای باقی‌مانده کارت را بگیر */
+    flex: 1 1 auto;
+    /* * بسیار مهم: * بدون این min-height، flex ممکن است * به اندازه محتوای خودش بزرگ شود. */
+    min-height: 0;
+    /* * اجازه بده فقط همین قسمت اسکرول شود. */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    /* * برای Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+/* =========================================================
+   Message Row
+========================================================= */
+.message-row {
+    display: flex;
+    width: 100%;
+    margin-bottom: .6rem;
+    flex-shrink: 0;
+}
+
+.message-row-in {
+    justify-content: flex-start;
+}
+
+.message-row-out {
+    justify-content: flex-end;
+}
+
+/* ========================================================= Message Bubble ========================================================= */
+.bubble {
+    max-width: 80%;
+    padding: .7rem .9rem;
+    margin-top: .7rem;
+    border-radius: 1rem;
+    font-size: 13px;
+    line-height: 1.9;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.bubble-in {
+    background: linear-gradient(180deg, #c5d8f9, #e3e8f5);
+    border-bottom-right-radius: .3rem;
+}
+
+.bubble-out {
+    margin-right: auto;
+    margin-left: 0;
+    background: linear-gradient(180deg, #494ae6, #2d5de9);
+    color: #fff;
+    border-bottom-left-radius: .3rem;
+}
+
+.message-text {
+    line-height: 1.9;
+}
+
+.message-time {
+    margin-top: .2rem;
+    font-size: 9px;
+    line-height: 1;
+    opacity: .65;
+    direction: ltr;
+}
+
+.bubble-in .message-time {
+    text-align: left;
+    color: var(--text-muted);
+}
+
+.bubble-out .message-time {
+    text-align: right;
+    color: rgba(255, 255, 255, .75);
+}
+
+/* ========================================================= Empty States ========================================================= */
+.chat-empty-state,
+.chat-messages-empty,
+.chat-no-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.chat-empty-state {
+    min-height: 260px;
+    padding: 2rem 1.25rem;
+}
+
+.chat-messages-empty {
+    flex: 1;
+    min-height: 300px;
+    padding: 2rem;
+}
+
+.chat-no-selection {
+    flex: 1;
+    min-height: 400px;
+    padding: 2rem;
+}
+
+/* ========================================================= Empty Icon ========================================================= */
+.chat-empty-icon,
+.chat-no-selection-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    margin-bottom: .75rem;
+    border-radius: 1rem;
+    background: #eef2ff;
+}
+
+.chat-empty-icon img,
+.chat-no-selection-icon img {
+    width: 27px;
+    height: 27px;
+    opacity: .65;
+}
+
+/* ========================================================= Scrollbar ========================================================= */
+.chat-thread::-webkit-scrollbar,
+.chat-conversations-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-thread::-webkit-scrollbar-track,
+.chat-conversations-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-thread::-webkit-scrollbar-thumb,
+.chat-conversations-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+.chat-thread::-webkit-scrollbar-thumb:hover,
+.chat-conversations-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+
+
+/* =========================================================
+   Loading State - Livewire
+========================================================= */
+
+.chat-thread[wire\:loading] {
+    opacity: .65;
+    transition: opacity .2s ease;
+}
+
+
+/* ========================================================= Tablet ========================================================= */
+@media (max-width: 1023px) {
+    .chat-layout {
+        grid-template-columns: 1fr;
+        /* * در موبایل دیگر ارتفاع viewport اجباری نباشد. */
+        height: auto;
+        min-height: auto;
+    }
+
+    .chat-conversations {
+        height: auto;
+        max-height: 320px;
+    }
+
+    .chat-panel {
+        height: 520px;
+        min-height: 520px;
+    }
+}
+
+/* ========================================================= Mobile ========================================================= */
+@media (max-width: 640px) {
+    .chat-layout {
+        gap: .75rem;
+    }
+
+    .chat-conversations {
+        max-height: 280px;
+    }
+
+    .chat-panel {
+        height: 480px;
+        min-height: 480px;
+    }
+
+    .chat-header {
+        min-height: 64px;
+        padding: .75rem;
+    }
+
+    .chat-thread {
+        padding: .75rem;
+    }
+
+    .bubble {
+        max-width: 85%;
+        padding: .6rem .75rem;
+        font-size: 12px;
+    }
+
+    .conversation-item {
+        padding: .65rem;
+    }
+}
+
+/* =========================================================
+   Small Mobile
+========================================================= */
+
+@media (max-width: 640px) {
+
+    .chat-layout {
+        gap: .75rem;
+    }
+
+    .chat-conversations {
+        max-height: 280px;
+    }
+
+    .chat-panel {
+        min-height: 480px;
+    }
+
+    .chat-header {
+        min-height: 64px;
+        padding: .75rem;
+    }
+
+    .chat-thread {
+        padding: .75rem;
+    }
+
+    .bubble {
+        max-width: 85%;
+        padding: .6rem .75rem;
+        font-size: 12px;
+    }
+
+    .conversation-item {
+        padding: .65rem;
+    }
+}

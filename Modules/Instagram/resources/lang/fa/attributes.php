@@ -12,4 +12,6 @@ return [
     'connected_at' => 'تاریخ اتصال',
     'last_synced_at' => 'آخرین همگام‌سازی',
 
+    'conversation_list' => 'لیست مکالمات',
+
 ];

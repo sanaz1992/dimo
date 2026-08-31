@@ -24,6 +24,8 @@ export default defineConfig({
                 'Modules/Dashboard/resources/assets/css/index.css',
                 'Modules/Dashboard/resources/assets/js/index.js',
 
+                'Modules/Instagram/resources/assets/css/chat.css',
+
             ],
             refresh: true,
         }),

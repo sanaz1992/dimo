@@ -7,7 +7,7 @@
         </x-slot:icon>
 
         {{-- فیلترها --}}
-          {{-- <livewire:instagram::instagram-advanced-filters /> --}}
+        {{-- <livewire:instagram::instagram-advanced-filters /> --}}
 
     </x-dashboard::card.card-header>
 
@@ -67,7 +67,13 @@
 
                         <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                             <div class="flex gap-1">
-
+                                @isset($conversationsRouteName)
+                                    {{-- Instagram --}}
+                                    <x-dashboard::buttons.primary-action id="btn-instagram-{{ $instagramAccount->id }}-conversations"
+                                        tag="a" href="{{ route($conversationsRouteName, ['account' => $instagramAccount]) }}" size="sm">
+                                        <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="instagram-conversations" class="w-5" />
+                                    </x-dashboard::buttons.primary-action>
+                                @endisset
                             </div>
                         </td>
                     </tr>

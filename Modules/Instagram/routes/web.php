@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Http\Controllers\InstagramAuthController;
 use Modules\Instagram\Http\Livewire\Admin\InstagramAccount\InstagramAccountList;
+use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Modules\Instagram\Http\Livewire\User\InstagramAccount\UserInstagramAccountList;
 use Modules\Instagram\Services\InstagramMessageService;
 
@@ -36,6 +37,8 @@ Route::name('user.')->prefix('/user')
         Route::get('/instagram/connect', [InstagramAuthController::class, 'redirect'])->name('instagram.connect');
 
         Route::get('/instagram-accounts', UserInstagramAccountList::class)->name('instagram_accounts.index');
+
+        Route::get('/instagram-accounts/{account}/conversations', UserConversationList::class)->name('instagram_accounts.conversations.index');
     });
 
 Route::get('/instagram/test-send', function (InstagramMessageService $messageService) {

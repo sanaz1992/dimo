@@ -41,6 +41,11 @@ class InstagramAccount extends Model
         'last_synced_at' => 'datetime',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'unique_code';
+    }
+
     public function getTokenExpiresAtJalaliAttribute()
     {
         return verta($this->token_expires_at)->format('Y/m/d');
