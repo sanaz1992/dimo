@@ -4,6 +4,7 @@ namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Filters\QueryFilter;
+use Modules\Core\Helpers\CodeGeneratorHelper;
 use Modules\Instagram\Entities\Conversation;
 use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
 
@@ -35,6 +36,8 @@ class ConversationService
 
     public function create(array $data): Conversation
     {
+        $data['unique_code'] = CodeGeneratorHelper::generate(get_class(new Conversation), 'unique_code');
+
         return DB::transaction(function () use ($data) {
             $conversation = $this->conversationRepository->create($data);
 

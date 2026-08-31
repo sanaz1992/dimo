@@ -17,6 +17,7 @@ class Conversation extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'unique_code',
         'tenant_id',
         'instagram_account_id',
         'customer_ig_id',
