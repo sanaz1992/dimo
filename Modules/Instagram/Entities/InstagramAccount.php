@@ -8,8 +8,6 @@ use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\InstagramAccountStatus;
 use Modules\Tenant\Entities\Tenant;
 
-// use Modules\User\Database\Factories\AddressFactory;
-
 class InstagramAccount extends Model
 {
     use Filterable;
@@ -19,6 +17,7 @@ class InstagramAccount extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'unique_code',
         'tenant_id',
         'instagram_account_id',
         'instagram_user_id',
@@ -27,7 +26,7 @@ class InstagramAccount extends Model
         'profile_picture_url',
         'access_token',
         'token_expires_at',
-        'scops',
+        'scopes',
         'status',
         'connected_at',
         'last_synced_at',
