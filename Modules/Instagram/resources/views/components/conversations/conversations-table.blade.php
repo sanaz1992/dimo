@@ -53,8 +53,7 @@
                         <span class="avatar shrink-0">
                             {{-- @if($conversation->customer_profile_picture_url)
                             <img src="{{ $conversation->customer_profile_picture_url }}"
-                                alt="{{ $conversation->customer_username }}"
-                                class="h-11 w-11 rounded-full object-cover">
+                                alt="{{ $conversation->customer_username }}" class="h-11 w-11 rounded-full object-cover">
                             @else --}}
                             <span class="chat-avatar-placeholder"
                                 style="background: {{ $conversation->avatar_color }}; color: #fff;">
@@ -219,7 +218,43 @@
                 </div>
 
 
-                {{-- بدون فرم ارسال پیام --}}
+                <div class="chat-composer">
+
+                    <form wire:submit="sendMessage" class="chat-composer-form">
+                        <div class="chat-composer-input-wrapper">
+                            <textarea wire:model="messageText" class="chat-composer-input" rows="1"
+                                placeholder="پیام خود را بنویسید..." x-data x-on:keydown.enter="
+                                if (!$event.shiftKey) {
+                                    $event.preventDefault();
+                                    $wire.sendMessage();
+                                }
+                            "></textarea>
+                        </div>
+
+                        <button type="submit" class="chat-send-button" wire:loading.attr="disabled"
+                            wire:target="sendMessage">
+                            <span wire:loading.remove wire:target="sendMessage">
+                                <img src=" {{ asset('icons/dashboard/send-white.svg') }}" alt="ارسال">
+                            </span>
+
+                            <span wire:loading wire:target="sendMessage" class="chat-send-loading">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+
+                        </button>
+
+                    </form>
+
+                    {{-- خطای Validation --}}
+                    @error('messageText')
+                        <p class="chat-composer-error">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
+                </div>
 
             @else
 
@@ -231,6 +266,7 @@
                     <div class="chat-no-selection-icon">
                         <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="">
                     </div>
+
 
                     <h3 class="mt-4 font-bold text-base">
                         یک گفتگو را انتخاب کنید

@@ -34,7 +34,7 @@ class Conversation extends Model
 
     public function getLastMessageAtJalaliAttribute()
     {
-        return verta($this->last_message_at)->format('Y/m/d');
+        return verta($this->last_message_at)->format('Y/m/d H:i');
     }
 
     public function getAvatarColorAttribute(): string

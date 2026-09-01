@@ -10,6 +10,7 @@ use Modules\Core\Traits\LivewireNotify;
 use Modules\Instagram\Filters\ConversationFilter;
 use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
+use Modules\Instagram\Services\InstagramMessageService;
 use Modules\Instagram\Services\MessageService;
 
 class UserConversationList extends UserBaseComponent
@@ -30,6 +31,8 @@ class UserConversationList extends UserBaseComponent
     public $messages = [];
 
     public $instagramAccount;
+
+    public string $messageText = '';
 
     public function mount(string $account): void
     {
@@ -63,10 +66,47 @@ class UserConversationList extends UserBaseComponent
     {
         $this->selectedConversation = app(ConversationService::class)->findByColumn('id', $id);
         $this->selectedConversation->load('instagramAccount');
-        $this->messages = app(MessageService::class)->list(conditions: [
-            'where' => ['conversation_id' => ['=', $id]],
-        ]);
+        $this->resetConversationMessages($id);
         $this->dispatch('conversation-selected');
+    }
+
+    public function resetConversationMessages($conversationId)
+    {
+        $this->messages = app(MessageService::class)->list(
+            'created_at:desc',
+            conditions: [
+                'where' => ['conversation_id' => ['=', $conversationId]],
+            ]
+        );
+    }
+
+    protected function validateMessage()
+    {
+        $this->validate(
+            [
+                'messageText' => ['required', 'string', 'max:2000'],
+            ],
+            trans('instagram::validation'),
+            trans('instagram::attributes')
+        );
+    }
+
+    public function sendMessage(): void
+    {
+        $this->validateMessage();
+
+        // مرحله بعد:
+        // ارسال پیام از طریق InstagramMessageService
+
+        $result = app(InstagramMessageService::class)->sendTextMessage(
+            instagramAccount: $this->instagramAccount,
+            recipientIgId: $this->selectedConversation->customer_ig_id,
+            message: $this->messageText,
+        );
+
+        $this->resetConversationMessages($this->selectedConversation->id);
+
+        $this->reset('messageText');
     }
 
     public function render(ConversationService $conversationService)
@@ -82,7 +122,7 @@ class UserConversationList extends UserBaseComponent
         ];
 
         $conversations = $conversationService->list(
-            null,
+            'created_at:desc',
             [10, true],
             with: ['instagramAccount'],
             conditions: $conditions,
