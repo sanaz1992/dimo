@@ -51,14 +51,14 @@
 
                         {{-- Avatar --}}
                         <span class="avatar shrink-0">
-                            {{-- @if($conversation->instagramAccount->profile_picture_url)
-                            <img src="{{ $conversation->instagramAccount->profile_picture_url }}"
-                                alt="{{ $conversation->instagramAccount->username }}"
+                            {{-- @if($conversation->customer_profile_picture_url)
+                            <img src="{{ $conversation->customer_profile_picture_url }}"
+                                alt="{{ $conversation->customer_username }}"
                                 class="h-11 w-11 rounded-full object-cover">
                             @else --}}
                             <span class="chat-avatar-placeholder"
                                 style="background: {{ $conversation->avatar_color }}; color: #fff;">
-                                {{ mb_substr($conversation->instagramAccount->username, 0, 1) }}
+                                {{ mb_substr($conversation->customer_username, 0, 1) }}
                             </span>
                             {{-- @endif --}}
                         </span>
@@ -70,7 +70,7 @@
                             <span class="flex items-center justify-between gap-2">
 
                                 <span class="block truncate font-bold text-sm">
-                                    {{ $conversation->instagramAccount->username }}
+                                    {{ $conversation->customer_username }}
                                 </span>
 
                                 <span class="shrink-0 text-[10px] text-[var(--text-muted)]">
@@ -142,14 +142,14 @@
 
                         <span class="avatar shrink-0">
 
-                            {{-- @if($selectedConversation->instagramAccount->profile_picture_url)
-                            <img src="{{ $selectedConversation->instagramAccount->profile_picture_url }}"
-                                alt="{{ $selectedConversation->instagramAccount->username }}"
+                            {{-- @if($selectedConversation->customer_profile_picture_url)
+                            <img src="{{ $selectedConversation->customer_profile_picture_url }}"
+                                alt="{{ $selectedConversation->customer_username }}"
                                 class="h-10 w-10 rounded-full object-cover">
                             @else --}}
                             <span class="chat-avatar-placeholder"
                                 style="background: {{ $selectedConversation->avatar_color }}; color: #fff;">
-                                {{ mb_substr($selectedConversation->instagramAccount->username, 0, 1) }}
+                                {{ mb_substr($selectedConversation->customer_username, 0, 1) }}
                             </span>
                             {{-- @endif --}}
 
@@ -159,7 +159,7 @@
                         <div class="min-w-0">
 
                             <p class="truncate font-bold text-sm">
-                                {{ $selectedConversation->instagramAccount->username }}
+                                {{ $selectedConversation->customer_username }}
                             </p>
 
                             <p class="mt-0.5 text-xs text-[var(--text-muted)]">

@@ -67,7 +67,7 @@ class Conversation extends Model
             'Y' => '#92705F',
             'Z' => '#66785F',
         ];
-        $firstLetter = strtoupper(mb_substr($this->username, 0, 1));
+        $firstLetter = strtoupper(mb_substr($this->customer_username, 0, 1));
 
         return $colors[$firstLetter] ?? '#64748B';
     }

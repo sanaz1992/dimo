@@ -163,6 +163,18 @@
     background: #ffffff;
     box-shadow: none;
 }
+.conversation-item .avatar,
+.chat-header .avatar {
+    color: #ffffff;
+    background: #ffffff;
+    box-shadow: none;
+}
+.conversation-item.is-active .avatar,
+.chat-header.is-active .avatar {
+    color: #ffffff;
+    background: rgb(222, 230, 253);
+    box-shadow: none;
+}
 
 /* =========================================================
    Unread Count
