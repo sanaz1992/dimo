@@ -18,6 +18,7 @@ use Modules\Instagram\Enums\WebhookEventType;
 use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\MessageService;
+use Modules\Instagram\Services\MetaAuthService;
 use Modules\Instagram\Services\WebhookEventService;
 
 class ProcessInstagramWebhook implements ShouldQueue
@@ -160,6 +161,13 @@ class ProcessInstagramWebhook implements ShouldQueue
             return 'continue';
         }
 
+        $metaAuthService = app(MetaAuthService::class);
+
+        $customerProfile = $metaAuthService->getProfile(
+            $instagramAccount,
+            $senderId
+        );
+
         $conversation = app(ConversationService::class)->firstOrCreate(
             [
                 'tenant_id' => $instagramAccount->tenant_id,
@@ -167,11 +175,17 @@ class ProcessInstagramWebhook implements ShouldQueue
                 'customer_ig_id' => $senderId,
             ],
             [
-                'customer_username' => null,
+                'customer_username' => $customerProfile['username'] ?? null,
                 'status' => ConversationStatus::OPEN->value,
                 'last_message_at' => now(),
+                'customer_profile_picture_url' => $customerProfile['profile_picture_url'] ?? null,
             ]
         );
+        if (! $conversation->customer_username) {
+            $conversation->customer_username = $customerProfile['username'] ?? null;
+            $conversation->customer_profile_picture_url = $customerProfile['profile_picture_url'] ?? null;
+            $conversation->save();
+        }
 
         Log::info('=== CONVERSATION CREATED/FOUND ===', [
             'conversation_id' => $conversation->id,

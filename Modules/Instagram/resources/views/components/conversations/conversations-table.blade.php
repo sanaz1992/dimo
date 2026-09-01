@@ -26,7 +26,7 @@
                     </h3>
 
                     <p class="text-xs text-[var(--text-muted)] mt-1">
-                        گفتگوهای اینستاگرام
+                        {{$instagramAccount->username}}
                     </p>
                 </div>
 

@@ -24,6 +24,7 @@ class Conversation extends Model
         'customer_username',
         'status',
         'last_message_at',
+        'customer_profile_picture_url',
     ];
 
     protected $casts = [

@@ -9,6 +9,7 @@ use Modules\Core\Http\Livewire\User\UserBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Instagram\Filters\ConversationFilter;
 use Modules\Instagram\Services\ConversationService;
+use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\MessageService;
 
 class UserConversationList extends UserBaseComponent
@@ -28,9 +29,12 @@ class UserConversationList extends UserBaseComponent
 
     public $messages = [];
 
+    public $instagramAccount;
+
     public function mount(string $account): void
     {
         $this->accountUniqueCode = $account;
+        $this->instagramAccount = app(InstagramAccountService::class)->findByColumn('unique_code', $account);
     }
 
     #[On('updateConversationListFilters')]

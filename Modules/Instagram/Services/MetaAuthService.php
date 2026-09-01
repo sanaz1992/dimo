@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Modules\Instagram\Entities\InstagramAccount;
 
 class MetaAuthService
 {
@@ -173,7 +174,7 @@ class MetaAuthService
         if ($response->failed()) {
             throw new Exception(
                 'خطا در دریافت Instagram Access Token: '.
-                $response->body()
+                    $response->body()
             );
         }
 
@@ -201,7 +202,7 @@ class MetaAuthService
         if ($response->failed()) {
             throw new Exception(
                 'خطا در دریافت Instagram Long-Lived Token: '.
-                $response->body()
+                    $response->body()
             );
         }
 
@@ -226,7 +227,7 @@ class MetaAuthService
         if ($response->failed()) {
             throw new Exception(
                 'خطا در دریافت اطلاعات اکانت Instagram: '.
-                $response->body()
+                    $response->body()
             );
         }
 
@@ -277,7 +278,7 @@ class MetaAuthService
 
             throw new Exception(
                 'خطا در فعال‌سازی Instagram Webhook: '.
-                $response->body()
+                    $response->body()
             );
         }
 
@@ -293,5 +294,31 @@ class MetaAuthService
         );
 
         return $data;
+    }
+
+    public function getProfile(
+        InstagramAccount $instagramAccount,
+        string $instagramUserId
+    ): ?array {
+        $response = Http::get(
+            'https://graph.instagram.com/'.$instagramUserId,
+            [
+                'fields' => 'id,username,name',
+                'access_token' => $instagramAccount->access_token,
+            ]
+        );
+
+        if ($response->failed()) {
+            // Log::warning('Instagram user profile fetch failed', [
+            //     'instagram_user_id' => $instagramUserId,
+            //     'instagram_account_id' => $instagramAccount->id,
+            //     'status' => $response->status(),
+            //     'body' => $response->body(),
+            // ]);
+
+            return null;
+        }
+
+        return $response->json();
     }
 }

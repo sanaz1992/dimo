@@ -21,6 +21,8 @@ class ConversationService
 
     public function firstOrCreate(array $conditions, array $data)
     {
+        $data['unique_code'] = CodeGeneratorHelper::generate(get_class(new Conversation), 'unique_code');
+
         return $this->conversationRepository->firstOrCreate($conditions, $data);
     }
 
@@ -47,6 +49,8 @@ class ConversationService
 
     public function updateOrCreate(array $condition, array $data)
     {
+        $data['unique_code'] = CodeGeneratorHelper::generate(get_class(new Conversation), 'unique_code');
+
         return $this->conversationRepository->updateOrCreate(
             $condition,
             $data
