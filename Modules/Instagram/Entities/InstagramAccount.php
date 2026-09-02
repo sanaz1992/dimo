@@ -80,4 +80,14 @@ class InstagramAccount extends Model
     {
         return $this->hasMany(InstagramComment::class);
     }
+
+    public function automationRules()
+    {
+        return $this->hasMany(AutomationRule::class);
+    }
+
+    public function automationRuns()
+    {
+        return $this->hasMany(AutomationRun::class);
+    }
 }

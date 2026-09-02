@@ -44,4 +44,9 @@ class InstagramComment extends Model
     {
         return $this->belongsTo(InstagramAccount::class);
     }
+
+    public function automationRuns()
+    {
+        return $this->hasMany(AutomationRun::class);
+    }
 }

@@ -45,4 +45,9 @@ class InstagramPost extends Model
     {
         return $this->hasMany(InstagramComment::class);
     }
+
+    public function automationRules()
+    {
+        return $this->hasMany(AutomationRule::class);
+    }
 }
