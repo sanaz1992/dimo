@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Modules\Instagram\Entities\InstagramComment;
 use Modules\Instagram\Entities\Message;
 use Modules\Instagram\Enums\ConversationStatus;
 use Modules\Instagram\Enums\MessageDirection;
@@ -18,6 +17,7 @@ use Modules\Instagram\Enums\WebhookEventStatus;
 use Modules\Instagram\Enums\WebhookEventType;
 use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
+use Modules\Instagram\Services\InstagramCommentService;
 use Modules\Instagram\Services\InstagramPostService;
 use Modules\Instagram\Services\MessageService;
 use Modules\Instagram\Services\MetaAuthService;
@@ -163,19 +163,12 @@ class ProcessInstagramWebhook implements ShouldQueue
                     $instagramUserId = $entry['id'] ?? null;
 
                     if (! $instagramUserId) {
-                        Log::warning('Instagram entry ID missing', [
-                            'webhook_event_id' => $webhookEvent->id,
-                        ]);
+                        Log::warning('Instagram entry ID missing', ['webhook_event_id' => $webhookEvent->id]);
 
                         continue;
                     }
 
-                    $instagramAccount = app(
-                        InstagramAccountService::class
-                    )->findByColumn(
-                        'instagram_user_id',
-                        $instagramUserId
-                    );
+                    $instagramAccount = app(InstagramAccountService::class)->findByColumn('instagram_user_id', $instagramUserId);
 
                     if (! $instagramAccount) {
                         Log::warning('Instagram account not found for comment', [
@@ -198,11 +191,7 @@ class ProcessInstagramWebhook implements ShouldQueue
                     |--------------------------------------------------------------------------
                     */
 
-                    $this->handleComment(
-                        $change,
-                        $instagramAccount,
-                        $entry['time'] ?? null
-                    );
+                    $this->handleComment($change, $instagramAccount, $entry['time'] ?? null);
                 }
             }
 
@@ -247,10 +236,7 @@ class ProcessInstagramWebhook implements ShouldQueue
 
         $metaAuthService = app(MetaAuthService::class);
 
-        $customerProfile = $metaAuthService->getProfile(
-            $instagramAccount,
-            $senderId
-        );
+        $customerProfile = $metaAuthService->getProfile($instagramAccount, $senderId);
 
         $conversation = app(ConversationService::class)->firstOrCreate(
             [
@@ -312,9 +298,7 @@ class ProcessInstagramWebhook implements ShouldQueue
 
         if (isset($event['message'])) {
 
-            if (
-                ($event['message']['is_echo'] ?? false) === true
-            ) {
+            if (($event['message']['is_echo'] ?? false) === true) {
                 return WebhookEventType::MESSAGE_ECHO->value;
             }
 
@@ -332,11 +316,8 @@ class ProcessInstagramWebhook implements ShouldQueue
         return WebhookEventType::UNKNOWN->value;
     }
 
-    private function handleComment(
-        array $change,
-        $instagramAccount,
-        ?int $timestamp = null
-    ): void {
+    private function handleComment(array $change, $instagramAccount, ?int $timestamp = null): void
+    {
         $value = $change['value'] ?? [];
         $commentId = $value['id'] ?? null;
         $commenterId = $value['from']['id'] ?? null;
@@ -378,30 +359,21 @@ class ProcessInstagramWebhook implements ShouldQueue
         );
 
         /*
-    |--------------------------------------------------------------------------
-    | Create / Find Comment
-    |--------------------------------------------------------------------------
-    */
-
-        $comment = InstagramComment::firstOrCreate(
+        |--------------------------------------------------------------------------
+        | Create / Find Comment
+        |--------------------------------------------------------------------------
+        */
+        $comment = app(InstagramCommentService::class)->firstOrCreate(
             [
                 'instagram_account_id' => $instagramAccount->id,
-
                 'instagram_comment_id' => $commentId,
             ],
             [
                 'instagram_post_id' => $post->id,
-
                 'commenter_ig_id' => $commenterId,
-
                 'commenter_username' => $commenterUsername,
-
                 'comment_text' => $text,
-
-                'commented_at' => $timestamp
-                    ? Carbon::createFromTimestamp($timestamp)
-                    : now(),
-
+                'commented_at' => $timestamp ? Carbon::createFromTimestamp($timestamp) : now(),
                 'payload' => $value,
             ]
         );
@@ -410,17 +382,11 @@ class ProcessInstagramWebhook implements ShouldQueue
             '=== INSTAGRAM COMMENT CREATED/FOUND ===',
             [
                 'comment_id' => $comment->id,
-
                 'instagram_comment_id' => $comment->instagram_comment_id,
-
                 'post_id' => $post->id,
-
                 'media_id' => $post->instagram_media_id,
-
                 'commenter_ig_id' => $comment->commenter_ig_id,
-
                 'commenter_username' => $comment->commenter_username,
-
                 'text' => $comment->comment_text,
             ]
         );
