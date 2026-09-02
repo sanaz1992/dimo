@@ -85,7 +85,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding: 1rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #E5E7EB;
     flex-shrink: 0;
 }
 
@@ -98,7 +98,7 @@
     padding: 0 7px;
     border-radius: 999px;
     background: #eef2ff;
-    color: var(--brand-blue);
+    color: #6366F1;
     font-size: 11px;
     font-weight: 700;
 }
@@ -158,7 +158,7 @@
     min-width: 40px;
     border-radius: 999px;
     background: #eef2ff;
-    color: var(--brand-blue);
+    color: #6366F1;
     font-size: 14px;
     font-weight: 700;
 }
@@ -195,7 +195,7 @@
     height: 19px;
     padding: 0 5px;
     border-radius: 999px;
-    background: var(--brand-blue);
+    background: #6366F1;
     color: #fff;
     font-size: 10px;
     font-weight: 700;
@@ -219,7 +219,7 @@
     justify-content: space-between;
     min-height: 72px;
     padding: .9rem 1rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #E5E7EB;
     flex-shrink: 0;
 }
 
@@ -299,7 +299,7 @@
 
 .bubble-in .message-time {
     text-align: left;
-    color: var(--text-muted);
+    color: #9CA3AF;
 }
 
 .bubble-out .message-time {
@@ -395,8 +395,8 @@
 .chat-composer {
     flex-shrink: 0;
     padding: 14px 16px;
-    border-top: 1px solid var(--border);
-    background: var(--card);
+    border-top: 1px solid #E5E7EB;
+    background: #FFFFFF;
 }
 
 .chat-composer-form {
