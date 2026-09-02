@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Modules\Instagram\Entities\InstagramComment;
-use Modules\Instagram\Entities\InstagramPost;
 use Modules\Instagram\Entities\Message;
 use Modules\Instagram\Enums\ConversationStatus;
 use Modules\Instagram\Enums\MessageDirection;
@@ -19,6 +18,7 @@ use Modules\Instagram\Enums\WebhookEventStatus;
 use Modules\Instagram\Enums\WebhookEventType;
 use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
+use Modules\Instagram\Services\InstagramPostService;
 use Modules\Instagram\Services\MessageService;
 use Modules\Instagram\Services\MetaAuthService;
 use Modules\Instagram\Services\WebhookEventService;
@@ -363,21 +363,16 @@ class ProcessInstagramWebhook implements ShouldQueue
         |--------------------------------------------------------------------------
         */
 
-        $post = InstagramPost::firstOrCreate(
+        $post = app(InstagramPostService::class)->firstOrCreate(
             [
                 'instagram_account_id' => $instagramAccount->id,
-
                 'instagram_media_id' => $mediaId,
             ],
             [
                 'media_product_type' => $mediaProductType,
-
                 'caption' => null,
-
                 'permalink' => null,
-
                 'published_at' => null,
-
                 'payload' => $value['media'] ?? [],
             ]
         );
