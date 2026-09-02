@@ -338,24 +338,14 @@ class ProcessInstagramWebhook implements ShouldQueue
         ?int $timestamp = null
     ): void {
         $value = $change['value'] ?? [];
-
         $commentId = $value['id'] ?? null;
-
         $commenterId = $value['from']['id'] ?? null;
-
-        $commenterUsername =
-            $value['from']['username'] ?? null;
-
+        $commenterUsername = $value['from']['username'] ?? null;
         $text = $value['text'] ?? null;
-
-        $mediaId =
-            $value['media']['id'] ?? null;
-
-        $mediaProductType =
-            $value['media']['media_product_type'] ?? null;
+        $mediaId = $value['media']['id'] ?? null;
+        $mediaProductType = $value['media']['media_product_type'] ?? null;
 
         if (! $commentId || ! $commenterId || ! $mediaId) {
-
             Log::warning(
                 'Instagram comment data incomplete',
                 [
@@ -368,10 +358,10 @@ class ProcessInstagramWebhook implements ShouldQueue
         }
 
         /*
-    |--------------------------------------------------------------------------
-    | Create / Find Post
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | Create / Find Post
+        |--------------------------------------------------------------------------
+        */
 
         $post = InstagramPost::firstOrCreate(
             [

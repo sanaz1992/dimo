@@ -8,10 +8,12 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\InstagramAccountRepositoryInterface;
+use Modules\Instagram\External\Repositories\Contract\InstagramPostRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\MessageRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\WebhookEventRepositoryInterface;
 use Modules\Instagram\External\Repositories\ConversationRepository;
 use Modules\Instagram\External\Repositories\InstagramAccountRepository;
+use Modules\Instagram\External\Repositories\InstagramPostRepository;
 use Modules\Instagram\External\Repositories\MessageRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
@@ -56,6 +58,7 @@ class InstagramServiceProvider extends ServiceProvider
         $this->app->bind(WebhookEventRepositoryInterface::class, WebhookEventRepository::class);
         $this->app->bind(ConversationRepositoryInterface::class, ConversationRepository::class);
         $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
+        $this->app->bind(InstagramPostRepositoryInterface::class, InstagramPostRepository::class);
     }
 
     /**
