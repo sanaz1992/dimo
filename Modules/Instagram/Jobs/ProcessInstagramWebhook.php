@@ -9,6 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Modules\Instagram\Entities\InstagramComment;
+use Modules\Instagram\Entities\InstagramPost;
 use Modules\Instagram\Entities\Message;
 use Modules\Instagram\Enums\ConversationStatus;
 use Modules\Instagram\Enums\MessageDirection;
@@ -46,6 +48,10 @@ class ProcessInstagramWebhook implements ShouldQueue
 
         try {
             $payload = $webhookEvent->payload;
+
+            Log::info('=== INSTAGRAM EVENT PAYLOAD ===', [
+                'payload' => $payload,
+            ]);
 
             foreach ($payload['entry'] ?? [] as $entry) {
 
@@ -119,6 +125,84 @@ class ProcessInstagramWebhook implements ShouldQueue
                             continue;
                         }
                     }
+                }
+
+                /*
+                |--------------------------------------------------------------------------
+                | Change Events
+                |--------------------------------------------------------------------------
+                */
+
+                foreach ($entry['changes'] ?? [] as $change) {
+
+                    $field = $change['field'] ?? null;
+
+                    Log::info('=== INSTAGRAM CHANGE EVENT ===', [
+                        'webhook_event_id' => $webhookEvent->id,
+                        'entry_id' => $entry['id'] ?? null,
+                        'field' => $field,
+                        'change' => $change,
+                    ]);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Comment
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if ($field !== 'comments') {
+                        continue;
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Resolve Instagram Account
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $instagramUserId = $entry['id'] ?? null;
+
+                    if (! $instagramUserId) {
+                        Log::warning('Instagram entry ID missing', [
+                            'webhook_event_id' => $webhookEvent->id,
+                        ]);
+
+                        continue;
+                    }
+
+                    $instagramAccount = app(
+                        InstagramAccountService::class
+                    )->findByColumn(
+                        'instagram_user_id',
+                        $instagramUserId
+                    );
+
+                    if (! $instagramAccount) {
+                        Log::warning('Instagram account not found for comment', [
+                            'instagram_user_id' => $instagramUserId,
+                            'webhook_event_id' => $webhookEvent->id,
+                        ]);
+
+                        continue;
+                    }
+
+                    Log::info('=== INSTAGRAM COMMENT ACCOUNT RESOLVED ===', [
+                        'instagram_account_id' => $instagramAccount->id,
+                        'tenant_id' => $instagramAccount->tenant_id,
+                        'instagram_user_id' => $instagramAccount->instagram_user_id,
+                    ]);
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Handle Comment
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $this->handleComment(
+                        $change,
+                        $instagramAccount,
+                        $entry['time'] ?? null
+                    );
                 }
             }
 
@@ -246,5 +330,114 @@ class ProcessInstagramWebhook implements ShouldQueue
         }
 
         return WebhookEventType::UNKNOWN->value;
+    }
+
+    private function handleComment(
+        array $change,
+        $instagramAccount,
+        ?int $timestamp = null
+    ): void {
+        $value = $change['value'] ?? [];
+
+        $commentId = $value['id'] ?? null;
+
+        $commenterId = $value['from']['id'] ?? null;
+
+        $commenterUsername =
+            $value['from']['username'] ?? null;
+
+        $text = $value['text'] ?? null;
+
+        $mediaId =
+            $value['media']['id'] ?? null;
+
+        $mediaProductType =
+            $value['media']['media_product_type'] ?? null;
+
+        if (! $commentId || ! $commenterId || ! $mediaId) {
+
+            Log::warning(
+                'Instagram comment data incomplete',
+                [
+                    'webhook_event_id' => $this->webhookEventId,
+                    'change' => $change,
+                ]
+            );
+
+            return;
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Create / Find Post
+    |--------------------------------------------------------------------------
+    */
+
+        $post = InstagramPost::firstOrCreate(
+            [
+                'instagram_account_id' => $instagramAccount->id,
+
+                'instagram_media_id' => $mediaId,
+            ],
+            [
+                'media_product_type' => $mediaProductType,
+
+                'caption' => null,
+
+                'permalink' => null,
+
+                'published_at' => null,
+
+                'payload' => $value['media'] ?? [],
+            ]
+        );
+
+        /*
+    |--------------------------------------------------------------------------
+    | Create / Find Comment
+    |--------------------------------------------------------------------------
+    */
+
+        $comment = InstagramComment::firstOrCreate(
+            [
+                'instagram_account_id' => $instagramAccount->id,
+
+                'instagram_comment_id' => $commentId,
+            ],
+            [
+                'instagram_post_id' => $post->id,
+
+                'commenter_ig_id' => $commenterId,
+
+                'commenter_username' => $commenterUsername,
+
+                'comment_text' => $text,
+
+                'commented_at' => $timestamp
+                    ? Carbon::createFromTimestamp($timestamp)
+                    : now(),
+
+                'payload' => $value,
+            ]
+        );
+
+        Log::info(
+            '=== INSTAGRAM COMMENT CREATED/FOUND ===',
+            [
+                'comment_id' => $comment->id,
+
+                'instagram_comment_id' => $comment->instagram_comment_id,
+
+                'post_id' => $post->id,
+
+                'media_id' => $post->instagram_media_id,
+
+                'commenter_ig_id' => $comment->commenter_ig_id,
+
+                'commenter_username' => $comment->commenter_username,
+
+                'text' => $comment->comment_text,
+            ]
+        );
     }
 }

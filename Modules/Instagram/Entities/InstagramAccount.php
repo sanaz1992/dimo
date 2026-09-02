@@ -70,4 +70,14 @@ class InstagramAccount extends Model
     {
         return $this->hasMany(Conversation::class);
     }
+
+    public function posts()
+    {
+        return $this->hasMany(InstagramPost::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(InstagramComment::class);
+    }
 }
