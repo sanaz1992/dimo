@@ -15,30 +15,37 @@ class AutomationService
 {
     public function processComment(InstagramComment $comment): void
     {
-        $rules = AutomationRule::query()
-            ->where('tenant_id', $comment->instagramAccount->tenant_id)
-            ->where('instagram_account_id', $comment->instagram_account_id)
-            ->where('is_active', true)
-            ->where(function ($query) use ($comment) {
-                $query->whereNull('instagram_post_id')
-                    ->orWhere('instagram_post_id', $comment->instagram_post_id);
-            })->orderBy('priority')
-            ->get();
+        $conditions = [
+            'where' => [
+                'tenant_id' => ['=', $comment->instagramAccount->tenant_id],
+                'instagram_account_id' => ['=', $comment->instagram_account_id],
+                'is_active' => ['=', true],
+                function ($query) use ($comment) {
+                    $query->whereNull('instagram_post_id')
+                        ->orWhere('instagram_post_id', $comment->instagram_post_id);
+                },
+            ],
+        ];
+        $rules = app(AutomationRuleService::class)->list('priority', conditions: $conditions);
 
+        $automationRunService = app(AutomationRunService::class);
         foreach ($rules as $rule) {
             if (! $this->matches($rule, $comment)) {
                 continue;
             }
 
-            $alreadyExecuted = AutomationRun::query()
-                ->where('automation_rule_id', $rule->id)
-                ->where('instagram_comment_id', $comment->id)
-                ->exists();
-            if ($alreadyExecuted) {
+            $alreadyExecutedConditions = [
+                'where' => [
+                    'automation_rule_id' => ['=', $rule->id],
+                    'instagram_comment_id' => ['=', $comment->id],
+                ],
+            ];
+            $alreadyExecuted = $automationRunService->list(conditions: $alreadyExecutedConditions);
+            if ($alreadyExecuted->count()) {
                 continue;
             }
 
-            $run = AutomationRun::create([
+            $run = $automationRunService->create([
                 'automation_rule_id' => $rule->id,
                 'instagram_account_id' => $comment->instagram_account_id,
                 'instagram_comment_id' => $comment->id,
@@ -70,7 +77,8 @@ class AutomationService
 
     private function executeRun(AutomationRun $run): void
     {
-        $run->update([
+        $automationRunService = app(AutomationRunService::class);
+        $run = $automationRunService->update($run, [
             'status' => AutomationRunStatus::PROCESSING->value,
             'started_at' => now(),
         ]);
@@ -100,7 +108,7 @@ class AutomationService
                 };
             }
 
-            $run->update([
+            $run = $automationRunService->update($run, [
                 'status' => AutomationRunStatus::COMPLETED->value,
                 'completed_at' => now(),
             ]);
@@ -110,7 +118,7 @@ class AutomationService
                 'error' => $e->getMessage(),
             ]);
 
-            $run->update([
+            $run = $automationRunService->update($run, [
                 'status' => AutomationRunStatus::FAILED->value,
                 'error' => $e->getMessage(),
                 'completed_at' => now(),
@@ -167,7 +175,7 @@ class AutomationService
             'sent_at' => now()->toIso8601String(),
         ];
 
-        $run->update(['context' => $context]);
+        $run = app(AutomationRunService::class)->update($run, ['context' => $context]);
 
         Log::info('=== AUTOMATION PRIVATE REPLY SUCCESS ===', [
             'run_id' => $run->id,

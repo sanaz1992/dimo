@@ -6,6 +6,10 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Modules\Instagram\External\Repositories\AutomationRuleRepository;
+use Modules\Instagram\External\Repositories\AutomationRunRepository;
+use Modules\Instagram\External\Repositories\Contract\AutomationRuleRepositoryInterface;
+use Modules\Instagram\External\Repositories\Contract\AutomationRunRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\InstagramAccountRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\InstagramCommentRepositoryInterface;
@@ -62,6 +66,8 @@ class InstagramServiceProvider extends ServiceProvider
         $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
         $this->app->bind(InstagramPostRepositoryInterface::class, InstagramPostRepository::class);
         $this->app->bind(InstagramCommentRepositoryInterface::class, InstagramCommentRepository::class);
+        $this->app->bind(AutomationRunRepositoryInterface::class, AutomationRunRepository::class);
+        $this->app->bind(AutomationRuleRepositoryInterface::class, AutomationRuleRepository::class);
     }
 
     /**

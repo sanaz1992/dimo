@@ -8,8 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Modules\Instagram\Entities\InstagramComment;
 use Modules\Instagram\Services\AutomationService;
+use Modules\Instagram\Services\InstagramCommentService;
 
 class ProcessInstagramCommentAutomation implements ShouldQueue
 {
@@ -27,23 +27,19 @@ class ProcessInstagramCommentAutomation implements ShouldQueue
     ) {}
 
     public function handle(
-        AutomationService $automationService
+        AutomationService $automationService,
+        InstagramCommentService $commentService
     ): void {
-        $comment = InstagramComment::query()
-            ->with('instagramAccount')
-            ->find($this->commentId);
-
+        $comment = $commentService->findByColumn('id', $this->commentId);
         if (! $comment) {
             Log::warning(
                 'Instagram comment not found for automation',
-                [
-                    'comment_id' => $this->commentId,
-                ]
+                ['comment_id' => $this->commentId]
             );
 
             return;
         }
-
+        $comment->load('instagramAccount');
         $automationService->processComment($comment);
     }
 
