@@ -3,6 +3,7 @@
 namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Modules\Instagram\Entities\Conversation;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Entities\Message;
@@ -70,6 +71,52 @@ class InstagramMessageService
          */
         $conversation->update([
             'last_message_at' => $messageModel->sent_at,
+        ]);
+
+        return $result;
+    }
+
+    public function sendPrivateReply(
+        InstagramAccount $instagramAccount,
+        string $commentId,
+        string $message
+    ): array {
+        $response = Http::withToken(
+            $instagramAccount->access_token
+        )->post(
+            'https://graph.instagram.com/v26.0/'.
+                $instagramAccount->instagram_user_id.
+                '/messages',
+            [
+                'recipient' => [
+                    'comment_id' => $commentId,
+                ],
+                'message' => [
+                    'text' => $message,
+                ],
+            ]
+        );
+
+        if ($response->failed()) {
+            Log::error('=== INSTAGRAM PRIVATE REPLY FAILED ===', [
+                'instagram_account_id' => $instagramAccount->id,
+                'comment_id' => $commentId,
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            throw new \RuntimeException(
+                'Instagram private reply failed: '.
+                    $response->body()
+            );
+        }
+
+        $result = $response->json();
+
+        Log::info('=== INSTAGRAM PRIVATE REPLY SENT ===', [
+            'instagram_account_id' => $instagramAccount->id,
+            'comment_id' => $commentId,
+            'result' => $result,
         ]);
 
         return $result;
