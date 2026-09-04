@@ -2,12 +2,15 @@
 
 namespace Modules\Instagram\Http\Livewire\Concerns;
 
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use Livewire\WithFileUploads;
 use Modules\Instagram\Entities\AutomationRule;
+use Modules\Instagram\Enums\AutomationActionType;
 use Modules\Instagram\Enums\AutomationMatchType;
 use Modules\Instagram\Enums\AutomationTriggerType;
 use Modules\Instagram\Rules\StoreAutomationRuleRules;
+use Modules\Instagram\Services\AutomationActionService;
 use Modules\Instagram\Services\AutomationRuleService;
 use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\InstagramPostService;
@@ -30,6 +33,15 @@ trait ManagesAutomationRules
         'priority' => '',
     ];
 
+    public array $actionForm = [
+        'action_type' => '',
+        'message' => '',
+        'sort_order' => 1,
+        'is_active' => true,
+    ];
+
+    public array $actionTypes = [];
+
     public array $matchTypes = [];
 
     public array $triggerTypes = [];
@@ -47,6 +59,8 @@ trait ManagesAutomationRules
         'automation_actions' => 'اقدامات',
     ];
 
+    public bool $isEditMode = false;
+
     /**
      * Each panel must determine which tenants
      * are available to the current user.
@@ -57,6 +71,8 @@ trait ManagesAutomationRules
     {
         $this->matchTypes = AutomationMatchType::labels();
         $this->triggerTypes = AutomationTriggerType::labels();
+
+        $this->isEditMode = $automationRule !== null;
 
         if ($automationRule) {
             $this->automationRule = $automationRule;
@@ -73,9 +89,15 @@ trait ManagesAutomationRules
             $this->loadInstagramAccounts($this->form['tenant']);
 
             $this->loadInstagramPosts($this->form['instagram_account']);
+
+            $this->automationRule->load('actions');
         }
 
         $this->tenants = $this->getAvailableTenants();
+
+        if ($this->isEditMode) {
+            $this->actionTypes = AutomationActionType::labels();
+        }
     }
 
     protected function automationRuleRules(): array
@@ -183,10 +205,15 @@ trait ManagesAutomationRules
 
     public function nextStep(AutomationRuleService $automationRuleService): void
     {
-        match ($this->currentStep) {
-            'basic' => $this->storeAutomationRule($automationRuleService),
-            default => $this->showNextStep(),
-        };
+        if ($this->currentStep === 'basic') {
+            if ($this->isEditMode) {
+                $this->updateAutomationRule($automationRuleService);
+            } else {
+                $this->storeAutomationRule($automationRuleService);
+            }
+        }
+
+        $this->showNextStep();
     }
 
     public function storeAutomationRule(AutomationRuleService $automationRuleService): void
@@ -194,11 +221,9 @@ trait ManagesAutomationRules
         try {
             $this->validateAutomationRule();
 
-            $this->createAutomationRule($automationRuleService);
+            $this->automationRule = $this->createAutomationRule($automationRuleService);
 
             $this->notify('success', __('core::messages.create.success'));
-            $this->reset('form');
-            $this->showNextStep();
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Throwable $e) {
@@ -208,8 +233,101 @@ trait ManagesAutomationRules
         }
     }
 
+    abstract protected function getAutomationRuleEditRoute(AutomationRule $automationRule): string;
+
     protected function showNextStep(): void
     {
-        // Actions step will be implemented later.
+        if (! $this->isEditMode) {
+            $url = $this->getAutomationRuleEditRoute($this->automationRule);
+            $url .= '?step=automation_actions';
+            $this->redirect($url);
+        } else {
+            if (! $this->automationRule) {
+                return;
+            }
+            $this->currentStep = 'automation_actions';
+
+            return;
+        }
+    }
+
+    public function addAutomationAction(AutomationActionService $automationActionService): void
+    {
+        try {
+            $this->validate([
+                'actionForm.action_type' => ['required', new Enum(AutomationActionType::class)],
+                'actionForm.message' => ['required_if:actionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value],
+                'actionForm.sort_order' => ['nullable', 'integer', 'min:1'],
+                'actionForm.is_active' => ['required', 'boolean'],
+            ]);
+
+            if (! $this->automationRule) {
+                return;
+            }
+
+            $nextSortOrder = $this->automationRule->actions()->max('sort_order') + 1;
+
+            $data = [
+                'automation_rule_id' => $this->automationRule->id,
+                'action_type' => $this->actionForm['action_type'],
+                'sort_order' => $this->actionForm['sort_order'] ?: $nextSortOrder,
+                'is_active' => $this->actionForm['is_active'],
+                'config' => [],
+            ];
+
+            if ($this->actionForm['action_type'] === AutomationActionType::SEND_MESSAGE->value) {
+                $data['config'] = ['message' => trim($this->actionForm['message'])];
+            }
+
+            $automationActionService->create($data);
+
+            $this->automationRule->load('actions');
+
+            $this->resetActionForm();
+            $this->notify('success', __('core::messages.edit.success'));
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            report($e);
+            dd($e->getMessage());
+            $this->notify('error', __('core::messages.edit.error'));
+        }
+    }
+
+    protected function resetActionForm(): void
+    {
+        $this->actionForm = [
+            'action_type' => '',
+            'message' => '',
+            'sort_order' => 1,
+            'is_active' => true,
+        ];
+    }
+
+    public function deleteAutomationAction(int $actionId, AutomationActionService $automationActionService): void
+    {
+        try {
+            if (! $this->automationRule) {
+                return;
+            }
+
+            $action = $automationActionService->findByColumn('id', $actionId);
+            if (! $action) {
+                return;
+            }
+
+            if ($action->automation_rule_id !== $this->automationRule->id) {
+                return;
+            }
+
+            $automationActionService->delete($action);
+
+            $this->automationRule->load('actions');
+
+            $this->notify('success', __('core::messages.destroy.success'));
+        } catch (\Throwable $e) {
+            report($e);
+            $this->notify('error', __('core::messages.destroy.error'));
+        }
     }
 }

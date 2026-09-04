@@ -62,102 +62,124 @@
                     </div>
             @endif
 
-            {{-- @if ($currentStep === 'automation_actions')
-            <div class="relative z-[1] space-y-3">
+            @if ($currentStep === 'automation_actions')
+                <div class="relative z-[1] space-y-4">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="space-y-3">
+                            <x-dashboard::forms.select
+                                label="instagram::attributes.action_type"
+                                wire:model.live="actionForm.action_type"
+                                :options="$actionTypes"
+                                placeholder="instagram::messages.select_action_type"
+                            />
 
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            @if ($actionForm['action_type'] === \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE->value)
+                                <x-dashboard::forms.textarea
+                                    label="instagram::attributes.message"
+                                    wire:model.defer="actionForm.message"
+                                />
+                            @endif
+                        </div>
+                        <div class="space-y-3">
+                            <x-dashboard::forms.input
+                                label="instagram::attributes.sort_order"
+                                type="number"
+                                wire:model.defer="actionForm.sort_order"
+                            />
 
-                    <div class="space-y-3">
-                        <x-dashboard::forms.select label="product::attributes.packaging_type"
-                            name="automation_actionsForm.packaging_type" wire:model.defer="automation_actionsForm.packaging_type"
-                            :options="$packagingType" option-value="id"
-                            placeholder="product::messages.select_packaging_type" />
-
-                        <x-dashboard::forms.input label="product::attributes.volume_ml" name="automation_actionsForm.volume_ml"
-                            wire:model.defer="automation_actionsForm.volume_ml" placeholder="product::messages.enter_volume_ml"
-                            :suffix="__('product::attributes.ml')" />
-
+                            <x-dashboard::forms.radio
+                                label="instagram::attributes.is_active"
+                                name="actionForm.is_active"
+                                wire:model.defer="actionForm.is_active"
+                                :options="[
+                                    '1' => 'core::attributes.active',
+                                    '0' => 'core::attributes.inactive',
+                                ]"
+                            />
+                        </div>
                     </div>
-                    <div class="space-y-3">
 
-                        <x-dashboard::forms.input label="product::attributes.base_sale_price" :suffix="$currency"
-                            name="automation_actionsForm.price" wire:model.defer="automation_actionsForm.price"
-                            placeholder="product::messages.enter_base_sale_price" />
-
-                        <x-dashboard::forms.radio label="product::attributes.is_active" name="automation_actionsForm.is_active"
-                            wire:model.defer="automation_actionsForm.is_active" :options="[
-                    '1' => 'product::attributes.active',
-                    '0' => 'product::attributes.inactive',
-                ]" />
+                    <div class="flex justify-end">
+                        <x-dashboard::buttons.primary-action
+                            id="btn-add-automation-action"
+                            tag="button"
+                            wire:click="addAutomationAction"
+                            size="sm"
+                            class="btn-fill"
+                        >
+                            افزودن اقدام
+                        </x-dashboard::buttons.primary-action>
                     </div>
                 </div>
-                <div class="flex justify-end">
-                    <x-dashboard::buttons.primary-action id="btn-store-product-automation_actions" tag="button"
-                        wire:click="storeProductautomation_actions" size="sm" class="btn-fill">
-                        @lang('core::attributes.store')
-                    </x-dashboard::buttons.primary-action>
+                <div class="mt-6 border-t border-slate-100 pt-4">
+                    <x-dashboard::table.table>
+                        <x-slot:head>
+                            <tr>
+                                <th>@lang('core::attributes.row')</th>
+                                <th>@lang('instagram::attributes.action_type')</th>
+                                <th>@lang('instagram::attributes.message')</th>
+                                <th>@lang('instagram::attributes.sort_order')</th>
+                                <th>@lang('instagram::attributes.is_active')</th>
+                                <th class="col-actions"></th>
+                            </tr>
+                        </x-slot:head>
+                        <x-slot:body>
+                            @foreach ($automationRule->actions as $action)
+                                <tr class="data-row">
+                                    <x-dashboard::table.cell :label="__('core::attributes.row')">
+                                        {{ $loop->iteration }}
+                                    </x-dashboard::table.cell>
+
+                                    <x-dashboard::table.cell :label="__('instagram::attributes.action_type')">
+                                        {{ $action->action_type->label() }}
+                                    </x-dashboard::table.cell>
+
+                                    <x-dashboard::table.cell :label="__('instagram::attributes.message')">
+                                        @if ($action->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE)
+                                            {{ $action->config['message'] ?? '-' }}
+                                        @else
+                                            -
+                                        @endif
+                                    </x-dashboard::table.cell>
+
+                                    <x-dashboard::table.cell :label="__('instagram::attributes.sort_order')">
+                                        {{ $action->sort_order }}
+                                    </x-dashboard::table.cell>
+
+                                    <x-dashboard::table.cell :label="__('instagram::attributes.is_active')">
+                                        @if ($action->is_active)
+                                            <span class="chip chip-ok">
+                                                @lang('core::attributes.active')
+                                            </span>
+                                        @else
+                                            <span class="chip chip-fail">
+                                                @lang('core::attributes.inactive')
+                                            </span>
+                                        @endif
+                                    </x-dashboard::table.cell>
+
+                                    <td class="data-cell px-4 py-3.5 col-actions" data-label="@lang('core::attributes.actions')">
+                                        <div class="flex gap-1">
+                                            <x-dashboard::buttons.primary-action
+                                                id="btn-delete-automation-action-{{ $action->id }}"
+                                                tag="button"
+                                                wire:click="deleteAutomationAction({{ $action->id }})"
+                                                size="sm"
+                                            >
+                                                <img
+                                                    src="{{ asset('icons/dashboard/vuesax/outline/trash.svg') }}"
+                                                    alt="delete"
+                                                    class="w-5"
+                                                />
+                                            </x-dashboard::buttons.primary-action>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </x-slot:body>
+                    </x-dashboard::table.table>
                 </div>
-            </div>
-
-            <div class="mt-6 border-t border-slate-100 pt-4">
-                <x-dashboard::table.table>
-                    <x-slot:head>
-                        <tr>
-                            <th>@lang('core::attributes.row')</th>
-                            <th>@lang('product::attributes.packaging_type')</th>
-                            <th>@lang('product::attributes.volume_ml') (@lang('product::attributes.ml'))</th>
-                            <th>@lang('product::attributes.base_sale_price') ({{$currency}})</th>
-                            <th>@lang('product::attributes.is_active')</th>
-                            <th>@lang('product::attributes.created_at')</th>
-                            <th class="col-actions"></th>
-                        </tr>
-                    </x-slot:head>
-                    <x-slot:body>
-                        @foreach ($product->automation_actionss as $automation_actions)
-                        <tr class="data-row" data-searchable="" data-status="success" style="animation-delay:0.35s">
-                            <x-dashboard::table.cell :label="__('core::attributes.row')">
-                                {{ $loop->index + 1 }}
-                            </x-dashboard::table.cell>
-
-                            <x-dashboard::table.cell :label="__('product::attributes.packaging_type')">
-                                {{$automation_actions->packaging_type->label()}}
-                            </x-dashboard::table.cell>
-
-                            <x-dashboard::table.cell :label="__('product::attributes.volume_ml')">
-                                {{number_format($automation_actions->volume_ml)}}
-                            </x-dashboard::table.cell>
-
-                            <x-dashboard::table.cell :label="__('product::attributes.base_sale_price')">
-                                {{number_format($automation_actions->price)}}
-                            </x-dashboard::table.cell>
-
-                            <x-dashboard::table.cell :label="__('product::attributes.is_active')">
-                                @if($automation_actions->is_active)
-                                <span class="chip chip-ok">@lang('product::attributes.active')</span>
-                                @else
-                                <span class="chip chip-fail">@lang('product::attributes.inactive')</span>
-                                @endif
-                            </x-dashboard::table.cell>
-
-                            <x-dashboard::table.cell :label="__('product::attributes.created_at')">
-                                {{$automation_actions->created_at_jalali_date}}
-                            </x-dashboard::table.cell>
-
-                            <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
-                                <div class="flex gap-1">
-                                    <x-dashboard::buttons.primary-action id="btn-delete-product-automation_actions-{{$automation_actions->automation_actions}}"
-                                        tag="button" wire:click="deleteProductautomation_actions({{$automation_actions->id}})" size="sm">
-                                        <img src="{{ asset('icons/dashboard/vuesax/outline/trash.svg') }}" alt="add"
-                                            class="w-5" />
-                                    </x-dashboard::buttons.primary-action>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </x-slot:body>
-                </x-dashboard::table.table>
-            </div>
-            @endif --}}
+            @endif
 
             <x-slot:footer>
                 <div class="flex items-center justify-between gap-3">

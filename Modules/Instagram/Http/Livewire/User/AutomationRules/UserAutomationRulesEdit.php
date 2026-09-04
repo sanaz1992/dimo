@@ -8,14 +8,16 @@ use Modules\Instagram\Entities\AutomationRule;
 use Modules\Instagram\Http\Livewire\Concerns\ManagesAutomationRules;
 use Modules\Tenant\Services\TenantService;
 
-class UserAutomationRulesCreate extends UserBaseComponent
+class UserAutomationRulesEdit extends UserBaseComponent
 {
     use LivewireNotify;
     use ManagesAutomationRules;
 
-    public function mount(): void
+    public function mount(AutomationRule $automationRule): void
     {
-        $this->fillForm();
+        $this->fillForm($automationRule);
+
+        $this->currentStep = request()->query('step', 'basic');
     }
 
     protected function getAvailableTenants()
@@ -41,12 +43,11 @@ class UserAutomationRulesCreate extends UserBaseComponent
 
     public function render()
     {
-        return $this->renderView(
-            'Instagram::livewire.user.automation-rules.automation-rules-create'
-        )->layoutData([
-            'title' => __(
-                'instagram::attributes.create_automation_rule'
-            ),
-        ]);
+        return $this->renderView('Instagram::livewire.user.automation-rules.automation-rules-edit')
+            ->layoutData([
+                'title' => __('instagram::attributes.edit_automation_rule')
+                    .' '
+                    .($this->automationRule ? ': '.$this->automationRule->name : ''),
+            ]);
     }
 }

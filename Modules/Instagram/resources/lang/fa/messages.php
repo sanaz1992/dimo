@@ -10,4 +10,6 @@ return [
     'select_match_type' => 'نحوه تطبیق را انتخاب کنید',
     'select_trigger_type' => 'محرک را انتخاب کنید',
 
+    'select_action_type' => 'نوع اقدام را انتخاب کنید',
+
 ];

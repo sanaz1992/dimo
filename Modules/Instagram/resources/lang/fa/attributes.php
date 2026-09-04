@@ -17,6 +17,7 @@ return [
 
     'automation_rules_list' => 'لیست قوانین خودکارسازی',
     'create_automation_rule' => 'افزودن قانون خودکارسازی',
+    'edit_automation_rule' => 'ویرایش قانون خودکارسازی',
 
     'automation_rule_name' => 'عنوان قانون',
     'title' => 'عنوان',
@@ -32,5 +33,9 @@ return [
     'tenant' => 'کسب و کار',
     'instagram_account' => 'اکانت اینستاگرام',
     'instagram_post' => 'پست اینستاگرام',
+
+    'action_type' => 'نوع اقدام',
+    'sort_order' => 'ترتیب اجرا',
+    'message' => 'پیام',
 
 ];

@@ -6,8 +6,10 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Modules\Instagram\External\Repositories\AutomationActionRepository;
 use Modules\Instagram\External\Repositories\AutomationRuleRepository;
 use Modules\Instagram\External\Repositories\AutomationRunRepository;
+use Modules\Instagram\External\Repositories\Contract\AutomationActionRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\AutomationRuleRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\AutomationRunRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
@@ -23,6 +25,7 @@ use Modules\Instagram\External\Repositories\InstagramPostRepository;
 use Modules\Instagram\External\Repositories\MessageRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesCreate;
+use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesEdit;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -52,6 +55,7 @@ class InstagramServiceProvider extends ServiceProvider
 
         Livewire::component('instagram::conversation-list', UserConversationList::class);
         Livewire::component('instagram::user-automation-rules-create', UserAutomationRulesCreate::class);
+        Livewire::component('instagram::user-automation-rules-edit', UserAutomationRulesEdit::class);
     }
 
     /**
@@ -70,6 +74,7 @@ class InstagramServiceProvider extends ServiceProvider
         $this->app->bind(InstagramCommentRepositoryInterface::class, InstagramCommentRepository::class);
         $this->app->bind(AutomationRunRepositoryInterface::class, AutomationRunRepository::class);
         $this->app->bind(AutomationRuleRepositoryInterface::class, AutomationRuleRepository::class);
+        $this->app->bind(AutomationActionRepositoryInterface::class, AutomationActionRepository::class);
     }
 
     /**
