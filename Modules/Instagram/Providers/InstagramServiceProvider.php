@@ -22,6 +22,7 @@ use Modules\Instagram\External\Repositories\InstagramCommentRepository;
 use Modules\Instagram\External\Repositories\InstagramPostRepository;
 use Modules\Instagram\External\Repositories\MessageRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
+use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesCreate;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -50,6 +51,7 @@ class InstagramServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path($this->name, 'Database/migrations'));
 
         Livewire::component('instagram::conversation-list', UserConversationList::class);
+        Livewire::component('instagram::user-automation-rules-create', UserAutomationRulesCreate::class);
     }
 
     /**

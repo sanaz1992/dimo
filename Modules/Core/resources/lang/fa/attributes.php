@@ -35,4 +35,7 @@ return [
 
     'connect_to_instagram' => 'اتصال اکانت اینستاگرام',
 
+    'active' => 'فعال',
+    'inactive' => 'غیر فعال',
+
 ];

@@ -16,9 +16,9 @@ enum AutomationTriggerType: string
     public static function labels(): array
     {
         return [
-            self::COMMENT->value => 'کامنت',
-            self::MESSAGE->value => 'پیام',
-            self::MENTION->value => 'منشن',
+            self::COMMENT->value => 'وقتی کاربر کامنت می‌گذارد',
+            self::MESSAGE->value => 'وقتی کاربر پیام ارسال میکند',
+            self::MENTION->value => 'وقتی کاربر منشن میکند',
         ];
     }
 

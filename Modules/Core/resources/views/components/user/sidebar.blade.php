@@ -68,16 +68,16 @@
             <span>@lang('dashboard::attributes.my_instagram_accounts')</span>
         </a>
 
+        <a href="{{route('user.automation_rules.index')}}" data-nav="automation_rules"
+            class="nav-link {{request()->routeIs('user.automation_rules.*') ? 'nav-link-active' : ''}}">
+            <span class="nav-ico">
+                <img src="{{request()->routeIs('user.automation_rules.*') ? asset('icons\sidebar\magic-stick-white.svg') : asset('icons\sidebar\magic-stick.svg') }}"
+                    alt="automation_rules" />
+            </span>
+            <span>@lang('dashboard::attributes.automation_rules')</span>
+        </a>
+
     </nav>
 
-    {{-- <div class="status-box relative z-[1]">
-        <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-soft"
-                id="icon-server"></div>
-            <div class="min-w-0">
-                <p class="text-[11px] text-emerald-700/70">وضعیت سرور</p>
-                <p class="text-[13px] font-bold text-emerald-700">آنلاین ۹۹.۹٪</p>
-            </div>
-        </div>
-    </div> --}}
+
 </aside>

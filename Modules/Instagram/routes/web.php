@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Http\Controllers\InstagramAuthController;
 use Modules\Instagram\Http\Livewire\Admin\InstagramAccount\InstagramAccountList;
+use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesCreate;
+use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesList;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Modules\Instagram\Http\Livewire\User\InstagramAccount\UserInstagramAccountList;
 use Modules\Instagram\Services\InstagramMessageService;
@@ -39,6 +41,9 @@ Route::name('user.')->prefix('/user')
         Route::get('/instagram-accounts', UserInstagramAccountList::class)->name('instagram_accounts.index');
 
         Route::get('/instagram-accounts/{account}/conversations', UserConversationList::class)->name('instagram_accounts.conversations.index');
+
+        Route::get('/automation_rules', UserAutomationRulesList::class)->name('automation_rules.index');
+        Route::get('/automation_rules/create', UserAutomationRulesCreate::class)->name('automation_rules.create');
     });
 
 Route::get('/instagram/test-send', function (InstagramMessageService $messageService) {

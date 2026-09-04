@@ -27,4 +27,6 @@ return [
     'instagram_accounts' => 'اکانت های اینستاگرام',
     'my_instagram_accounts' => 'اکانت های اینستاگرام من',
 
+    'automation_rules' => 'قوانین خودکارسازی',
+
 ];

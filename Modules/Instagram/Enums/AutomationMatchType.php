@@ -17,10 +17,10 @@ enum AutomationMatchType: string
     public static function labels(): array
     {
         return [
-            self::EXACT->value => 'دقیق',
-            self::CONTAINS->value => 'حاوی',
-            self::STARTS_WITH->value => 'شروع با',
-            self::ENDS_WITH->value => 'پایان با',
+            self::EXACT->value => 'دقیقاً برابر باشد',
+            self::CONTAINS->value => 'شامل عبارت باشد',
+            self::STARTS_WITH->value => ' با عبارت شروع شود',
+            self::ENDS_WITH->value => 'با عبارت تمام شود',
         ];
     }
 

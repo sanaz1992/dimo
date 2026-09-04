@@ -6,6 +6,7 @@ return [
     'my_instagram_accounts_list' => 'لیست اکانت های اینستاگرام من',
     'tenant_name' => 'کسب و کار',
     'username' => 'نام کاربری',
+    'instagram_username' => 'نام کاربری اینستاگرام',
     'name' => 'نام',
     'token_expires_at' => 'تاریخ انقضا',
     'status' => 'وضعیت',
@@ -13,5 +14,23 @@ return [
     'last_synced_at' => 'آخرین همگام‌سازی',
 
     'conversation_list' => 'لیست مکالمات',
+
+    'automation_rules_list' => 'لیست قوانین خودکارسازی',
+    'create_automation_rule' => 'افزودن قانون خودکارسازی',
+
+    'automation_rule_name' => 'عنوان قانون',
+    'title' => 'عنوان',
+    'post_title' => 'پست',
+    'trigger_type' => 'محرک',
+    'match_type' => 'نحوه تطبیق',
+    'match_value' => 'عبارت موردنظر',
+    'is_active' => 'وضعیت',
+    'priority' => 'اولویت',
+
+    'created_at' => 'تاریخ ایجاد',
+
+    'tenant' => 'کسب و کار',
+    'instagram_account' => 'اکانت اینستاگرام',
+    'instagram_post' => 'پست اینستاگرام',
 
 ];
