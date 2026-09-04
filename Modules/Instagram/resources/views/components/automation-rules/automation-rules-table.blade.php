@@ -88,14 +88,14 @@
 
                         <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                             <div class="flex gap-1">
-                                {{-- @isset($conversationsRouteName)
+                                @isset($editRouteName)
                                 <x-dashboard::buttons.primary-action
-                                    id="btn-instagram-{{ $automationRule->id }}-conversations" tag="a"
-                                    href="{{ route($conversationsRouteName, ['account' => $automationRule]) }}" size="sm">
-                                    <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="instagram-conversations"
+                                    id="btn-automation-rule-{{ $automationRule->id }}-edit" tag="a"
+                                    href="{{ route($editRouteName, ['automationRule' => $automationRule]) }}" size="sm">
+                                    <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="edit-automation-rule"
                                         class="w-5" />
                                 </x-dashboard::buttons.primary-action>
-                                @endisset --}}
+                                @endisset
                             </div>
                         </td>
                     </tr>

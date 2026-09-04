@@ -216,6 +216,13 @@ trait ManagesAutomationRules
         $this->showNextStep();
     }
 
+    public function previousStep(): void
+    {
+        if ($this->currentStep === 'automation_actions') {
+            $this->currentStep = 'basic';
+        }
+    }
+
     public function storeAutomationRule(AutomationRuleService $automationRuleService): void
     {
         try {
