@@ -22,6 +22,11 @@ class AutomationRuleService
         return $this->automationRuleRepository->all($orderBy, $limit, $with, $conditions, $filter);
     }
 
+    public function findByColumn($col, $value)
+    {
+        return $this->automationRuleRepository->findByColumn($col, $value);
+    }
+
     public function create(array $data): AutomationRule
     {
         $relations = $this->validateRelations($data);
