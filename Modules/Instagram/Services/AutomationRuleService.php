@@ -14,17 +14,12 @@ use Modules\User\Enums\UserLevel;
 class AutomationRuleService
 {
     public function __construct(
-        protected AutomationRuleRepositoryInterface $AutomationRuleRepository
+        protected AutomationRuleRepositoryInterface $automationRuleRepository
     ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
-        return $this->AutomationRuleRepository->all($orderBy, $limit, $with, $conditions, $filter);
-    }
-
-    public function firstOrCreate(array $conditions, array $data)
-    {
-        return $this->AutomationRuleRepository->firstOrCreate($conditions, $data);
+        return $this->automationRuleRepository->all($orderBy, $limit, $with, $conditions, $filter);
     }
 
     public function create(array $data): AutomationRule
@@ -38,23 +33,22 @@ class AutomationRuleService
         $data['instagram_post_id'] = $relations['post']?->id;
 
         return DB::transaction(function () use ($data) {
-            $automationRule = $this->AutomationRuleRepository->create($data);
-
-            return $automationRule;
+            return $this->automationRuleRepository->create($data);
         });
-    }
-
-    public function updateOrCreate(array $condition, array $data)
-    {
-        return $this->AutomationRuleRepository->updateOrCreate($condition, $data);
     }
 
     public function update(AutomationRule $automationRule, array $data): AutomationRule
     {
-        return DB::transaction(function () use ($automationRule, $data) {
-            $automationRule = $this->AutomationRuleRepository->update($automationRule, $data);
+        $relations = $this->validateRelations($data);
 
-            return $automationRule;
+        $this->authorizeTenant($relations['tenant']);
+
+        $data['tenant_id'] = $relations['tenant']->id;
+        $data['instagram_account_id'] = $relations['instagramAccount']->id;
+        $data['instagram_post_id'] = $relations['post']?->id;
+
+        return DB::transaction(function () use ($automationRule, $data) {
+            return $this->automationRuleRepository->update($automationRule, $data);
         });
     }
 
@@ -76,8 +70,8 @@ class AutomationRuleService
 
         $post = null;
 
-        if (! empty($data['instagram_post'])) {
-            $post = app(InstagramPostService::class)->findByColumn('id', $data['instagram_post']);
+        if (! empty($data['instagram_post_id'])) {
+            $post = app(InstagramPostService::class)->findByColumn('id', $data['instagram_post_id']);
             if (! $post) {
                 throw new \DomainException('Instagram post not found.');
             }
@@ -103,9 +97,7 @@ class AutomationRuleService
                 ->exists();
 
             if (! $hasAccess) {
-                throw new AuthorizationException(
-                    'You do not have access to this tenant.'
-                );
+                throw new AuthorizationException('You do not have access to this tenant.');
             }
         }
     }
