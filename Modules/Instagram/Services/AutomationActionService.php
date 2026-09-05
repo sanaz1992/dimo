@@ -26,6 +26,15 @@ class AutomationActionService
         });
     }
 
+    public function update(AutomationAction $automationAction, array $data): AutomationAction
+    {
+        return DB::transaction(function () use ($automationAction, $data) {
+            $automationAction = $this->automationActionRepository->update($automationAction, $data);
+
+            return $automationAction;
+        });
+    }
+
     public function delete(AutomationAction $automationAction): bool
     {
         return $this->automationActionRepository->delete($automationAction->id);

@@ -24,7 +24,7 @@ trait ManagesAutomationRules
     public array $form = [
         'tenant' => '',
         'instagram_account' => '',
-        'instagram_post' => '',
+        'instagram_post_id' => '',
         'name' => '',
         'trigger_type' => '',
         'match_type' => '',
@@ -33,12 +33,18 @@ trait ManagesAutomationRules
         'priority' => '',
     ];
 
+    public bool $showActionModal = false;
+
+    public $selectedEditingAction = null;
+
     public array $actionForm = [
         'action_type' => '',
         'message' => '',
         'sort_order' => 1,
         'is_active' => true,
     ];
+
+    public array $editActionForm = [];
 
     public array $actionTypes = [];
 
@@ -74,11 +80,13 @@ trait ManagesAutomationRules
 
         $this->isEditMode = $automationRule !== null;
 
+        $this->editActionForm = $this->actionForm;
+
         if ($automationRule) {
             $this->automationRule = $automationRule;
             $this->form['tenant'] = $automationRule->tenant->slug;
             $this->form['instagram_account'] = $automationRule->instagramAccount->unique_code;
-            $this->form['instagram_post'] = $automationRule->instagramPost?->id ?? '';
+            $this->form['instagram_post_id'] = $automationRule->instagram_post_id;
             $this->form['name'] = $automationRule->name;
             $this->form['trigger_type'] = $automationRule->trigger_type?->value ?? $automationRule->trigger_type;
             $this->form['match_type'] = $automationRule->match_type?->value ?? $automationRule->match_type;
@@ -132,9 +140,11 @@ trait ManagesAutomationRules
         $this->instagramPosts = [];
 
         $this->form['instagram_account'] = '';
-        $this->form['instagram_post'] = '';
+        $this->form['instagram_post_id'] = '';
 
         if (! $tenantSlug) {
+            $this->notify('error', __('instagram::messages.the_selected_tenant_could_not_be_found'));
+
             return;
         }
 
@@ -144,8 +154,10 @@ trait ManagesAutomationRules
     public function updatedFormInstagramAccount($accountUniqueCode): void
     {
         $this->instagramPosts = [];
-        $this->form['instagram_post'] = '';
+        $this->form['instagram_post_id'] = '';
         if (! $accountUniqueCode) {
+            $this->notify('error', __('instagram::messages.the_selected_instagram_account_could_not_be_found'));
+
             return;
         }
         $this->loadInstagramPosts($accountUniqueCode);
@@ -235,7 +247,6 @@ trait ManagesAutomationRules
             throw $e;
         } catch (\Throwable $e) {
             report($e);
-            dd($e->getMessage());
             $this->notify('error', __('core::messages.create.error'));
         }
     }
@@ -250,6 +261,8 @@ trait ManagesAutomationRules
             $this->redirect($url);
         } else {
             if (! $this->automationRule) {
+                $this->notify('error', __('instagram::messages.automation_rule_not_found'));
+
                 return;
             }
             $this->currentStep = 'automation_actions';
@@ -261,16 +274,30 @@ trait ManagesAutomationRules
     public function addAutomationAction(AutomationActionService $automationActionService): void
     {
         try {
+            if (! $this->automationRule) {
+                $this->notify('error', __('instagram::messages.automation_rule_not_found'));
+
+                return;
+            }
+
+            if ($this->actionForm['action_type'] === AutomationActionType::SEND_MESSAGE->value) {
+                $existingPrivateReply = $this->automationRule
+                    ->actions()
+                    ->where('action_type', AutomationActionType::SEND_MESSAGE->value)
+                    ->exists();
+                if ($existingPrivateReply) {
+                    $this->notify('error', __('instagram::messages.only_one_private_reply_can_be_defined_for_each_automation_rule'));
+
+                    return;
+                }
+            }
+
             $this->validate([
                 'actionForm.action_type' => ['required', new Enum(AutomationActionType::class)],
                 'actionForm.message' => ['required_if:actionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value],
                 'actionForm.sort_order' => ['nullable', 'integer', 'min:1'],
                 'actionForm.is_active' => ['required', 'boolean'],
             ]);
-
-            if (! $this->automationRule) {
-                return;
-            }
 
             $nextSortOrder = $this->automationRule->actions()->max('sort_order') + 1;
 
@@ -296,7 +323,6 @@ trait ManagesAutomationRules
             throw $e;
         } catch (\Throwable $e) {
             report($e);
-            dd($e->getMessage());
             $this->notify('error', __('core::messages.edit.error'));
         }
     }
@@ -315,15 +341,21 @@ trait ManagesAutomationRules
     {
         try {
             if (! $this->automationRule) {
+                $this->notify('error', __('instagram::messages.automation_rule_not_found'));
+
                 return;
             }
 
             $action = $automationActionService->findByColumn('id', $actionId);
             if (! $action) {
+                $this->notify('error', __('instagram::messages.action_not_found'));
+
                 return;
             }
 
             if ($action->automation_rule_id !== $this->automationRule->id) {
+                $this->notify('error', __('instagram::messages.this_action_does_not_belong_to_the_selected_automation_rule'));
+
                 return;
             }
 
@@ -335,6 +367,71 @@ trait ManagesAutomationRules
         } catch (\Throwable $e) {
             report($e);
             $this->notify('error', __('core::messages.destroy.error'));
+        }
+    }
+
+    public function editAutomationAction(int $actionId): void
+    {
+        // load action
+        $this->selectedEditingAction = app(AutomationActionService::class)->findByColumn('id', $actionId);
+
+        if (! $this->selectedEditingAction) {
+            return;
+        }
+        // fill actionForm
+        $this->editActionForm['action_type'] = $this->selectedEditingAction->action_type;
+        $this->editActionForm['message'] = $this->selectedEditingAction->config['message'] ?? '';
+        $this->editActionForm['sort_order'] = $this->selectedEditingAction->sort_order;
+        $this->editActionForm['is_active'] = $this->selectedEditingAction->is_active;
+
+        $this->showActionModal = true;
+    }
+
+    public function updateAutomationAction(AutomationActionService $automationActionService): void
+    {
+        try {
+            if (! $this->selectedEditingAction) {
+                $this->notify('error', __('instagram::messages.action_not_found'));
+
+                return;
+            }
+
+            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_MESSAGE->value) {
+                $existingPrivateReply = $this->automationRule
+                    ->actions()
+                    ->where('id', '!=', $this->selectedEditingAction->id)
+                    ->where('action_type', AutomationActionType::SEND_MESSAGE->value)
+                    ->exists();
+                if ($existingPrivateReply) {
+                    $this->notify('error', __('instagram::messages.only_one_private_reply_can_be_defined_for_each_automation_rule'));
+
+                    return;
+                }
+            }
+
+            $this->validate([
+                'editActionForm.action_type' => ['required', new Enum(AutomationActionType::class)],
+                'editActionForm.message' => ['required_if:editActionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value],
+                'editActionForm.sort_order' => ['nullable', 'integer', 'min:1'],
+                'editActionForm.is_active' => ['required', 'boolean'],
+            ]);
+
+            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_MESSAGE) {
+                $this->editActionForm['config'] = ['message' => trim($this->editActionForm['message'])];
+            }
+
+            $automationActionService->update($this->selectedEditingAction, $this->editActionForm);
+
+            $this->automationRule->load('actions');
+
+            $this->resetActionForm();
+            $this->notify('success', __('core::messages.edit.success'));
+            $this->showActionModal = false;
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            report($e);
+            $this->notify('error', __('core::messages.edit.error'));
         }
     }
 }

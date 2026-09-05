@@ -14,7 +14,6 @@ use Modules\Core\External\Repositories\SettingRepository;
 use Modules\Core\Http\Livewire\Admin\SearchNavbar;
 use Modules\Core\Http\Livewire\Admin\SettingEdit;
 use Modules\Core\Http\Middlewares\SetApiLocale;
-use Modules\Instagram\Entities\InstagramAccount;
 use Modules\User\Http\Middleware\EnsureAdminPanelAccess;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
@@ -33,14 +32,10 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot(Router $router): void
     {
-        // $account = InstagramAccount::first();
 
-        // dd(
-        //     strlen($account->access_token),substr($account->access_token, 0, 10)
-        // );
-        if (app()->environment('local')) {
-            URL::forceScheme('https');
-        }
+        // if (app()->environment('local')) {
+        //     URL::forceScheme('https');
+        // }
 
         $router->aliasMiddleware(
             'admin.panel',

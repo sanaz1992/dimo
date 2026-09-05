@@ -37,5 +37,7 @@ return [
     'action_type' => 'نوع اقدام',
     'sort_order' => 'ترتیب اجرا',
     'message' => 'پیام',
+    'create_action' => 'افزودن اقدام',
+    'update_action' => 'ویرایش اقدام',
 
 ];
