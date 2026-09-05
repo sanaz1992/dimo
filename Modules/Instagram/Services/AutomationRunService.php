@@ -26,9 +26,7 @@ class AutomationRunService
     public function create(array $data): AutomationRun
     {
         return DB::transaction(function () use ($data) {
-            $automationRun = $this->automationRunRepository->create($data);
-
-            return $automationRun;
+            return $this->automationRunRepository->create($data);
         });
     }
 
@@ -40,9 +38,7 @@ class AutomationRunService
     public function update(AutomationRun $automationRun, array $data): AutomationRun
     {
         return DB::transaction(function () use ($automationRun, $data) {
-            $automationRun = $this->automationRunRepository->update($automationRun, $data);
-
-            return $automationRun;
+            return $this->automationRunRepository->update($automationRun, $data);
         });
     }
 }

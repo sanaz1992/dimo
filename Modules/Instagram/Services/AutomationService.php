@@ -26,25 +26,38 @@ class AutomationService
                 },
             ],
         ];
+
         $rules = app(AutomationRuleService::class)->list('priority', conditions: $conditions);
 
         $automationRunService = app(AutomationRunService::class);
+
         foreach ($rules as $rule) {
             if (! $this->matches($rule, $comment)) {
                 continue;
             }
 
-            $alreadyExecutedConditions = [
-                'where' => [
-                    'automation_rule_id' => ['=', $rule->id],
-                    'instagram_comment_id' => ['=', $comment->id],
-                ],
-            ];
-            $alreadyExecuted = $automationRunService->list(conditions: $alreadyExecutedConditions);
-            if ($alreadyExecuted->count()) {
+            $existingRun = $automationRunService->list(
+                conditions: [
+                    'where' => [
+                        'automation_rule_id' => ['=', $rule->id],
+                        'instagram_comment_id' => ['=', $comment->id],
+                    ],
+                ]
+            )->first();
+
+            // if automation executed complately, don't do it again
+            if ($existingRun && $existingRun->status === AutomationRunStatus::COMPLETED) {
                 continue;
             }
 
+            // if run exists but failed or processing/pending, continue with the same run
+            if ($existingRun) {
+                $this->executeRun($existingRun);
+
+                continue;
+            }
+
+            // first run, create a new AutomationRun record and execute it
             $run = $automationRunService->create([
                 'automation_rule_id' => $rule->id,
                 'instagram_account_id' => $comment->instagram_account_id,
@@ -81,7 +94,9 @@ class AutomationService
 
         $run = $automationRunService->update($run, [
             'status' => AutomationRunStatus::PROCESSING->value,
-            'started_at' => now(),
+            'started_at' => $run->started_at ?? now(),
+            'error' => null,
+            'completed_at' => null,
         ]);
 
         try {
@@ -92,10 +107,17 @@ class AutomationService
                 ->get();
 
             foreach ($actions as $action) {
+
+                // if this action run successfully before, don't run it again in retry
+                $context = $run->context ?? [];
+
+                if (isset($context['actions'][$action->id]) && ($context['actions'][$action->id]['status'] ?? null) === 'completed') {
+                    continue;
+                }
+
                 match ($action->action_type) {
                     AutomationActionType::SEND_PRIVATE_REPLY => $this->executePrivateReply($run, $action),
                     AutomationActionType::SEND_MESSAGE => $this->executeSendMessage($run, $action),
-
                     default => Log::warning(
                         'Unsupported automation action',
                         [
@@ -105,17 +127,24 @@ class AutomationService
                         ]
                     ),
                 };
+
+                // maybe refresh the run to get the latest context after executing the action
+                $run->refresh();
             }
 
             $automationRunService->update($run, [
                 'status' => AutomationRunStatus::COMPLETED->value,
                 'completed_at' => now(),
+                'error' => null,
             ]);
         } catch (\Throwable $e) {
-            Log::error('=== Instagram automation run failed ===', [
-                'run_id' => $run->id,
-                'error' => $e->getMessage(),
-            ]);
+            Log::error(
+                '=== Instagram automation run failed ===',
+                [
+                    'run_id' => $run->id,
+                    'error' => $e->getMessage(),
+                ]
+            );
 
             $automationRunService->update($run, [
                 'status' => AutomationRunStatus::FAILED->value,
@@ -227,7 +256,7 @@ class AutomationService
     private function storeActionContext(AutomationRun $run, AutomationAction $action, array $data): void
     {
         $context = $run->context ?? [];
-        $context['actions'][$action->id] = $data;
+        $context['actions'][$action->id] = array_merge($data, ['status' => 'completed']);
         app(AutomationRunService::class)->update($run, ['context' => $context]);
     }
 }
