@@ -10,23 +10,23 @@ use Modules\Instagram\External\Repositories\Contract\AutomationRunRepositoryInte
 class AutomationRunService
 {
     public function __construct(
-        protected AutomationRunRepositoryInterface $AutomationRunRepository
+        protected AutomationRunRepositoryInterface $automationRunRepository
     ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
-        return $this->AutomationRunRepository->all($orderBy, $limit, $with, $conditions, $filter);
+        return $this->automationRunRepository->all($orderBy, $limit, $with, $conditions, $filter);
     }
 
     public function firstOrCreate(array $conditions, array $data)
     {
-        return $this->AutomationRunRepository->firstOrCreate($conditions, $data);
+        return $this->automationRunRepository->firstOrCreate($conditions, $data);
     }
 
     public function create(array $data): AutomationRun
     {
         return DB::transaction(function () use ($data) {
-            $automationRun = $this->AutomationRunRepository->create($data);
+            $automationRun = $this->automationRunRepository->create($data);
 
             return $automationRun;
         });
@@ -34,13 +34,13 @@ class AutomationRunService
 
     public function updateOrCreate(array $condition, array $data)
     {
-        return $this->AutomationRunRepository->updateOrCreate($condition, $data);
+        return $this->automationRunRepository->updateOrCreate($condition, $data);
     }
 
     public function update(AutomationRun $automationRun, array $data): AutomationRun
     {
         return DB::transaction(function () use ($automationRun, $data) {
-            $automationRun = $this->AutomationRunRepository->update($automationRun, $data);
+            $automationRun = $this->automationRunRepository->update($automationRun, $data);
 
             return $automationRun;
         });

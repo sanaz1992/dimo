@@ -4,6 +4,7 @@ namespace Modules\Instagram\Enums;
 
 enum AutomationActionType: string
 {
+    case SEND_PRIVATE_REPLY = 'send_private_reply';
     case SEND_MESSAGE = 'send_message';
     case ADD_TAG = 'add_tag';
     case SEND_EMAIL = 'send_email';
@@ -16,6 +17,7 @@ enum AutomationActionType: string
     public static function labels(): array
     {
         return [
+            self::SEND_PRIVATE_REPLY->value => 'پاسخ خصوصی به کامنت',
             self::SEND_MESSAGE->value => 'ارسال پیام',
             self::ADD_TAG->value => 'افزودن برچسب',
             self::SEND_EMAIL->value => 'ارسال ایمیل',
@@ -30,6 +32,7 @@ enum AutomationActionType: string
     public function color(): string
     {
         return match ($this) {
+            self::SEND_PRIVATE_REPLY => 'green',
             self::SEND_MESSAGE => 'green',
             self::ADD_TAG => 'blue',
             self::SEND_EMAIL => 'rose',

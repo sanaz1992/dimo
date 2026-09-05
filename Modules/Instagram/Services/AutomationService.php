@@ -78,6 +78,7 @@ class AutomationService
     private function executeRun(AutomationRun $run): void
     {
         $automationRunService = app(AutomationRunService::class);
+
         $run = $automationRunService->update($run, [
             'status' => AutomationRunStatus::PROCESSING->value,
             'started_at' => now(),
@@ -92,23 +93,21 @@ class AutomationService
 
             foreach ($actions as $action) {
                 match ($action->action_type) {
-                    AutomationActionType::SEND_MESSAGE => $this->executeSendMessage(
-                        $run,
-                        $action
-                    ),
+                    AutomationActionType::SEND_PRIVATE_REPLY => $this->executePrivateReply($run, $action),
+                    AutomationActionType::SEND_MESSAGE => $this->executeSendMessage($run, $action),
 
                     default => Log::warning(
                         'Unsupported automation action',
                         [
                             'run_id' => $run->id,
                             'action_id' => $action->id,
-                            'action_type' => $action->action_type,
+                            'action_type' => $action->action_type->value,
                         ]
                     ),
                 };
             }
 
-            $run = $automationRunService->update($run, [
+            $automationRunService->update($run, [
                 'status' => AutomationRunStatus::COMPLETED->value,
                 'completed_at' => now(),
             ]);
@@ -118,7 +117,7 @@ class AutomationService
                 'error' => $e->getMessage(),
             ]);
 
-            $run = $automationRunService->update($run, [
+            $automationRunService->update($run, [
                 'status' => AutomationRunStatus::FAILED->value,
                 'error' => $e->getMessage(),
                 'completed_at' => now(),
@@ -128,34 +127,26 @@ class AutomationService
         }
     }
 
-    private function executeSendMessage(AutomationRun $run, AutomationAction $action): void
+    private function executePrivateReply(AutomationRun $run, AutomationAction $action): void
     {
         $comment = $run->instagramComment;
         if (! $comment) {
-            throw new \RuntimeException(
-                'Instagram comment not found for automation run.'
-            );
+            throw new \RuntimeException('Instagram comment not found for automation run.');
         }
 
         $instagramAccount = $run->instagramAccount;
         if (! $instagramAccount) {
-            throw new \RuntimeException(
-                'Instagram account not found for automation run.'
-            );
+            throw new \RuntimeException('Instagram account not found for automation run.');
         }
 
         $message = trim($action->config['message'] ?? '');
         if ($message === '') {
-            throw new \RuntimeException(
-                'Automation message is empty.'
-            );
+            throw new \RuntimeException('Automation message is empty.');
         }
 
         $commentId = $comment->instagram_comment_id;
         if (! $commentId) {
-            throw new \RuntimeException(
-                'Instagram comment ID is missing.'
-            );
+            throw new \RuntimeException('Instagram comment ID is missing.');
         }
 
         $result = app(InstagramMessageService::class)
@@ -165,17 +156,17 @@ class AutomationService
                 message: $message,
             );
 
-        $context = $run->context ?? [];
-
-        $context['actions'][$action->id] = [
-            'type' => AutomationActionType::SEND_MESSAGE->value,
-            'message_id' => $result['message_id'] ?? null,
-            'recipient_id' => $result['recipient_id'] ?? null,
-            'comment_id' => $commentId,
-            'sent_at' => now()->toIso8601String(),
-        ];
-
-        $run = app(AutomationRunService::class)->update($run, ['context' => $context]);
+        $this->storeActionContext(
+            run: $run,
+            action: $action,
+            data: [
+                'type' => AutomationActionType::SEND_PRIVATE_REPLY->value,
+                'message_id' => $result['message_id'] ?? null,
+                'recipient_id' => $result['recipient_id'] ?? null,
+                'comment_id' => $commentId,
+                'sent_at' => now()->toIso8601String(),
+            ]
+        );
 
         Log::info('=== AUTOMATION PRIVATE REPLY SUCCESS ===', [
             'run_id' => $run->id,
@@ -183,5 +174,60 @@ class AutomationService
             'comment_id' => $commentId,
             'message_id' => $result['message_id'] ?? null,
         ]);
+    }
+
+    private function executeSendMessage(AutomationRun $run, AutomationAction $action): void
+    {
+        $comment = $run->instagramComment;
+        if (! $comment) {
+            throw new \RuntimeException('Instagram comment not found for automation run.');
+        }
+
+        $instagramAccount = $run->instagramAccount;
+        if (! $instagramAccount) {
+            throw new \RuntimeException('Instagram account not found for automation run.');
+        }
+
+        $message = trim($action->config['message'] ?? '');
+        if ($message === '') {
+            throw new \RuntimeException('Automation message is empty.');
+        }
+
+        $recipientIgId = $comment->commenter_ig_id;
+        if (! $recipientIgId) {
+            throw new \RuntimeException('Instagram commenter ID is missing.');
+        }
+
+        $result = app(InstagramMessageService::class)
+            ->sendTextMessage(
+                instagramAccount: $instagramAccount,
+                recipientIgId: $recipientIgId,
+                message: $message,
+            );
+
+        $this->storeActionContext(
+            run: $run,
+            action: $action,
+            data: [
+                'type' => AutomationActionType::SEND_MESSAGE->value,
+                'message_id' => $result['message_id'] ?? null,
+                'recipient_id' => $recipientIgId,
+                'sent_at' => now()->toIso8601String(),
+            ]
+        );
+
+        Log::info('=== AUTOMATION MESSAGE SUCCESS ===', [
+            'run_id' => $run->id,
+            'action_id' => $action->id,
+            'recipient_id' => $recipientIgId,
+            'message_id' => $result['message_id'] ?? null,
+        ]);
+    }
+
+    private function storeActionContext(AutomationRun $run, AutomationAction $action, array $data): void
+    {
+        $context = $run->context ?? [];
+        $context['actions'][$action->id] = $data;
+        app(AutomationRunService::class)->update($run, ['context' => $context]);
     }
 }

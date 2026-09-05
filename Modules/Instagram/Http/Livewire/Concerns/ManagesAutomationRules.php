@@ -280,13 +280,14 @@ trait ManagesAutomationRules
                 return;
             }
 
-            if ($this->actionForm['action_type'] === AutomationActionType::SEND_MESSAGE->value) {
-                $existingPrivateReply = $this->automationRule
+            if ($this->actionForm['action_type'] === AutomationActionType::SEND_PRIVATE_REPLY->value) {
+                $hasPrivateReply = $this->automationRule
                     ->actions()
-                    ->where('action_type', AutomationActionType::SEND_MESSAGE->value)
+                    ->where('action_type', AutomationActionType::SEND_PRIVATE_REPLY->value)
                     ->exists();
-                if ($existingPrivateReply) {
-                    $this->notify('error', __('instagram::messages.only_one_private_reply_can_be_defined_for_each_automation_rule'));
+
+                if ($hasPrivateReply) {
+                    $this->notify('error', 'برای هر قانون فقط یک پاسخ خصوصی به کامنت مجاز است.');
 
                     return;
                 }
