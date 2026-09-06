@@ -9,6 +9,7 @@ use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesEdit
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesList;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Modules\Instagram\Http\Livewire\User\InstagramAccount\UserInstagramAccountList;
+use Modules\Instagram\Http\Livewire\User\InstagramPost\UserInstagramPostList;
 use Modules\Instagram\Services\InstagramMessageService;
 
 Route::middleware(['auth'])->group(function () {
@@ -39,13 +40,14 @@ Route::name('user.')->prefix('/user')
 
         Route::get('/instagram/connect', [InstagramAuthController::class, 'redirect'])->name('instagram.connect');
 
-        Route::get('/instagram-accounts', UserInstagramAccountList::class)->name('instagram_accounts.index');
-
-        Route::get('/instagram-accounts/{account}/conversations', UserConversationList::class)->name('instagram_accounts.conversations.index');
+        Route::get('/instagram_accounts', UserInstagramAccountList::class)->name('instagram_accounts.index');
+        Route::get('/instagram_accounts/{account}/conversations', UserConversationList::class)->name('instagram_accounts.conversations.index');
 
         Route::get('/automation_rules', UserAutomationRulesList::class)->name('automation_rules.index');
         Route::get('/automation_rules/create', UserAutomationRulesCreate::class)->name('automation_rules.create');
         Route::get('/automation_rules/{automationRule}/edit', UserAutomationRulesEdit::class)->name('automation_rules.edit');
+
+        Route::get('/instagram_posts', UserInstagramPostList::class)->name('instagram_posts.index');
     });
 
 Route::get('/instagram/test-send', function (InstagramMessageService $messageService) {

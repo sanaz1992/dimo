@@ -28,5 +28,5 @@ return [
     'my_instagram_accounts' => 'اکانت های اینستاگرام من',
 
     'automation_rules' => 'قوانین خودکارسازی',
-
+    'instagram_posts' => 'پست های اینستاگرام',
 ];

@@ -69,9 +69,20 @@
                             <div class="flex gap-1">
                                 @isset($conversationsRouteName)
                                     {{-- Instagram --}}
-                                    <x-dashboard::buttons.primary-action id="btn-instagram-{{ $instagramAccount->id }}-conversations"
-                                        tag="a" href="{{ route($conversationsRouteName, ['account' => $instagramAccount]) }}" size="sm">
-                                        <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="instagram-conversations" class="w-5" />
+                                    <x-dashboard::buttons.primary-action
+                                        id="btn-instagram-{{ $instagramAccount->id }}-conversations" tag="a"
+                                        href="{{ route($conversationsRouteName, ['account' => $instagramAccount]) }}" size="sm">
+                                        <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="instagram-conversations"
+                                            class="w-5" />
+                                    </x-dashboard::buttons.primary-action>
+                                @endisset
+
+                                @isset($instagramPostsListRouteName)
+                                    <x-dashboard::buttons.primary-action id="btn-instagram-{{ $instagramAccount->id }}-posts"
+                                        tag="a"
+                                        href="{{ route($instagramPostsListRouteName, ['account' => $instagramAccount]) }}"
+                                        size="sm">
+                                        <img src="{{ asset('icons\sidebar\photos.svg') }}" alt="instagram-posts" class="w-5" />
                                     </x-dashboard::buttons.primary-action>
                                 @endisset
                             </div>

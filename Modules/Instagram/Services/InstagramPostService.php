@@ -4,6 +4,7 @@ namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Filters\QueryFilter;
+use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Entities\InstagramPost;
 use Modules\Instagram\External\Repositories\Contract\InstagramPostRepositoryInterface;
 
@@ -11,6 +12,7 @@ class InstagramPostService
 {
     public function __construct(
         protected InstagramPostRepositoryInterface $instagramPostRepository,
+        protected InstagramApiService $instagramApiService,
     ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
@@ -57,5 +59,25 @@ class InstagramPostService
 
             return $post;
         });
+    }
+
+    public function syncPostsPage(InstagramAccount $instagramAccount, array $result): int
+    {
+        $posts = $result['data'] ?? [];
+        foreach ($posts as $post) {
+            $this->updateOrCreate(
+                ['instagram_media_id' => $post['id']],
+                [
+                    'instagram_account_id' => $instagramAccount->id,
+                    'media_product_type' => $post['media_product_type'] ?? null,
+                    'caption' => $post['caption'] ?? null,
+                    'permalink' => $post['permalink'] ?? null,
+                    'published_at' => $post['timestamp'] ?? null,
+                    'payload' => $post,
+                ]
+            );
+        }
+
+        return count($posts);
     }
 }

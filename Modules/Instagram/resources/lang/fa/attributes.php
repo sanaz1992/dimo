@@ -40,4 +40,13 @@ return [
     'create_action' => 'افزودن اقدام',
     'update_action' => 'ویرایش اقدام',
 
+    'my_instagram_posts_list' => 'پست های اینستاگرام من',
+
+    'caption' => 'کپشن',
+    'media_product_type' => 'نوع پست',
+    'permalink' => 'لینک',
+    'published_at' => 'تاریخ انتشار',
+    'comments_count' => 'تعداد کامنت ها',
+    'sync_posts' => 'به روزرسانی پست ها',
+
 ];

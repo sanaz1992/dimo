@@ -77,6 +77,15 @@
             <span>@lang('dashboard::attributes.automation_rules')</span>
         </a>
 
+        <a href="{{route('user.instagram_posts.index')}}" data-nav="instagram_posts"
+            class="nav-link {{request()->routeIs('user.instagram_posts.*') ? 'nav-link-active' : ''}}">
+            <span class="nav-ico">
+                <img src="{{request()->routeIs('user.instagram_posts.*') ? asset('icons\sidebar\photos-white.svg') : asset('icons\sidebar\photos.svg') }}"
+                    alt="instagram_posts" />
+            </span>
+            <span>@lang('dashboard::attributes.instagram_posts')</span>
+        </a>
+
     </nav>
 
 
