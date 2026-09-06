@@ -4,7 +4,6 @@ namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Modules\Instagram\Entities\Conversation;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Entities\Message;
 use Modules\Instagram\Enums\ConversationStatus;
@@ -13,21 +12,23 @@ use Modules\Instagram\Enums\MessageType;
 
 class InstagramMessageService
 {
+    public function __construct(
+        protected ConversationService $conversationService,
+        protected MessageService $messageService,
+    ) {}
+
     public function sendTextMessage(
         InstagramAccount $instagramAccount,
         string $recipientIgId,
         string $message
     ): array {
-        $response = Http::withToken($instagramAccount->access_token)
-            ->post(
-                'https://graph.instagram.com/v26.0/'.
-                    $instagramAccount->instagram_user_id.
-                    '/messages',
-                [
-                    'recipient' => ['id' => $recipientIgId],
-                    'message' => ['text' => $message],
-                ]
-            );
+        $response = Http::withToken($instagramAccount->access_token)->post(
+            $this->getMessagesEndpoint($instagramAccount),
+            [
+                'recipient' => ['id' => $recipientIgId],
+                'message' => ['text' => $message],
+            ]
+        );
 
         if ($response->failed()) {
             throw new \RuntimeException('Instagram message sending failed: '.$response->body());
@@ -35,26 +36,92 @@ class InstagramMessageService
 
         $result = $response->json();
 
-        /*
-         * پیدا کردن یا ساخت Conversation
-         */
-        $conversation = Conversation::firstOrCreate(
+        $this->storeOutgoingMessage(
+            instagramAccount: $instagramAccount,
+            recipientIgId: $recipientIgId,
+            recipientUsername: null,
+            message: $message,
+            result: $result,
+        );
+
+        Log::info(
+            'Instagram message sent.',
             [
-                'tenant_id' => $instagramAccount->tenant_id,
                 'instagram_account_id' => $instagramAccount->id,
-                'customer_ig_id' => $recipientIgId,
-            ],
-            [
-                'customer_username' => null,
-                'status' => ConversationStatus::OPEN->value,
-                'last_message_at' => now(),
+                'recipient_id' => $recipientIgId,
+                'message_id' => $result['message_id'] ?? null,
             ]
         );
 
-        /*
-         * ذخیره پیام Outgoing
-         */
-        $messageModel = Message::create([
+        return $result;
+    }
+
+    public function sendPrivateReply(
+        InstagramAccount $instagramAccount,
+        string $commentId,
+        string $recipientIgId,
+        ?string $recipientUsername,
+        string $message
+    ): array {
+        $response = Http::withToken($instagramAccount->access_token)->post(
+            $this->getMessagesEndpoint($instagramAccount),
+            [
+                'recipient' => ['comment_id' => $commentId],
+                'message' => ['text' => $message],
+            ]
+        );
+
+        if ($response->failed()) {
+            Log::error(
+                'Instagram private reply failed.',
+                [
+                    'instagram_account_id' => $instagramAccount->id,
+                    'comment_id' => $commentId,
+                    'status' => $response->status(),
+                    'response' => $response->body(),
+                ]
+            );
+
+            throw new \RuntimeException('Instagram private reply failed: '.$response->body());
+        }
+
+        $result = $response->json();
+
+        $this->storeOutgoingMessage(
+            instagramAccount: $instagramAccount,
+            recipientIgId: $recipientIgId,
+            recipientUsername: $recipientUsername,
+            message: $message,
+            result: $result,
+        );
+
+        Log::info(
+            'Instagram private reply sent.',
+            [
+                'instagram_account_id' => $instagramAccount->id,
+                'comment_id' => $commentId,
+                'recipient_id' => $recipientIgId,
+                'message_id' => $result['message_id'] ?? null,
+            ]
+        );
+
+        return $result;
+    }
+
+    private function storeOutgoingMessage(
+        InstagramAccount $instagramAccount,
+        string $recipientIgId,
+        ?string $recipientUsername,
+        string $message,
+        array $result
+    ): Message {
+        $conversation = $this->findOrCreateConversation(
+            instagramAccount: $instagramAccount,
+            recipientIgId: $recipientIgId,
+            recipientUsername: $recipientUsername,
+        );
+
+        $messageModel = $this->messageService->create([
             'conversation_id' => $conversation->id,
             'instagram_message_id' => $result['message_id'] ?? null,
             'sender_ig_id' => $instagramAccount->instagram_user_id,
@@ -66,59 +133,38 @@ class InstagramMessageService
             'sent_at' => now(),
         ]);
 
-        /*
-         * آپدیت آخرین پیام Conversation
-         */
-        $conversation->update([
-            'last_message_at' => $messageModel->sent_at,
-        ]);
+        $this->conversationService->update($conversation, ['last_message_at' => $messageModel->sent_at]);
 
-        return $result;
+        return $messageModel;
     }
 
-    public function sendPrivateReply(
+    private function findOrCreateConversation(
         InstagramAccount $instagramAccount,
-        string $commentId,
-        string $message
-    ): array {
-        $response = Http::withToken(
-            $instagramAccount->access_token
-        )->post(
-            'https://graph.instagram.com/v26.0/'.
-                $instagramAccount->instagram_user_id.
-                '/messages',
+        string $recipientIgId,
+        ?string $recipientUsername
+    ) {
+        $conversation = $this->conversationService->firstOrCreate(
             [
-                'recipient' => [
-                    'comment_id' => $commentId,
-                ],
-                'message' => [
-                    'text' => $message,
-                ],
+                'tenant_id' => $instagramAccount->tenant_id,
+                'instagram_account_id' => $instagramAccount->id,
+                'customer_ig_id' => $recipientIgId,
+            ],
+            [
+                'customer_username' => $recipientUsername,
+                'status' => ConversationStatus::OPEN->value,
+                'last_message_at' => now(),
             ]
         );
 
-        if ($response->failed()) {
-            Log::error('=== INSTAGRAM PRIVATE REPLY FAILED ===', [
-                'instagram_account_id' => $instagramAccount->id,
-                'comment_id' => $commentId,
-                'status' => $response->status(),
-                'response' => $response->body(),
-            ]);
-
-            throw new \RuntimeException(
-                'Instagram private reply failed: '.
-                    $response->body()
-            );
+        if ($recipientUsername && $conversation->customer_username !== $recipientUsername) {
+            $this->conversationService->update($conversation, ['customer_username' => $recipientUsername]);
         }
 
-        $result = $response->json();
+        return $conversation;
+    }
 
-        Log::info('=== INSTAGRAM PRIVATE REPLY SENT ===', [
-            'instagram_account_id' => $instagramAccount->id,
-            'comment_id' => $commentId,
-            'result' => $result,
-        ]);
-
-        return $result;
+    private function getMessagesEndpoint(InstagramAccount $instagramAccount): string
+    {
+        return 'https://graph.instagram.com/v26.0/'.$instagramAccount->instagram_user_id.'/messages';
     }
 }

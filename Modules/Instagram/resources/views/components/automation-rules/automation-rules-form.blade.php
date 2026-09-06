@@ -126,7 +126,7 @@
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('instagram::attributes.action_type')">
-                                        {{ $action->action_type->label() }}
+                                    {{$action->id}} -    {{ $action->action_type->label() }}
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('instagram::attributes.message')">
