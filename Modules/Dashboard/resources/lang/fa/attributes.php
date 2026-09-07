@@ -29,4 +29,6 @@ return [
 
     'automation_rules' => 'قوانین خودکارسازی',
     'instagram_posts' => 'پست های اینستاگرام',
+
+    'automation_runs_history' => 'تاریخچه اجراها',
 ];

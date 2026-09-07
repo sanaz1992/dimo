@@ -51,7 +51,7 @@ class UserAutomationRulesList extends UserBaseComponent
         $request = new Request($this->filterData ?? []);
         $filter = new AutomationRuleFilter($request);
 
-        $automationRules = $automationRuleService->list(null, [10, true], with: ['instagramAccount'], filter: $filter);
+        $automationRules = $automationRuleService->list(null, [10, true], with: ['instagramAccount', 'runs'], filter: $filter);
 
         return $this->renderView(
             'Instagram::livewire.user.automation-rules.automation-rules-list',

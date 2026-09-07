@@ -18,6 +18,11 @@ class AutomationRunService
         return $this->automationRunRepository->all($orderBy, $limit, $with, $conditions, $filter);
     }
 
+    public function findByColumn($col, $value)
+    {
+        return $this->automationRunRepository->findByColumn($col, $value);
+    }
+
     public function firstOrCreate(array $conditions, array $data)
     {
         return $this->automationRunRepository->firstOrCreate($conditions, $data);

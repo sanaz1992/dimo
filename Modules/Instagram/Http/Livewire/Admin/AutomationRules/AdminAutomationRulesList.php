@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Instagram\Http\Livewire\User\AutomationRules;
+namespace Modules\Instagram\Http\Livewire\Admin\AutomationRules;
 
 use Illuminate\Http\Request;
 use Livewire\Attributes\On;
@@ -10,7 +10,7 @@ use Modules\Core\Traits\LivewireNotify;
 use Modules\Instagram\Filters\AutomationRuleFilter;
 use Modules\Instagram\Services\AutomationRuleService;
 
-class UserAutomationRulesList extends UserBaseComponent
+class AdminAutomationRulesList extends UserBaseComponent
 {
     use LivewireNotify;
     use WithPagination;
@@ -20,7 +20,9 @@ class UserAutomationRulesList extends UserBaseComponent
 
     public $filterData = [];
 
-    public function mount() {}
+    public function mount()
+    {
+    }
 
     #[On('updateAutomationRuleListFilters')]
     public function handleFilters($filters)

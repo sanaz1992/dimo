@@ -30,7 +30,7 @@
                     <th>@lang('instagram::attributes.match_type')</th>
                     <th>@lang('instagram::attributes.match_value')</th>
                     <th>@lang('instagram::attributes.is_active')</th>
-                    <th>@lang('instagram::attributes.priority')</th>
+                    <th>@lang('instagram::attributes.action_runs_count')</th>
                     <th>@lang('instagram::attributes.created_at')</th>
                     <th class="col-actions"></th>
                 </tr>
@@ -79,7 +79,7 @@
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.priority')">
-                            {{toPersianNumber($automationRule->priority)}}
+                            {{toPersianNumber($automationRule->runs->count())}}
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.created_at')">

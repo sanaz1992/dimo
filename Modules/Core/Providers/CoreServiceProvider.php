@@ -35,9 +35,9 @@ class CoreServiceProvider extends ServiceProvider
     public function boot(Router $router): void
     {
 
-        if (app()->environment('local')) {
-            URL::forceScheme('https');
-        }
+        // if (app()->environment('local')) {
+        //     URL::forceScheme('https');
+        // }
 
         $router->aliasMiddleware(
             'admin.panel',

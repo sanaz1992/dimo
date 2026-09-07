@@ -1829,7 +1829,7 @@ button:hover {
     --tw-shadow: 0 8px 32px #0f172a14;
     --tw-shadow-colored: 0 8px 32px var(--tw-shadow-color);
     width: 100%;
-    max-width: 420px;
+    /* max-width: 420px; */
     max-height: min(90dvh, 560px);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     background-color: #fffffff2;

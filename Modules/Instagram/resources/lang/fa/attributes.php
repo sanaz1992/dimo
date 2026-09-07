@@ -51,4 +51,12 @@ return [
 
     'show_post_in_instagram' => 'مشاهده پست در اینستاگرام',
 
+    'automation_runs_list' => 'تاریخچه اجراها',
+    'rule_title' => 'عنوان خودکارسازی',
+    'customer_username' => 'نام کاربری مشتری',
+    'comment_text' => 'متن کامنت',
+    'action_runs_count' => 'تعداد اجراها',
+
+    'detail_automation_run' => 'جزئیات اجرای خودکارسازی ',
+
 ];

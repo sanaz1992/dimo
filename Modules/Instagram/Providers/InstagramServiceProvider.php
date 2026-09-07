@@ -28,6 +28,7 @@ use Modules\Instagram\External\Repositories\MessageRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesCreate;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesEdit;
+use Modules\Instagram\Http\Livewire\User\AutomationRuns\UserAutomationRunsList;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Modules\Instagram\Http\Livewire\User\InstagramPost\UserInstagramPostList;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -60,6 +61,7 @@ class InstagramServiceProvider extends ServiceProvider
         Livewire::component('instagram::user-automation-rules-create', UserAutomationRulesCreate::class);
         Livewire::component('instagram::user-automation-rules-edit', UserAutomationRulesEdit::class);
         Livewire::component('instagram::user-instagram-post-list', UserInstagramPostList::class);
+        Livewire::component('instagram::user-automation-runs-list', UserAutomationRunsList::class);
     }
 
     /**

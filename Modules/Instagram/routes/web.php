@@ -7,6 +7,7 @@ use Modules\Instagram\Http\Livewire\Admin\InstagramAccount\InstagramAccountList;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesCreate;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesEdit;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesList;
+use Modules\Instagram\Http\Livewire\User\AutomationRuns\UserAutomationRunsList;
 use Modules\Instagram\Http\Livewire\User\Conversation\UserConversationList;
 use Modules\Instagram\Http\Livewire\User\InstagramAccount\UserInstagramAccountList;
 use Modules\Instagram\Http\Livewire\User\InstagramPost\UserInstagramPostList;
@@ -48,6 +49,8 @@ Route::name('user.')->prefix('/user')
         Route::get('/automation_rules/{automationRule}/edit', UserAutomationRulesEdit::class)->name('automation_rules.edit');
 
         Route::get('/instagram_posts', UserInstagramPostList::class)->name('instagram_posts.index');
+
+        Route::get('/automation_runs', UserAutomationRunsList::class)->name('automation_runs.index');
     });
 
 Route::get('/instagram/test-send', function (InstagramMessageService $messageService) {

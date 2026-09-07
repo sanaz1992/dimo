@@ -86,6 +86,14 @@
             <span>@lang('dashboard::attributes.instagram_posts')</span>
         </a>
 
+        <a href="{{route('user.automation_runs.index')}}" data-nav="automation_runs"
+            class="nav-link {{request()->routeIs('user.automation_runs.*') ? 'nav-link-active' : ''}}">
+            <span class="nav-ico">
+                <img src="{{request()->routeIs('user.automation_runs.*') ? asset('icons\sidebar\clock-white.svg') : asset('icons\sidebar\clock.svg') }}"
+                    alt="automation_runs" />
+            </span>
+            <span>@lang('dashboard::attributes.automation_runs_history')</span>
+        </a>
     </nav>
 
 
