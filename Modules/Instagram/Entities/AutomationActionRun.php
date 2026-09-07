@@ -5,9 +5,9 @@ namespace Modules\Instagram\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Traits\Filterable;
-use Modules\Instagram\Enums\AutomationRunStatus;
+use Modules\Instagram\Enums\AutomationActionRunStatus;
 
-class AutomationRun extends Model
+class AutomationActionRun extends Model
 {
     use Filterable;
     use HasFactory;
@@ -16,9 +16,8 @@ class AutomationRun extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'automation_rule_id',
-        'instagram_account_id',
-        'instagram_comment_id',
+        'automation_run_id',
+        'automation_action_id',
         'status',
         'error',
         'context',
@@ -27,7 +26,7 @@ class AutomationRun extends Model
     ];
 
     protected $casts = [
-        'status' => AutomationRunStatus::class,
+        'status' => AutomationActionRunStatus::class,
         'context' => 'array',
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
@@ -48,23 +47,13 @@ class AutomationRun extends Model
         return verta($this->completed_at)->format('Y/m/d H:i');
     }
 
-    public function automationRule()
+    public function automationRun()
     {
-        return $this->belongsTo(AutomationRule::class);
+        return $this->belongsTo(AutomationRun::class);
     }
 
-    public function instagramAccount()
+    public function automationAction()
     {
-        return $this->belongsTo(InstagramAccount::class);
-    }
-
-    public function instagramComment()
-    {
-        return $this->belongsTo(InstagramComment::class);
-    }
-
-    public function actionRuns()
-    {
-        return $this->hasMany(AutomationActionRun::class);
+        return $this->belongsTo(AutomationAction::class);
     }
 }

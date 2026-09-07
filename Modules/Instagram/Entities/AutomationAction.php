@@ -39,4 +39,9 @@ class AutomationAction extends Model
     {
         return $this->belongsTo(AutomationRule::class);
     }
+
+    public function runs()
+    {
+        return $this->hasMany(AutomationActionRun::class);
+    }
 }

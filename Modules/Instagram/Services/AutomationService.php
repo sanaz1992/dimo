@@ -4,9 +4,11 @@ namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\Log;
 use Modules\Instagram\Entities\AutomationAction;
+use Modules\Instagram\Entities\AutomationActionRun;
 use Modules\Instagram\Entities\AutomationRule;
 use Modules\Instagram\Entities\AutomationRun;
 use Modules\Instagram\Entities\InstagramComment;
+use Modules\Instagram\Enums\AutomationActionRunStatus;
 use Modules\Instagram\Enums\AutomationActionType;
 use Modules\Instagram\Enums\AutomationMatchType;
 use Modules\Instagram\Enums\AutomationRunStatus;
@@ -17,6 +19,7 @@ class AutomationService
         protected AutomationRuleService $automationRuleService,
         protected AutomationRunService $automationRunService,
         protected InstagramMessageService $instagramMessageService,
+        protected AutomationActionRunService $automationActionRunService,
     ) {}
 
     public function processComment(InstagramComment $comment): void
@@ -110,13 +113,40 @@ class AutomationService
             $actions = $this->getActiveActions($run);
 
             foreach ($actions as $action) {
-                if ($this->actionAlreadyCompleted($run, $action)) {
+                $actionRun = $this->getOrCreateActionRun(
+                    $run,
+                    $action
+                );
+
+                if (
+                    $actionRun->status ===
+                    AutomationActionRunStatus::COMPLETED
+                ) {
                     continue;
                 }
 
-                $this->executeAction($run, $action);
+                try {
+                    $this->automationActionRunService->start(
+                        $actionRun
+                    );
 
-                $run->refresh();
+                    $context = $this->executeAction(
+                        $run,
+                        $action
+                    );
+
+                    $this->automationActionRunService->complete(
+                        $actionRun,
+                        $context
+                    );
+                } catch (\Throwable $e) {
+                    $this->automationActionRunService->fail(
+                        $actionRun,
+                        $e->getMessage()
+                    );
+
+                    throw $e;
+                }
             }
 
             $this->automationRunService->update($run, [
@@ -139,25 +169,25 @@ class AutomationService
             ->get();
     }
 
-    private function actionAlreadyCompleted(AutomationRun $run, AutomationAction $action): bool
-    {
-        $context = $run->context ?? [];
+    // private function actionAlreadyCompleted(AutomationRun $run, AutomationAction $action): bool
+    // {
+    //     $context = $run->context ?? [];
 
-        return isset($context['actions'][$action->id])
-            && ($context['actions'][$action->id]['status'] ?? null)
-            === 'completed';
-    }
+    //     return isset($context['actions'][$action->id])
+    //         && ($context['actions'][$action->id]['status'] ?? null)
+    //         === 'completed';
+    // }
 
-    private function executeAction(AutomationRun $run, AutomationAction $action): void
+    private function executeAction(AutomationRun $run, AutomationAction $action): ?array
     {
-        match ($action->action_type) {
+        return match ($action->action_type) {
             AutomationActionType::SEND_PRIVATE_REPLY => $this->executePrivateReply($run, $action),
             AutomationActionType::SEND_MESSAGE => $this->executeSendMessage($run, $action),
             default => $this->logUnsupportedAction($run, $action),
         };
     }
 
-    private function executePrivateReply(AutomationRun $run, AutomationAction $action): void
+    private function executePrivateReply(AutomationRun $run, AutomationAction $action): array
     {
         $comment = $this->getComment($run);
         $instagramAccount = $this->getInstagramAccount($run);
@@ -181,17 +211,17 @@ class AutomationService
                 message: $message,
             );
 
-        $this->storeActionContext(
-            run: $run,
-            action: $action,
-            data: [
-                'type' => AutomationActionType::SEND_PRIVATE_REPLY->value,
-                'message_id' => $result['message_id'] ?? null,
-                'recipient_id' => $result['recipient_id'] ?? $comment->commenter_ig_id,
-                'comment_id' => $commentId,
-                'sent_at' => now()->toIso8601String(),
-            ]
-        );
+        // $this->storeActionContext(
+        //     run: $run,
+        //     action: $action,
+        //     data: [
+        //         'type' => AutomationActionType::SEND_PRIVATE_REPLY->value,
+        //         'message_id' => $result['message_id'] ?? null,
+        //         'recipient_id' => $result['recipient_id'] ?? $comment->commenter_ig_id,
+        //         'comment_id' => $commentId,
+        //         'sent_at' => now()->toIso8601String(),
+        //     ]
+        // );
 
         Log::info(
             'Instagram automation private reply sent.',
@@ -202,9 +232,17 @@ class AutomationService
                 'message_id' => $result['message_id'] ?? null,
             ]
         );
+
+        return [
+            'type' => AutomationActionType::SEND_PRIVATE_REPLY->value,
+            'message_id' => $result['message_id'] ?? null,
+            'recipient_id' => $result['recipient_id'] ?? $comment->commenter_ig_id,
+            'comment_id' => $commentId,
+            'sent_at' => now()->toIso8601String(),
+        ];
     }
 
-    private function executeSendMessage(AutomationRun $run, AutomationAction $action): void
+    private function executeSendMessage(AutomationRun $run, AutomationAction $action): array
     {
         $comment = $this->getComment($run);
         $instagramAccount = $this->getInstagramAccount($run);
@@ -222,16 +260,16 @@ class AutomationService
                 message: $message,
             );
 
-        $this->storeActionContext(
-            run: $run,
-            action: $action,
-            data: [
-                'type' => AutomationActionType::SEND_MESSAGE->value,
-                'message_id' => $result['message_id'] ?? null,
-                'recipient_id' => $recipientIgId,
-                'sent_at' => now()->toIso8601String(),
-            ]
-        );
+        // $this->storeActionContext(
+        //     run: $run,
+        //     action: $action,
+        //     data: [
+        //         'type' => AutomationActionType::SEND_MESSAGE->value,
+        //         'message_id' => $result['message_id'] ?? null,
+        //         'recipient_id' => $recipientIgId,
+        //         'sent_at' => now()->toIso8601String(),
+        //     ]
+        // );
 
         Log::info(
             'Instagram automation message sent.',
@@ -242,6 +280,13 @@ class AutomationService
                 'message_id' => $result['message_id'] ?? null,
             ]
         );
+
+        return [
+            'type' => AutomationActionType::SEND_MESSAGE->value,
+            'message_id' => $result['message_id'] ?? null,
+            'recipient_id' => $recipientIgId,
+            'sent_at' => now()->toIso8601String(),
+        ];
     }
 
     private function getComment(AutomationRun $run): InstagramComment
@@ -277,13 +322,13 @@ class AutomationService
         return $message;
     }
 
-    private function storeActionContext(AutomationRun $run, AutomationAction $action, array $data): void
-    {
-        $context = $run->context ?? [];
-        $context['actions'][$action->id] = array_merge($data, ['status' => 'completed']);
+    // private function storeActionContext(AutomationRun $run, AutomationAction $action, array $data): void
+    // {
+    //     $context = $run->context ?? [];
+    //     $context['actions'][$action->id] = array_merge($data, ['status' => 'completed']);
 
-        $this->automationRunService->update($run, ['context' => $context]);
-    }
+    //     $this->automationRunService->update($run, ['context' => $context]);
+    // }
 
     private function markRunAsFailed(AutomationRun $run, \Throwable $exception): void
     {
@@ -305,7 +350,7 @@ class AutomationService
         );
     }
 
-    private function logUnsupportedAction(AutomationRun $run, AutomationAction $action): void
+    private function logUnsupportedAction(AutomationRun $run, AutomationAction $action): never
     {
         Log::warning(
             'Unsupported automation action.',
@@ -313,6 +358,26 @@ class AutomationService
                 'run_id' => $run->id,
                 'action_id' => $action->id,
                 'action_type' => $action->action_type->value,
+            ]
+        );
+
+        throw new \RuntimeException(
+            'Unsupported automation action: '.
+                $action->action_type->value
+        );
+    }
+
+    private function getOrCreateActionRun(
+        AutomationRun $run,
+        AutomationAction $action
+    ): AutomationActionRun {
+        return $this->automationActionRunService->firstOrCreate(
+            [
+                'automation_run_id' => $run->id,
+                'automation_action_id' => $action->id,
+            ],
+            [
+                'status' => AutomationActionRunStatus::PENDING,
             ]
         );
     }

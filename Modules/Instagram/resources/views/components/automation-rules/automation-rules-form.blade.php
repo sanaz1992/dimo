@@ -73,7 +73,11 @@
                                 placeholder="instagram::messages.select_action_type"
                             />
 
-                            @if ($actionForm['action_type'] === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value)
+                            @if (in_array($actionForm['action_type'],
+                            [
+                                \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value,
+                                \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE->value
+                            ]))
                                 <x-dashboard::forms.textarea
                                     label="instagram::attributes.message"
                                     wire:model.defer="actionForm.message"
@@ -130,7 +134,11 @@
                                     </x-dashboard::table.cell>
 
                                     <x-dashboard::table.cell :label="__('instagram::attributes.message')">
-                                        @if ($action->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY)
+                                        @if (in_array($action->action_type,
+                                        [
+                                            \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY,
+                                            \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE
+                                        ]))
                                             {{ $action->config['message'] ?? '-' }}
                                         @else
                                             -

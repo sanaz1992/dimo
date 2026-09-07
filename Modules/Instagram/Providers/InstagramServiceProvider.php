@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Modules\Instagram\External\Repositories\AutomationActionRepository;
+use Modules\Instagram\External\Repositories\AutomationActionRunRepository;
 use Modules\Instagram\External\Repositories\AutomationRuleRepository;
 use Modules\Instagram\External\Repositories\AutomationRunRepository;
 use Modules\Instagram\External\Repositories\Contract\AutomationActionRepositoryInterface;
+use Modules\Instagram\External\Repositories\Contract\AutomationActionRunRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\AutomationRuleRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\AutomationRunRepositoryInterface;
 use Modules\Instagram\External\Repositories\Contract\ConversationRepositoryInterface;
@@ -77,6 +79,7 @@ class InstagramServiceProvider extends ServiceProvider
         $this->app->bind(AutomationRunRepositoryInterface::class, AutomationRunRepository::class);
         $this->app->bind(AutomationRuleRepositoryInterface::class, AutomationRuleRepository::class);
         $this->app->bind(AutomationActionRepositoryInterface::class, AutomationActionRepository::class);
+        $this->app->bind(AutomationActionRunRepositoryInterface::class, AutomationActionRunRepository::class);
     }
 
     /**
