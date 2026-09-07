@@ -4,6 +4,7 @@ namespace Modules\Instagram\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\InstagramMediaType;
 
@@ -23,6 +24,7 @@ class InstagramPost extends Model
         'permalink',
         'published_at',
         'payload',
+        'comments_count',
     ];
 
     protected $casts = [
@@ -34,6 +36,11 @@ class InstagramPost extends Model
     public function getPublishedAtJalaliAttribute()
     {
         return verta($this->published_at)->format('Y/m/d H:i');
+    }
+
+    public function getCaptionSummeryAttribute()
+    {
+        return Str::limit($this->caption, 50);
     }
 
     public function instagramAccount()

@@ -22,6 +22,7 @@ class InstagramApiService
                 'caption',
                 'permalink',
                 'timestamp',
+                'comments_count',
             ]),
             'limit' => $limit,
         ];

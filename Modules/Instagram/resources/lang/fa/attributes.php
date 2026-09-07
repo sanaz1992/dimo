@@ -49,4 +49,6 @@ return [
     'comments_count' => 'تعداد کامنت ها',
     'sync_posts' => 'به روزرسانی پست ها',
 
+    'show_post_in_instagram' => 'مشاهده پست در اینستاگرام',
+
 ];

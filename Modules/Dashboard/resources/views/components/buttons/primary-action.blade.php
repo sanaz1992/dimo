@@ -25,6 +25,7 @@
     <a
         href="{{ $disabled ? 'javascript:void(0)' : $href }}"
         {{ $attributes->merge(['class' => $classes . $disabledClasses]) }}
+        target="{{ $target ?? null }}"
         @if($disabled) aria-disabled="true" @endif
     >
         @isset($icon)

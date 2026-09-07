@@ -37,7 +37,6 @@
                     <th>@lang('instagram::attributes.instagram_username')</th>
                     <th>@lang('instagram::attributes.caption')</th>
                     <th>@lang('instagram::attributes.media_product_type')</th>
-                    <th>@lang('instagram::attributes.permalink')</th>
                     <th>@lang('instagram::attributes.published_at')</th>
                     <th>@lang('instagram::attributes.comments_count')</th>
                     <th class="col-actions"></th>
@@ -57,17 +56,13 @@
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.caption')">
-                            {{($instagramPost->caption)}}
+                          {{$instagramPost->caption_summery }}
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.media_product_type')">
                             <x-dashboard::badge :color="$instagramPost->media_product_type?->color()">
                                 {{$instagramPost->media_product_type?->label()}}
                             </x-dashboard::badge>
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.permalink')">
-                            {{($instagramPost->permalink)}}
                         </x-dashboard::table.cell>
 
                         <x-dashboard::table.cell :label="__('instagram::attributes.published_at')">
@@ -80,7 +75,12 @@
 
                         <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                             <div class="flex gap-1">
-
+                                <x-dashboard::buttons.primary-action id="btn-show-post-{{ $instagramPost->id }}" tag="a"
+                                        href="{{ $instagramPost->permalink }}" target="_blank" size="sm"
+                                        :lable="__('instagram::attributes.show_post_in_instagram')">
+                                        <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}" alt="show"
+                                            class="w-5" />
+                                    </x-dashboard::buttons.primary-action>
                             </div>
                         </td>
                     </tr>

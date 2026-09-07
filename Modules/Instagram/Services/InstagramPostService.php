@@ -73,6 +73,7 @@ class InstagramPostService
                     'permalink' => $post['permalink'] ?? null,
                     'published_at' => $post['timestamp'] ?? null,
                     'payload' => $post,
+                    'comments_count' => $post['comments_count'],
                 ]
             );
         }
