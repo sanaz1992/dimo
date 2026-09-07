@@ -28,4 +28,7 @@ return [
     'posts_are_being_updated' => 'در حال بروزرسانی پست‌ها...',
     'instagram_posts_are_being_fetched_in_the_background' => 'پست‌های اینستاگرام در پس‌زمینه در حال دریافت هستند.',
 
+    'this_operation_could_not_be_completed' => 'امکان اجرای این عملیات وجود نداشت.',
+    'no_actions_have_been_recorded_for_this_execution_yet' => 'هنوز اقدامی برای این اجرا ثبت نشده است.',
+
 ];

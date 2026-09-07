@@ -37,6 +37,7 @@ return [
     'action_type' => 'نوع اقدام',
     'sort_order' => 'ترتیب اجرا',
     'message' => 'پیام',
+    'message_text' => 'متن پیام',
     'create_action' => 'افزودن اقدام',
     'update_action' => 'ویرایش اقدام',
 
@@ -58,5 +59,11 @@ return [
     'action_runs_count' => 'تعداد اجراها',
 
     'detail_automation_run' => 'جزئیات اجرای خودکارسازی ',
+    'automation_action_runs' => 'اقدامات خودکارسازی',
+    'action' => 'اقدام',
+    'start' => 'شروع',
+    'end' => 'پایان',
+    'error' => 'خطا',
+    'technical_execution_details' => ' جزئیات فنی اجرا',
 
 ];

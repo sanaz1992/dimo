@@ -104,7 +104,6 @@
                 </div>
 
                 <div class="modal-body space-y-5">
-
                     {{-- اطلاعات کلی اجرا --}}
                     <div class="rounded-xl border border-line bg-surface p-4">
                         <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -117,36 +116,32 @@
                                     {{ $selectedRun->automationRule->name }}
                                 </span>
                             </div>
+
                             {{-- وضعیت --}}
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-ink-faint whitespace-nowrap">
                                     @lang('instagram::attributes.status'):
                                 </span>
-
                                 <x-dashboard::badge :color="$selectedRun->status->color()">
                                     {{ $selectedRun->status->label() }}
                                 </x-dashboard::badge>
                             </div>
-
 
                             {{-- مشتری --}}
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-ink-faint whitespace-nowrap">
                                     @lang('instagram::attributes.customer_username'):
                                 </span>
-
                                 <span class="text-sm font-semibold text-ink">
                                     {{ $selectedRun->instagramComment?->commenter_username ?? '-' }}
                                 </span>
                             </div>
-
 
                             {{-- تاریخ --}}
                             <div class="flex items-center gap-2">
                                 <span class="text-xs text-ink-faint whitespace-nowrap">
                                     @lang('instagram::attributes.created_at'):
                                 </span>
-
                                 <span class="text-sm font-semibold text-ink">
                                     {{ toPersianNumber($selectedRun->created_at_jalali) }}
                                 </span>
@@ -154,231 +149,160 @@
 
                         </div>
 
-
                         {{-- اطلاعات مخصوص Admin --}}
                         @if(auth()->user()->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
-
                             <div class="mt-4 pt-4 border-t border-line">
-
                                 <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
-
                                     {{-- Tenant --}}
                                     @if($selectedRun->tenant)
-
                                         <div class="flex items-center gap-2">
                                             <span class="text-xs text-ink-faint whitespace-nowrap">
-                                                Tenant:
+                                                @lang('instagram::attributes.tenant_name'):
                                             </span>
-
                                             <span class="text-sm font-semibold text-ink">
                                                 {{ $selectedRun->tenant->name }}
                                             </span>
                                         </div>
-
                                     @endif
-
 
                                     {{-- اکانت اینستاگرام --}}
                                     <div class="flex items-center gap-2">
-
                                         <span class="text-xs text-ink-faint whitespace-nowrap">
                                             @lang('instagram::attributes.instagram_username'):
                                         </span>
-
                                         <span class="text-sm font-semibold text-ink">
                                             {{ $selectedRun->instagramAccount?->username ?? '-' }}
                                         </span>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                         @endif
-
                     </div>
-
 
                     {{-- کامنت --}}
                     <div class="rounded-xl border border-line bg-surface p-4">
-
                         <div class="text-xs text-ink-faint mb-2">
                             @lang('instagram::attributes.comment_text')
                         </div>
-
-                        <div class="text-sm leading-6 text-ink">
+                        <div class="text-sm leading-6 text-ink whitespace-pre-wrap break-words">
                             {{ $selectedRun->instagramComment?->comment_text ?? '-' }}
                         </div>
-
                     </div>
-
 
                     {{-- Actions --}}
                     <div>
-
                         <div class="flex items-center justify-between mb-3">
-
                             <h3 class="text-sm font-bold text-ink">
-                                اقدامات خودکارسازی
+                                @lang('instagram::attributes.automation_action_runs')
                             </h3>
-
                             <span class="text-xs text-ink-faint">
                                 {{ toPersianNumber($selectedRun->actionRuns->count()) }}
-                                اقدام
+                                @lang('instagram::attributes.action')
                             </span>
-
                         </div>
 
-
                         <div class="space-y-3">
-
                             @forelse($selectedRun->actionRuns as $actionRun)
-
                                 <div class="rounded-xl border border-line bg-surface p-4">
-
                                     {{-- عنوان Action + وضعیت --}}
                                     <div class="flex items-start justify-between gap-4">
-
                                         <div class="min-w-0">
 
-                                            {{-- نام Action --}}
+                                            {{-- action name --}}
                                             <div class="text-sm font-semibold text-ink">
                                                 {{ $actionRun->automationAction?->name ?? '-' }}
                                             </div>
 
-
-                                            {{-- نوع Action --}}
+                                            {{-- Action type --}}
                                             @if($actionRun->automationAction?->action_type)
-
                                                 <div class="text-xs text-ink-faint mt-1">
                                                     {{ $actionRun->automationAction->action_type->label() }}
                                                 </div>
-
                                             @endif
-
-
-                                            {{-- متن پیام --}}
-                                            @if(
-                                                    $actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE ||
-                                                    $actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY
-                                                )
-
-                                                @if(!empty($actionRun->automationAction?->config['message']))
-
-                                                    <div class="mt-3 rounded-lg border border-line bg-surface-muted px-4 py-3">
-
-                                                        <div class="text-xs font-semibold text-ink-faint mb-1.5">
-                                                            متن پیام
-                                                        </div>
-
-                                                        <div class="text-sm leading-6 text-ink whitespace-pre-wrap break-words">
-                                                            {{ $actionRun->automationAction->config['message'] }}
-                                                        </div>
-
-                                                    </div>
-
-                                                @endif
-
-                                            @endif
-
                                         </div>
 
-
-                                        {{-- وضعیت Action --}}
+                                        {{-- Action status --}}
                                         @if($actionRun->status)
-
                                             <x-dashboard::badge :color="$actionRun->status->color()">
                                                 {{ $actionRun->status->label() }}
                                             </x-dashboard::badge>
-
                                         @endif
-
                                     </div>
 
+                                    {{-- message text --}}
+                                    @if(
+                                            $actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE ||
+                                            $actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY
+                                        )
+                                        @if(!empty($actionRun->automationAction?->config['message']))
+                                            <div class="mt-4 w-full rounded-lg border border-line bg-surface-muted px-4 py-3">
+                                                <div class="text-xs font-semibold text-ink-faint mb-1.5">
+                                                    @lang('instagram::attributes.message_text')
+                                                </div>
+                                                <div class="text-sm leading-6 text-ink whitespace-pre-wrap break-words">
+                                                    {{ $actionRun->automationAction->config['message'] }}
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endif
 
-                                    {{-- زمان اجرا --}}
+                                    {{-- run time --}}
                                     @if($actionRun->started_at || $actionRun->completed_at)
-
                                         <div class="flex flex-wrap gap-x-6 gap-y-2 mt-4 text-xs text-ink-faint">
-
                                             @if($actionRun->started_at)
-
                                                 <div>
-                                                    شروع:
+                                                    @lang('instagram::attributes.start'):
                                                     {{ toPersianNumber(verta($actionRun->started_at)->format('Y/m/d H:i:s')) }}
                                                 </div>
-
                                             @endif
-
                                             @if($actionRun->completed_at)
-
                                                 <div>
-                                                    پایان:
+                                                    @lang('instagram::attributes.end'):
                                                     {{ toPersianNumber(verta($actionRun->completed_at)->format('Y/m/d H:i:s')) }}
                                                 </div>
-
                                             @endif
-
                                         </div>
-
                                     @endif
 
-
-                                    {{-- خطا --}}
+                                    {{-- error --}}
                                     @if($actionRun->error)
-
                                         <div class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-
                                             <div class="text-xs font-semibold text-red-600 mb-1">
-                                                خطا
+                                                @lang('instagram::attributes.error')
                                             </div>
-
                                             <div class="text-xs leading-6 text-red-700">
-                                                امکان اجرای این عملیات وجود نداشت.
+                                                @lang('instagram::messages.this_operation_could_not_be_completed')
                                             </div>
-
                                         </div>
-
                                     @endif
 
-
-                                    {{-- Context فقط برای Admin --}}
+                                    {{-- show Context just for Admin --}}
                                     @if(
-                                                            (auth()->user()->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
-                                                            && $actionRun->context
-                                                        )
-
-                                                        <details class="mt-4">
-
-                                                            <summary class="cursor-pointer text-xs text-ink-faint">
-                                                                جزئیات فنی اجرا
-                                                            </summary>
-
-                                                            <div class="mt-3 rounded-lg bg-surface-muted p-3">
-
-                                                                <pre class="text-xs leading-6 whitespace-pre-wrap break-words">{{ json_encode(
-                                            $actionRun->context,
-                                            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-                                        ) }}</pre>
-
-                                                            </div>
-                                                        </details>
+                                            (auth()->user()->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
+                                            && $actionRun->context
+                                        )
+                                        <details class="mt-4">
+                                            <summary class="cursor-pointer text-xs text-ink-faint">
+                                                @lang('instagram::attributes.technical_execution_details')
+                                            </summary>
+                                            <div class="mt-3 rounded-lg bg-surface-muted p-3">
+                                                <pre class="text-xs leading-6 whitespace-pre-wrap break-words">
+                                                                {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+                                                            </pre>
+                                            </div>
+                                        </details>
                                     @endif
                                 </div>
                             @empty
                                 <div class="rounded-xl border border-line bg-surface p-8 text-center">
                                     <div class="text-sm text-ink-faint">
-                                        هنوز اقدامی برای این اجرا ثبت نشده است.
+                                        @lang('instagram::messages.no_actions_have_been_recorded_for_this_execution_yet')
                                     </div>
                                 </div>
                             @endforelse
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         </div>
     @endif
