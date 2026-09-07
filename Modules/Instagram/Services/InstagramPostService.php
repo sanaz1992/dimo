@@ -3,16 +3,22 @@
 namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\DB;
+use Modules\Core\Entities\SyncRun;
+use Modules\Core\Enums\SyncRunStatus;
+use Modules\Core\Enums\SyncRunType;
 use Modules\Core\Filters\QueryFilter;
+use Modules\Core\Services\SyncRunService;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Entities\InstagramPost;
 use Modules\Instagram\External\Repositories\Contract\InstagramPostRepositoryInterface;
+use Modules\Instagram\Jobs\SyncInstagramPosts;
 
 class InstagramPostService
 {
     public function __construct(
         protected InstagramPostRepositoryInterface $instagramPostRepository,
         protected InstagramApiService $instagramApiService,
+        protected SyncRunService $syncRunService,
     ) {}
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
@@ -38,26 +44,19 @@ class InstagramPostService
     public function create(array $data): InstagramPost
     {
         return DB::transaction(function () use ($data) {
-            $post = $this->instagramPostRepository->create($data);
-
-            return $post;
+            return $this->instagramPostRepository->create($data);
         });
     }
 
     public function updateOrCreate(array $condition, array $data)
     {
-        return $this->instagramPostRepository->updateOrCreate(
-            $condition,
-            $data
-        );
+        return $this->instagramPostRepository->updateOrCreate($condition, $data);
     }
 
     public function update(InstagramPost $post, array $data): InstagramPost
     {
         return DB::transaction(function () use ($post, $data) {
-            $post = $this->instagramPostRepository->update($post, $data);
-
-            return $post;
+            return $this->instagramPostRepository->update($post, $data);
         });
     }
 
@@ -79,5 +78,27 @@ class InstagramPostService
         }
 
         return count($posts);
+    }
+
+    public function startInstagramPostsSync(InstagramAccount $instagramAccount): ?SyncRun
+    {
+        $activeSync = $this->syncRunService
+            ->getActiveRun(InstagramAccount::class, $instagramAccount->id, 'instagram_posts');
+        if ($activeSync) {
+            return null;
+        }
+
+        $syncRun = $this->syncRunService->create([
+            'tenant_id' => $instagramAccount->tenant_id,
+            'syncable_type' => InstagramAccount::class,
+            'syncable_id' => $instagramAccount->id,
+            'type' => SyncRunType::INSTAGRAM_POSTS,
+            'status' => SyncRunStatus::PENDING,
+            'processed' => 0,
+        ]);
+
+        SyncInstagramPosts::dispatch($instagramAccount->id, $syncRun->id);
+
+        return $syncRun;
     }
 }

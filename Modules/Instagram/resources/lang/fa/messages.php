@@ -20,5 +20,9 @@ return [
     'this_action_does_not_belong_to_the_selected_automation_rule' => 'این اقدام متعلق به قانون خودکارسازی انتخاب‌شده نیست.',
     'the_selected_instagram_account_could_not_be_found' => 'اکانت اینستاگرام موردنظر یافت نشد.',
     'the_selected_tenant_could_not_be_found' => 'کسب و کار موردنظر یافت نشد.',
+    'this_accounts_posts_are_currently_being_updated' => 'بروزرسانی پست‌های این اکانت در حال انجام است.',
+    'post_update_has_started_in_the_background' => 'بروزرسانی پست‌ها در پس‌زمینه شروع شد.',
+    'no_instagram_accounts_are_connected' => 'هیچ اکانت اینستاگرامی متصل نیست.',
+    'post_update_is_currently_in_progress' => 'بروزرسانی پست‌ها در حال انجام است.',
 
 ];

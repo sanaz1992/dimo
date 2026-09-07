@@ -8,7 +8,6 @@ use Livewire\WithPagination;
 use Modules\Core\Http\Livewire\User\UserBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Instagram\Filters\InstagramPostFilter;
-use Modules\Instagram\Jobs\SyncInstagramPosts;
 use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\InstagramPostService;
 
@@ -68,20 +67,57 @@ class UserInstagramPostList extends UserBaseComponent
 
     public function syncInstagramPosts(): void
     {
-        if (! $this->account) {
+        $postService = app(InstagramPostService::class);
+
+        // Sync selected account
+        if ($this->account) {
+            $instagramAccount = app(InstagramAccountService::class)->findByColumn('unique_code', $this->account);
+            if (! $instagramAccount) {
+                $this->notify('error', __('instagram::messages.the_selected_instagram_account_could_not_be_found'));
+
+                return;
+            }
+
+            $syncRun = $postService->startInstagramPostsSync($instagramAccount);
+            if (! $syncRun) {
+                $this->notify('error', __('instagram::messages.this_accounts_posts_are_currently_being_updated'));
+
+                return;
+            }
+
+            $this->notify('success', __('instagram::messages.post_update_has_started_in_the_background'));
+
             return;
         }
 
-        $instagramAccount = app(InstagramAccountService::class)->findByColumn('unique_code', $this->account);
+        // Sync all accounts
+        $authUser = auth()->user();
+        $authUser->load('tenants');
+        $tenans = $authUser->tenants;
 
-        if (! $instagramAccount) {
-            $this->notifyError('اکانت اینستاگرام پیدا نشد.');
+        $instagramAccounts = app(InstagramAccountService::class)->list(conditions: [
+            'whereIn' => ['tenant_id' => [$tenans->pluck('id')->toArray()]],
+        ]);
+        if ($instagramAccounts->isEmpty()) {
+            $this->notify('error', __('instagram::messages.no_instagram_accounts_are_connected'));
 
             return;
         }
 
-        SyncInstagramPosts::dispatch($instagramAccount->id);
+        $started = 0;
+        foreach ($instagramAccounts as $instagramAccount) {
+            $syncRun = $postService->startInstagramPostsSync($instagramAccount);
+            if ($syncRun) {
+                $started++;
+            }
+        }
 
-        $this->notify('success', 'بروزرسانی پست‌ها در پس‌زمینه شروع شد.');
+        if ($started === 0) {
+            $this->notify('error', __('instagram::messages.post_update_is_currently_in_progress'));
+
+            return;
+        }
+
+        $this->notify('success', __('instagram::messages.post_update_has_started_in_the_background'));
     }
 }

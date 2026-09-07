@@ -10,7 +10,9 @@ use Livewire\Livewire;
 use Modules\Core\External\Repositories\BaseRepository;
 use Modules\Core\External\Repositories\Contract\BaseRepositoryInterface;
 use Modules\Core\External\Repositories\Contract\SettingRepositoryInterface;
+use Modules\Core\External\Repositories\Contract\SyncRunRepositoryInterface;
 use Modules\Core\External\Repositories\SettingRepository;
+use Modules\Core\External\Repositories\SyncRunRepository;
 use Modules\Core\Http\Livewire\Admin\SearchNavbar;
 use Modules\Core\Http\Livewire\Admin\SettingEdit;
 use Modules\Core\Http\Middlewares\SetApiLocale;
@@ -33,9 +35,9 @@ class CoreServiceProvider extends ServiceProvider
     public function boot(Router $router): void
     {
 
-        if (app()->environment('local')) {
-            URL::forceScheme('https');
-        }
+        // if (app()->environment('local')) {
+        //     URL::forceScheme('https');
+        // }
 
         $router->aliasMiddleware(
             'admin.panel',
@@ -75,7 +77,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->app->bind(BaseRepositoryInterface::class, BaseRepository::class);
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
-
+        $this->app->bind(SyncRunRepositoryInterface::class, SyncRunRepository::class);
     }
 
     /**

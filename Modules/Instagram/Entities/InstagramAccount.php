@@ -4,6 +4,7 @@ namespace Modules\Instagram\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Entities\SyncRun;
 use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\InstagramAccountStatus;
 use Modules\Tenant\Entities\Tenant;
@@ -89,5 +90,10 @@ class InstagramAccount extends Model
     public function automationRuns()
     {
         return $this->hasMany(AutomationRun::class);
+    }
+
+    public function syncRuns()
+    {
+        return $this->morphMany(SyncRun::class, 'syncable');
     }
 }
