@@ -127,4 +127,33 @@ class SyncRunService
 
         return $this->update($syncRun, $data);
     }
+
+    public function getLatestRun(string $syncableType, int $syncableId, string $type): ?SyncRun
+    {
+        return SyncRun::query()
+            ->where('syncable_type', $syncableType)
+            ->where('syncable_id', $syncableId)
+            ->where('type', $type)
+            ->latest()
+            ->first();
+    }
+
+    public function getLatestRunForTenant(array $tenantId, string $type): ?SyncRun
+    {
+        return SyncRun::query()
+            ->whereIn('tenant_id', $tenantId)
+            ->where('type', $type)
+            ->latest()
+            ->first();
+    }
+
+    public function getActiveRunsForTenants(array $tenantId, string $type)
+    {
+        return SyncRun::query()
+            ->whereIn('tenant_id', $tenantId)
+            ->where('type', $type)
+            ->whereIn('status', [SyncRunStatus::PENDING, SyncRunStatus::RUNNING])
+            ->latest()
+            ->get();
+    }
 }

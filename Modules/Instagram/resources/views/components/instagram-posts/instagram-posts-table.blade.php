@@ -10,7 +10,7 @@
         {{-- <livewire:instagram::instagram-advanced-filters /> --}}
 
         <x-dashboard::buttons.primary-action id="btn-add-user" tag="button" class="btn-fill btn-new-tx shrink-0"
-            wire:click="syncInstagramPosts">
+            wire:click="syncInstagramPosts" target="syncInstagramPosts">
             <x-slot:icon>
                 <img src="{{ asset('icons/dashboard/sync-white.svg') }}" alt="sync_posts" style="max-width: 24px;" />
             </x-slot:icon>
@@ -18,6 +18,16 @@
             @lang('instagram::attributes.sync_posts')
         </x-dashboard::buttons.primary-action>
     </x-dashboard::card.card-header>
+
+   @if (
+    ($postsSyncRun &&in_array($postsSyncRun->status,[\Modules\Core\Enums\SyncRunStatus::PENDING,\Modules\Core\Enums\SyncRunStatus::RUNNING],true))
+    ||($postsSyncRuns && $postsSyncRuns->isNotEmpty())
+)
+        <x-Core::sync-status
+            :title="__('instagram::messages.posts_are_being_updated')"
+            :description="__('instagram::messages.instagram_posts_are_being_fetched_in_the_background')"
+        />
+    @endif
 
     <div>
         <x-dashboard::table.table>
@@ -70,7 +80,7 @@
 
                         <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                             <div class="flex gap-1">
-                               
+
                             </div>
                         </td>
                     </tr>

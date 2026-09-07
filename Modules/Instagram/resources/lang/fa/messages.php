@@ -25,4 +25,7 @@ return [
     'no_instagram_accounts_are_connected' => 'هیچ اکانت اینستاگرامی متصل نیست.',
     'post_update_is_currently_in_progress' => 'بروزرسانی پست‌ها در حال انجام است.',
 
+    'posts_are_being_updated' => 'در حال بروزرسانی پست‌ها...',
+    'instagram_posts_are_being_fetched_in_the_background' => 'پست‌های اینستاگرام در پس‌زمینه در حال دریافت هستند.',
+
 ];

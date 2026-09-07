@@ -5,8 +5,12 @@ namespace Modules\Instagram\Http\Livewire\User\InstagramPost;
 use Illuminate\Http\Request;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Modules\Core\Entities\SyncRun;
+use Modules\Core\Enums\SyncRunType;
 use Modules\Core\Http\Livewire\User\UserBaseComponent;
+use Modules\Core\Services\SyncRunService;
 use Modules\Core\Traits\LivewireNotify;
+use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Filters\InstagramPostFilter;
 use Modules\Instagram\Services\InstagramAccountService;
 use Modules\Instagram\Services\InstagramPostService;
@@ -23,6 +27,10 @@ class UserInstagramPostList extends UserBaseComponent
     public $account = null;
 
     public $filterData = [];
+
+    public ?SyncRun $postsSyncRun = null;
+
+    public $postsSyncRuns = [];
 
     public function mount() {}
 
@@ -85,6 +93,8 @@ class UserInstagramPostList extends UserBaseComponent
                 return;
             }
 
+            $this->postsSyncRun = $syncRun;
+
             $this->notify('success', __('instagram::messages.post_update_has_started_in_the_background'));
 
             return;
@@ -118,6 +128,35 @@ class UserInstagramPostList extends UserBaseComponent
             return;
         }
 
+        $this->postsSyncRuns = app(SyncRunService::class)
+            ->getActiveRunsForTenants($tenans->pluck('id')->toArray(), 'instagram_posts');
+
         $this->notify('success', __('instagram::messages.post_update_has_started_in_the_background'));
+    }
+
+    public function refreshPostsSyncStatus(): void
+    {
+        $syncRunService = app(SyncRunService::class);
+
+        // Sync selected account
+        if ($this->account) {
+            $instagramAccount = app(InstagramAccountService::class)->findByColumn('unique_code', $this->account);
+            if (! $instagramAccount) {
+                return;
+            }
+            $this->postsSyncRun = $syncRunService->getLatestRun(
+                InstagramAccount::class,
+                $instagramAccount->id,
+                SyncRunType::INSTAGRAM_POSTS->value
+            );
+
+            return;
+        }
+
+        // Sync all accounts
+        $authUser = auth()->user();
+        $authUser->load('tenants');
+        $tenantIds = $authUser->tenants->pluck('id')->toArray();
+        $this->postsSyncRuns = $syncRunService->getActiveRunsForTenants($tenantIds, SyncRunType::INSTAGRAM_POSTS->value);
     }
 }
