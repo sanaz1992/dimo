@@ -1,96 +1,100 @@
-<section class="table-panel anim-fade-up">
+<div>
+    <section class="table-panel anim-fade-up">
 
-    <x-dashboard::card.card-header :title="$title">
-        <x-slot:icon>
-            <img src="{{ asset('icons/sidebar/clock.svg') }}"
-                alt="@lang('instagram::attributes.automation_runs_list')" />
-        </x-slot:icon>
+        <x-dashboard::card.card-header :title="$title">
+            <x-slot:icon>
+                <img src="{{ asset('icons/sidebar/clock.svg') }}"
+                    alt="@lang('instagram::attributes.automation_runs_list')" />
+            </x-slot:icon>
 
-        {{-- فیلترها --}}
-        {{-- <livewire:instagram::instagram-advanced-filters /> --}}
-    </x-dashboard::card.card-header>
+            {{-- فیلترها --}}
+            {{-- <livewire:instagram::instagram-advanced-filters /> --}}
+        </x-dashboard::card.card-header>
 
-    <div>
-        <x-dashboard::table.table>
-            <x-slot:head>
-                <tr>
-                    <th>@lang('core::attributes.row')</th>
-                    <th>@lang('instagram::attributes.rule_title')</th>
-                    <th>@lang('instagram::attributes.instagram_username')</th>
-                    <th>@lang('instagram::attributes.customer_username')</th>
-                    <th>@lang('instagram::attributes.comment_text')</th>
-                    <th>@lang('instagram::attributes.status')</th>
-                    <th>@lang('instagram::attributes.created_at')</th>
-                    <th class="col-actions"></th>
-                </tr>
-            </x-slot:head>
-
-            <x-slot:body>
-                @forelse($automationRuns as $automationRun)
-                    <tr class="data-row" data-status="success">
-                        {{-- ردیف --}}
-                        <x-dashboard::table.cell :label="__('core::attributes.row')">
-                            {{ toPersianNumber(($automationRuns->currentPage() - 1) * $automationRuns->perPage() + $loop->iteration) }}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.rule_title')">
-                            {{toPersianNumber($automationRun->automationRule->name)}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.instagram_username')">
-                            {{$automationRun->instagramAccount->username}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.customer_username')">
-                            {{$automationRun->instagramComment->commenter_username}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.comment_text')">
-                            {{$automationRun->instagramComment->comment_text}}
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.status')">
-                            <x-dashboard::badge :color="$automationRun->status->color()">
-                                {{$automationRun->status->label() }}
-                            </x-dashboard::badge>
-                        </x-dashboard::table.cell>
-
-                        <x-dashboard::table.cell :label="__('instagram::attributes.created_at')">
-                            {{toPersianNumber($automationRun->created_at_jalali)}}
-                        </x-dashboard::table.cell>
-
-                        <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
-                            <div class="flex gap-1">
-                                @if ($userCanShowDetail)
-                                    <x-dashboard::buttons.primary-action id="btn-automation-run-{{ $automationRun->id }}-show"
-                                        tag="button" wire:click="showRunDetail({{ $automationRun->id }})"
-                                        target="showRunDetail({{ $automationRun->id }})" size="sm">
-                                        <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}"
-                                            alt="edit-automation-rule" class="w-5" />
-                                    </x-dashboard::buttons.primary-action>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                @empty
+        <div>
+            <x-dashboard::table.table>
+                <x-slot:head>
                     <tr>
-                        <td colspan="8" class="py-10 text-center text-[13px] text-ink-faint">
-                            @lang('core::messages.no_data')
-                        </td>
+                        <th>@lang('core::attributes.row')</th>
+                        <th>@lang('instagram::attributes.rule_title')</th>
+                        <th>@lang('instagram::attributes.instagram_username')</th>
+                        <th>@lang('instagram::attributes.customer_username')</th>
+                        <th>@lang('instagram::attributes.comment_text')</th>
+                        <th>@lang('instagram::attributes.status')</th>
+                        <th>@lang('instagram::attributes.created_at')</th>
+                        <th class="col-actions"></th>
                     </tr>
-                @endforelse
-            </x-slot:body>
-        </x-dashboard::table.table>
+                </x-slot:head>
 
-        {{-- Pagination --}}
-        {{ $automationRuns->links('Core::pagination') }}
+                <x-slot:body>
+                    @forelse($automationRuns as $automationRun)
+                        <tr class="data-row" data-status="success">
+                            {{-- ردیف --}}
+                            <x-dashboard::table.cell :label="__('core::attributes.row')">
+                                {{ toPersianNumber(($automationRuns->currentPage() - 1) * $automationRuns->perPage() + $loop->iteration) }}
+                            </x-dashboard::table.cell>
 
-    </div>
+                            <x-dashboard::table.cell :label="__('instagram::attributes.rule_title')">
+                                {{toPersianNumber($automationRun->automationRule->name)}}
+                            </x-dashboard::table.cell>
 
-    {{$slot}}
+                            <x-dashboard::table.cell :label="__('instagram::attributes.instagram_username')">
+                                {{$automationRun->instagramAccount->username}}
+                            </x-dashboard::table.cell>
 
+                            <x-dashboard::table.cell :label="__('instagram::attributes.customer_username')">
+                                {{$automationRun->instagramComment->commenter_username}}
+                            </x-dashboard::table.cell>
+
+                            <x-dashboard::table.cell :label="__('instagram::attributes.comment_text')">
+                                {{$automationRun->instagramComment->comment_text}}
+                            </x-dashboard::table.cell>
+
+                            <x-dashboard::table.cell :label="__('instagram::attributes.status')">
+                                <x-dashboard::badge :color="$automationRun->status->color()">
+                                    {{$automationRun->status->label() }}
+                                </x-dashboard::badge>
+                            </x-dashboard::table.cell>
+
+                            <x-dashboard::table.cell :label="__('instagram::attributes.created_at')">
+                                {{toPersianNumber($automationRun->created_at_jalali)}}
+                            </x-dashboard::table.cell>
+
+                            <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
+                                <div class="flex gap-1">
+                                    @if ($userCanShowDetail)
+                                        <x-dashboard::buttons.primary-action
+                                            id="btn-automation-run-{{ $automationRun->id }}-show" tag="button"
+                                            wire:click="showRunDetail({{ $automationRun->id }})"
+                                            target="showRunDetail({{ $automationRun->id }})" size="sm">
+                                            <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}"
+                                                alt="edit-automation-rule" class="w-5" />
+                                        </x-dashboard::buttons.primary-action>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="py-10 text-center text-[13px] text-ink-faint">
+                                @lang('core::messages.no_data')
+                            </td>
+                        </tr>
+                    @endforelse
+                </x-slot:body>
+            </x-dashboard::table.table>
+
+            {{-- Pagination --}}
+            {{ $automationRuns->links('Core::pagination') }}
+
+        </div>
+
+        {{$slot}}
+
+    </section>
 
     @if($showRunActionsModal)
+        @teleport('body')
         <div class="modal-backdrop modal-backdrop--show" wire:click="$set('showRunActionsModal', false)">
             <div class="modal modal--show w-full max-w-4xl" role="dialog" aria-modal="true" wire:click.stop>
                 <div class="modal-head">
@@ -289,8 +293,8 @@
                                             </summary>
                                             <div class="mt-3 rounded-lg bg-surface-muted p-3">
                                                 <pre class="text-xs leading-6 whitespace-pre-wrap break-words">
-                                                                                                    {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
-                                                                                                </pre>
+                                                                                                                            {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+                                                                                                                        </pre>
                                             </div>
                                         </details>
                                     @endif
@@ -307,5 +311,6 @@
                 </div>
             </div>
         </div>
+        @endteleport
     @endif
-</section>
+</div>
