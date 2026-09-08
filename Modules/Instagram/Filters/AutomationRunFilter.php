@@ -15,6 +15,13 @@ class AutomationRunFilter extends QueryFilter
         parent::__construct($request);
     }
 
+    public function user($value)
+    {
+        return $this->builder->whereHas('instagramAccount.tenant.users', function ($q) use ($value) {
+            $q->where('unique_code', $value);
+        });
+    }
+
     public function automationRule($value)
     {
         return $this->builder->where('automation_rule_id', $value);
@@ -24,13 +31,6 @@ class AutomationRunFilter extends QueryFilter
     {
         return $this->builder->whereHas('instagramAccount', function ($q) use ($value) {
             $q->where('unique_code', $value);
-        });
-    }
-
-    public function tenants($value)
-    {
-        return $this->builder->whereHas('instagramAccount', function ($q) use ($value) {
-            $q->whereIn('tenant_id', $value);
         });
     }
 }
