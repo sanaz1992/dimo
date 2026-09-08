@@ -30,5 +30,6 @@ return [
     'automation_rules' => 'قوانین خودکارسازی',
     'instagram_posts' => 'پست های اینستاگرام',
 
+    'conversations' => 'مکالمات',
     'automation_runs_history' => 'تاریخچه اجراها',
 ];

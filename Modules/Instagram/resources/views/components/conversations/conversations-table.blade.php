@@ -25,9 +25,12 @@
                         گفتگوها
                     </h3>
 
-                    <p class="text-xs text-[var(--text-muted)] mt-1">
-                        {{$instagramAccount->username}}
-                    </p>
+                    @isset($instagramAccount)
+                        <p class="text-xs text-[var(--text-muted)] mt-1">
+                            {{$instagramAccount->username}}
+                        </p>
+                    @endisset
+
                 </div>
 
                 @if($conversations->count())
@@ -62,67 +65,44 @@
                             {{-- @endif --}}
                         </span>
 
-
                         {{-- Content --}}
                         <span class="min-w-0 flex-1 text-right">
-
                             <span class="flex items-center justify-between gap-2">
-
                                 <span class="block truncate font-bold text-sm">
                                     {{ $conversation->customer_username }}
                                 </span>
-
                                 <span class="shrink-0 text-[10px] text-[var(--text-muted)]">
                                     {{ toPersianNumber($conversation->last_message_at_jalali) }}
                                 </span>
-
                             </span>
-
 
                             <span class="mt-1 flex items-center justify-between gap-2">
-
-                                {{-- <span class="block truncate text-xs text-[var(--text-muted)]">
-                                    {{ $conversation->last_message_preview ?? 'هنوز پیامی ارسال نشده است' }}
-                                </span> --}}
-
-                                {{-- @if($conversation->unread_count ?? 0)
-                                <span class="chat-unread">
-                                    {{ toPersianNumber($conversation->unread_count) }}
-                                </span>
-                                @endif --}}
-
+                                @if(!isset($instagramAccount))
+                                    <span class="block truncate text-xs text-[var(--text-muted)]">
+                                        {{ $conversation->instagramAccount->username }}
+                                    </span>
+                                @endif
                             </span>
-
                         </span>
-
                     </button>
-
                 @empty
 
                     {{-- Empty conversations --}}
                     <div class="chat-empty-state">
-
                         <div class="chat-empty-icon">
                             <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="">
                         </div>
-
                         <h4 class="font-bold text-sm">
                             هنوز گفتگویی وجود ندارد
                         </h4>
-
                         <p class="mt-1 text-xs leading-6 text-[var(--text-muted)]">
                             وقتی پیامی از طریق اینستاگرام دریافت شود،
                             گفتگوهای شما اینجا نمایش داده می‌شوند.
                         </p>
-
                     </div>
-
                 @endforelse
-
             </div>
-
         </section>
-
 
         {{-- =====================================================
         Chat Panel
@@ -131,7 +111,6 @@
             wire:key="chat-panel-{{ $selectedConversation?->id ?? 'empty' }}">
 
             @if($selectedConversation)
-
                 {{-- =================================================
                 Chat Header
                 ================================================== --}}
@@ -224,11 +203,11 @@
                         <div class="chat-composer-input-wrapper">
                             <textarea wire:model="messageText" class="chat-composer-input" rows="1"
                                 placeholder="پیام خود را بنویسید..." x-data x-on:keydown.enter="
-                                if (!$event.shiftKey) {
-                                    $event.preventDefault();
-                                    $wire.sendMessage();
-                                }
-                            "></textarea>
+                                            if (!$event.shiftKey) {
+                                                $event.preventDefault();
+                                                $wire.sendMessage();
+                                            }
+                                        "></textarea>
                         </div>
 
                         <button type="submit" class="chat-send-button" wire:loading.attr="disabled"

@@ -68,6 +68,11 @@ class PermissionSeeder extends Seeder
             ],
 
             [
+                'name' => 'conversations_list',
+                'title' => 'مشاهده لیست مکالمات',
+            ],
+
+            [
                 'name' => 'automation_runs_list',
                 'title' => 'لیست اجراها',
             ],

@@ -2,6 +2,7 @@
 
 namespace Modules\Instagram\Http\Livewire\Admin\InstagramAccount;
 
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
@@ -12,9 +13,9 @@ use Modules\Instagram\Services\InstagramAccountService;
 
 class InstagramAccountList extends AdminBaseComponent
 {
+    use Authorizable;
     use LivewireNotify;
     use WithPagination;
-    // use Authorizable;
 
     protected $queryString = [
         'tenant',

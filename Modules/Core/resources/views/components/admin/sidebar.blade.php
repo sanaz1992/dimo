@@ -89,6 +89,17 @@
             </a>
         @endcan
 
+        @can('conversations_list')
+            <a href="{{route('admin.conversations.index')}}" data-nav="conversations"
+                class="nav-link {{request()->routeIs('admin.conversations.*') ? 'nav-link-active' : ''}}">
+                <span class="nav-ico">
+                    <img src="{{request()->routeIs('admin.conversations.*') ? asset('icons\sidebar\messages-white.svg') : asset('icons\sidebar\messages.svg') }}"
+                        alt="conversations" />
+                </span>
+                <span>@lang('dashboard::attributes.conversations')</span>
+            </a>
+        @endcan
+
         @can('automation_runs_list')
             <a href="{{route('admin.automation_runs.index')}}" data-nav="automation_runs"
                 class="nav-link {{request()->routeIs('admin.automation_runs.*') ? 'nav-link-active' : ''}}">

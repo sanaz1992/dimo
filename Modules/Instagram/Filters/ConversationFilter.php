@@ -21,4 +21,11 @@ class ConversationFilter extends QueryFilter
             $q->where('unique_code', $value);
         });
     }
+
+    public function account($value)
+    {
+        return $this->builder->whereHas('instagramAccount', function ($q) use ($value) {
+            $q->where('unique_code', $value);
+        });
+    }
 }
