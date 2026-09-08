@@ -56,9 +56,8 @@ class UserAutomationRulesList extends UserBaseComponent
         return $this->renderView(
             'Instagram::livewire.user.automation-rules.automation-rules-list',
             compact('automationRules')
-        )
-            ->layoutData([
-                'title' => __('instagram::attributes.automation_rules_list'),
-            ]);
+        )->layoutData([
+            'title' => __('instagram::attributes.automation_rules_list'),
+        ]);
     }
 }

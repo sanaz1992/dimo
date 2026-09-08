@@ -24,7 +24,7 @@ class AutomationRuleFilter extends QueryFilter
 
     public function user($value)
     {
-        return $this->builder->whereHas('tenant.users', function ($q) use ($value) {
+        return $this->builder->whereHas('instagramAccount.tenant.users', function ($q) use ($value) {
             $q->where('unique_code', $value);
         });
     }
