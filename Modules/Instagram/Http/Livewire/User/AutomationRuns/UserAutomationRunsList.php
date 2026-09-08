@@ -51,7 +51,6 @@ class UserAutomationRunsList extends UserBaseComponent
     public function render(AutomationRunService $automationRunService)
     {
         $this->fillFilterData();
-        // $this->filterData['user'] = auth()->user()->unique_code;
         $authUser = auth()->user();
         $authUser->load('tenants');
         $tenantsId = $authUser->tenants->pluck('id')->toArray();
@@ -59,15 +58,18 @@ class UserAutomationRunsList extends UserBaseComponent
         $request = new Request($this->filterData ?? []);
         $filter = new AutomationRunFilter($request);
 
-        $automationRuns = $automationRunService->list(null, [10, true], with: ['automationRule', 'instagramAccount', 'instagramComment'], filter: $filter);
+        $automationRuns = $automationRunService->list(null, [10, true], with: [
+            'automationRule',
+            'instagramAccount',
+            'instagramComment',
+        ], filter: $filter);
 
         return $this->renderView(
             'Instagram::livewire.user.automation-runs.automation-runs-list',
             compact('automationRuns')
-        )
-            ->layoutData([
-                'title' => __('instagram::attributes.automation_runs_list'),
-            ]);
+        )->layoutData([
+            'title' => __('instagram::attributes.automation_runs_list'),
+        ]);
     }
 
     public $selectedRun = null;
