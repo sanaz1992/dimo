@@ -20,6 +20,13 @@ class AutomationRunFilter extends QueryFilter
         return $this->builder->where('automation_rule_id', $value);
     }
 
+    public function account($value)
+    {
+        return $this->builder->whereHas('instagramAccount', function ($q) use ($value) {
+            $q->where('unique_code', $value);
+        });
+    }
+
     public function tenants($value)
     {
         return $this->builder->whereHas('instagramAccount', function ($q) use ($value) {

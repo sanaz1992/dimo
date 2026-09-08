@@ -33,6 +33,7 @@ return [
     'tenant' => 'کسب و کار',
     'instagram_account' => 'اکانت اینستاگرام',
     'instagram_post' => 'پست اینستاگرام',
+    'instagram_posts' => 'پست های اینستاگرام',
 
     'action_type' => 'نوع اقدام',
     'sort_order' => 'ترتیب اجرا',

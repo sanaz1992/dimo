@@ -71,9 +71,10 @@
                                     {{-- Instagram --}}
                                     <x-dashboard::buttons.primary-action
                                         id="btn-instagram-{{ $instagramAccount->id }}-conversations" tag="a"
-                                        href="{{ route($conversationsRouteName, ['account' => $instagramAccount]) }}" size="sm">
+                                        href="{{ route($conversationsRouteName, ['account' => $instagramAccount]) }}"
+                                        :title="__('instagram::attributes.conversation_list')" size="sm">
                                         <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="instagram-conversations"
-                                            class="w-5" />
+                                            class="w-6" />
                                     </x-dashboard::buttons.primary-action>
                                 @endisset
 
@@ -81,8 +82,17 @@
                                     <x-dashboard::buttons.primary-action id="btn-instagram-{{ $instagramAccount->id }}-posts"
                                         tag="a"
                                         href="{{ route($instagramPostsListRouteName, ['account' => $instagramAccount]) }}"
-                                        size="sm">
-                                        <img src="{{ asset('icons\sidebar\photos.svg') }}" alt="instagram-posts" class="w-5" />
+                                       :title="__('instagram::attributes.instagram_posts')"  size="sm">
+                                        <img src="{{ asset('icons\sidebar\photos.svg') }}" alt="instagram-posts" class="w-6" />
+                                    </x-dashboard::buttons.primary-action>
+                                @endisset
+
+                                @isset($automationRunsListRouteName)
+                                    <x-dashboard::buttons.primary-action id="btn-instagram-{{ $instagramAccount->id }}-automation-runs"
+                                        tag="a"
+                                        href="{{ route($automationRunsListRouteName, ['account' => $instagramAccount]) }}"
+                                       :title="__('instagram::attributes.automation_runs_list')"  size="sm">
+                                        <img src="{{ asset('icons\sidebar\clock.svg') }}" alt="automation-runs" class="w-6" />
                                     </x-dashboard::buttons.primary-action>
                                 @endisset
                             </div>

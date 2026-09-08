@@ -11,9 +11,9 @@
     $isLink = $tag === 'a' || $href;
 
     $sizes = [
-        'sm' => 'px-3 py-1.5 text-xs rounded-lg',
-        'md' => 'px-4 py-2 text-sm rounded-xl',
-        'lg' => 'px-5 py-3 text-sm rounded-xl',
+        'sm' => 'p-1 text-xs rounded-lg',
+        'md' => 'p-1 text-sm rounded-xl',
+        'lg' => 'p-1.5 text-sm rounded-xl',
         'full'=>'w-full sm:w-auto',
     ];
 

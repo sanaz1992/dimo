@@ -16,7 +16,11 @@ class UserAutomationRunsList extends UserBaseComponent
     use WithPagination;
     // use Authorizable;
 
-    protected $queryString = [];
+    protected $queryString = [
+        'account',
+    ];
+
+    public $account = null;
 
     public $filterData = [];
 
