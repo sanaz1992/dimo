@@ -100,6 +100,17 @@
             </a>
         @endcan
 
+        @can('instagram_posts_list')
+            <a href="{{route('admin.instagram_posts.index')}}" data-nav="instagram_posts"
+                class="nav-link {{request()->routeIs('admin.instagram_posts.*') ? 'nav-link-active' : ''}}">
+                <span class="nav-ico">
+                    <img src="{{request()->routeIs('admin.instagram_posts.*') ? asset('icons\sidebar\photos-white.svg') : asset('icons\sidebar\photos.svg') }}"
+                        alt="instagram_posts" />
+                </span>
+                <span>@lang('dashboard::attributes.instagram_posts')</span>
+            </a>
+        @endcan
+
         @can('automation_runs_list')
             <a href="{{route('admin.automation_runs.index')}}" data-nav="automation_runs"
                 class="nav-link {{request()->routeIs('admin.automation_runs.*') ? 'nav-link-active' : ''}}">

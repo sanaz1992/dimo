@@ -28,6 +28,7 @@ use Modules\Instagram\External\Repositories\MessageRepository;
 use Modules\Instagram\External\Repositories\WebhookEventRepository;
 use Modules\Instagram\Http\Livewire\Admin\AutomationRuns\AdminAutomationRunsList;
 use Modules\Instagram\Http\Livewire\Admin\Conversation\AdminConversationList;
+use Modules\Instagram\Http\Livewire\Admin\InstagramPost\AdminInstagramPostList;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesCreate;
 use Modules\Instagram\Http\Livewire\User\AutomationRules\UserAutomationRulesEdit;
 use Modules\Instagram\Http\Livewire\User\AutomationRuns\UserAutomationRunsList;
@@ -64,6 +65,7 @@ class InstagramServiceProvider extends ServiceProvider
         Livewire::component('instagram::user-automation-rules-create', UserAutomationRulesCreate::class);
         Livewire::component('instagram::user-automation-rules-edit', UserAutomationRulesEdit::class);
         Livewire::component('instagram::user-instagram-post-list', UserInstagramPostList::class);
+        Livewire::component('instagram::admin-instagram-post-list', AdminInstagramPostList::class);
         Livewire::component('instagram::user-automation-runs-list', UserAutomationRunsList::class);
         Livewire::component('instagram::admin-automation-runs-list', AdminAutomationRunsList::class);
     }

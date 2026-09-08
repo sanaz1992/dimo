@@ -73,6 +73,11 @@ class PermissionSeeder extends Seeder
             ],
 
             [
+                'name' => 'instagram_posts_list',
+                'title' => 'مشاهده لیست پست ها اینستاگرام',
+            ],
+
+            [
                 'name' => 'automation_runs_list',
                 'title' => 'لیست اجراها',
             ],

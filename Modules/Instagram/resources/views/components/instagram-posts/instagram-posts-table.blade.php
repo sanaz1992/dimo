@@ -9,19 +9,20 @@
         {{-- فیلترها --}}
         {{-- <livewire:instagram::instagram-advanced-filters /> --}}
 
+        @if(isset($canSyncPosts)&&$canSyncPosts)
         <x-dashboard::buttons.primary-action id="btn-add-user" tag="button" class="btn-fill btn-new-tx shrink-0"
             wire:click="syncInstagramPosts" target="syncInstagramPosts">
             <x-slot:icon>
                 <img src="{{ asset('icons/dashboard/sync-white.svg') }}" alt="sync_posts" style="max-width: 24px;" />
             </x-slot:icon>
-
             @lang('instagram::attributes.sync_posts')
         </x-dashboard::buttons.primary-action>
+        @endif
     </x-dashboard::card.card-header>
 
    @if (
-    ($postsSyncRun &&in_array($postsSyncRun->status,[\Modules\Core\Enums\SyncRunStatus::PENDING,\Modules\Core\Enums\SyncRunStatus::RUNNING],true))
-    ||($postsSyncRuns && $postsSyncRuns->isNotEmpty())
+    (isset($postsSyncRun)&&$postsSyncRun &&in_array($postsSyncRun->status,[\Modules\Core\Enums\SyncRunStatus::PENDING,\Modules\Core\Enums\SyncRunStatus::RUNNING],true))
+    ||(isset($postsSyncRuns)&&$postsSyncRuns && $postsSyncRuns->isNotEmpty())
 )
         <x-Core::sync-status
             :title="__('instagram::messages.posts_are_being_updated')"
