@@ -67,6 +67,22 @@ class PermissionSeeder extends Seeder
                 'title' => 'لیست پیج های اینستاگرام',
             ],
 
+            [
+                'name' => 'automation_runs_list',
+                'title' => 'لیست اجراها',
+            ],
+            [
+                'name' => 'automation_runs_show',
+                'title' => 'مشاهده جزئیات اجرا',
+            ],
+            [
+                'name' => 'automation_runs_retry',
+                'title' => 'اجرای مجدد Run ناموفق',
+            ],
+            [
+                'name' => 'automation_runs_delete',
+                'title' => 'حذف اجراها',
+            ],
         ];
 
         foreach ($permissions as $permission) {

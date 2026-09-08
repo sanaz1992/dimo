@@ -1,20 +1,21 @@
 <?php
 
-namespace Modules\Instagram\Http\Livewire\User\AutomationRuns;
+namespace Modules\Instagram\Http\Livewire\Admin\AutomationRuns;
 
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use Modules\Core\Http\Livewire\User\UserBaseComponent;
+use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Instagram\Filters\AutomationRunFilter;
 use Modules\Instagram\Services\AutomationRunService;
 
-class UserAutomationRunsList extends UserBaseComponent
+class AdminAutomationRunsList extends AdminBaseComponent
 {
+    use Authorizable;
     use LivewireNotify;
     use WithPagination;
-    // use Authorizable;
 
     protected $queryString = [
         'account',
@@ -24,7 +25,10 @@ class UserAutomationRunsList extends UserBaseComponent
 
     public $filterData = [];
 
-    public function mount() {}
+    public function mount()
+    {
+        $this->authorize('automation_runs_list');
+    }
 
     #[On('updateAutomationRunListFilters')]
     public function handleFilters($filters)
@@ -51,10 +55,6 @@ class UserAutomationRunsList extends UserBaseComponent
     public function render(AutomationRunService $automationRunService)
     {
         $this->fillFilterData();
-        $authUser = auth()->user();
-        $authUser->load('tenants');
-        $tenantsId = $authUser->tenants->pluck('id')->toArray();
-        $this->filterData['tenants'] = $tenantsId;
         $request = new Request($this->filterData ?? []);
         $filter = new AutomationRunFilter($request);
 
@@ -65,7 +65,7 @@ class UserAutomationRunsList extends UserBaseComponent
         ], filter: $filter);
 
         return $this->renderView(
-            'Instagram::livewire.user.automation-runs.automation-runs-list',
+            'Instagram::livewire.admin.automation-runs.automation-runs-list',
             compact('automationRuns')
         )->layoutData([
             'title' => __('instagram::attributes.automation_runs_list'),
@@ -78,34 +78,16 @@ class UserAutomationRunsList extends UserBaseComponent
 
     public function showRunDetail($id)
     {
-        $authUser = auth()->user();
-
-        $tenantIds = $authUser->tenants()
-            ->pluck('tenants.id')->toArray();
-
-        $this->selectedRun = app(AutomationRunService::class)->list(
-            with: [
-                'automationRule',
-                'instagramAccount',
-                'instagramComment',
-                'actionRuns.automationAction',
-            ],
-            conditions: [
-                'where' => ['id' => ['=', $id]],
-                'whereIn' => ['instagram_account_id' => function ($query) use ($tenantIds) {
-                    $query->select('id')
-                        ->from('instagram_accounts')
-                        ->whereIn('tenant_id', $tenantIds);
-                }],
-            ]
-        )->first();
-
+        $this->selectedRun = app(AutomationRunService::class)->findByColumn('id', $id);
         if (! $this->selectedRun) {
             $this->notify('error', __('instagram::messages.the_requested_execution_was_not_found'));
-
-            return;
         }
-
+        $this->selectedRun->load([
+            'automationRule',
+            'instagramAccount',
+            'instagramComment',
+            'actionRuns.automationAction',
+        ]);
         $this->showRunActionsModal = true;
     }
 }

@@ -30,5 +30,6 @@ return [
 
     'this_operation_could_not_be_completed' => 'امکان اجرای این عملیات وجود نداشت.',
     'no_actions_have_been_recorded_for_this_execution_yet' => 'هنوز اقدامی برای این اجرا ثبت نشده است.',
+    'the_requested_execution_was_not_found' => 'اجرای مورد نظر یافت نشد.',
 
 ];

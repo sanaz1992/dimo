@@ -35,7 +35,8 @@
 
     {{-- <p class="relative z-[1] mb-2 px-2 text-[10px] font-semibold text-ink-faint">منوی اصلی</p> --}}
     <nav class="relative z-[1] flex flex-col gap-1">
-        <a href="{{route('admin.dashboard')}}" data-nav="dashboard" class="nav-link {{request()->routeIs('admin.dashboard')?'nav-link-active':''}}">
+        <a href="{{route('admin.dashboard')}}" data-nav="dashboard"
+            class="nav-link {{request()->routeIs('admin.dashboard') ? 'nav-link-active' : ''}}">
             <span class="nav-ico">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                     class="icon-svg shrink-0" aria-hidden="true">
@@ -51,7 +52,8 @@
             <span>@lang('dashboard::attributes.dashboard')</span>
         </a>
         @can('users_list')
-            <a href="{{route('admin.users.index')}}" data-nav="users" class="nav-link {{request()->routeIs('admin.users.*')?'nav-link-active':''}}">
+            <a href="{{route('admin.users.index')}}" data-nav="users"
+                class="nav-link {{request()->routeIs('admin.users.*') ? 'nav-link-active' : ''}}">
                 <span class="nav-ico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         class="icon-svg shrink-0" aria-hidden="true">
@@ -69,7 +71,8 @@
             </a>
         @endcan
         @can('tenants_list')
-            <a href="{{route('admin.tenants.index')}}" data-nav="tenants" class="nav-link {{request()->routeIs('admin.tenants.*')?'nav-link-active':''}}">
+            <a href="{{route('admin.tenants.index')}}" data-nav="tenants"
+                class="nav-link {{request()->routeIs('admin.tenants.*') ? 'nav-link-active' : ''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
                 </span>
@@ -77,16 +80,28 @@
             </a>
         @endcan
         @can('instagram_accounts_list')
-            <a href="{{route('admin.instagram_accounts.index')}}" data-nav="instagram_accounts" class="nav-link {{request()->routeIs('admin.instagram_accountss.*')?'nav-link-active':''}}">
+            <a href="{{route('admin.instagram_accounts.index')}}" data-nav="instagram_accounts"
+                class="nav-link {{request()->routeIs('admin.instagram_accountss.*') ? 'nav-link-active' : ''}}">
                 <span class="nav-ico">
                     <img src="{{ asset('icons\sidebar\instagram-white.svg') }}" alt="instagram_accounts" />
                 </span>
                 <span>@lang('dashboard::attributes.instagram_accounts')</span>
             </a>
         @endcan
-       
+
+        @can('automation_runs_list')
+            <a href="{{route('admin.automation_runs.index')}}" data-nav="automation_runs"
+                class="nav-link {{request()->routeIs('admin.automation_runs.*') ? 'nav-link-active' : ''}}">
+                <span class="nav-ico">
+                    <img src="{{request()->routeIs('admin.automation_runs.*') ? asset('icons\sidebar\clock-white.svg') : asset('icons\sidebar\clock.svg') }}"
+                        alt="automation_runs" />
+                </span>
+                <span>@lang('dashboard::attributes.automation_runs_history')</span>
+            </a>
+        @endcan
         @can('settings_edit')
-            <a href="{{route('admin.settings.edit')}}" data-nav="settings" class="nav-link {{request()->routeIs('admin.settings.*')?'nav-link-active':''}}">
+            <a href="{{route('admin.settings.edit')}}" data-nav="settings"
+                class="nav-link {{request()->routeIs('admin.settings.*') ? 'nav-link-active' : ''}}">
                 <span class="nav-ico">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         class="icon-svg shrink-0" aria-hidden="true">

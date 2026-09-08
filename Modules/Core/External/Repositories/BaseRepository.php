@@ -81,6 +81,11 @@ class BaseRepository implements BaseRepositoryInterface
         }
         if (! empty($conditions['whereIn'])) {
             foreach ($conditions['whereIn'] as $col => $val) {
+                if ($val instanceof \Closure) {
+                    $query = $query->whereIn($col, $val);
+
+                    continue;
+                }
                 $query = $query->whereIn($col, $val[0]);
             }
         }
