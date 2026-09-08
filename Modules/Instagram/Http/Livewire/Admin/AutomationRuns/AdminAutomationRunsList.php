@@ -4,12 +4,15 @@ namespace Modules\Instagram\Http\Livewire\Admin\AutomationRuns;
 
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
+use Modules\Instagram\Enums\AutomationRunStatus;
 use Modules\Instagram\Filters\AutomationRunFilter;
 use Modules\Instagram\Services\AutomationRunService;
+use Modules\Instagram\Services\AutomationService;
 
 class AdminAutomationRunsList extends AdminBaseComponent
 {
@@ -95,5 +98,44 @@ class AdminAutomationRunsList extends AdminBaseComponent
             'actionRuns.automationAction',
         ]);
         $this->showRunActionsModal = true;
+    }
+
+    public function retryRun(int $id): void
+    {
+        if (! auth()->user()->can('automation_runs_retry')) {
+            $this->notify('error', __('instagram::messages.you_do_not_have_permission'));
+
+            return;
+        }
+
+        $run = app(AutomationRunService::class)->findByColumn('id', $id);
+        if (! $run) {
+            $this->notify('error', __('instagram::messages.the_requested_execution_was_not_found'));
+
+            return;
+        }
+
+        if ($run->status !== AutomationRunStatus::FAILED) {
+            $this->notify('error', __('instagram::messages.only_failed_executions_can_be_retried'));
+
+            return;
+        }
+
+        // Retry logic goes here
+        try {
+            app(AutomationService::class)->retryRun($run);
+            $this->notify('success', __('instagram::messages.execution_retry_started'));
+        } catch (\Throwable $e) {
+            Log::error('Failed to retry automation run.', [
+                'run_id' => $run->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            $this->notify('error', __('instagram::messages.execution_retry_failed'));
+        }
+
+        $this->notify('success', __('instagram::messages.execution_retry_started'));
+
+        $this->resetPage();
     }
 }

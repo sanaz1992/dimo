@@ -381,4 +381,9 @@ class AutomationService
             ]
         );
     }
+
+    public function retryRun(AutomationRun $run): void
+    {
+        $this->executeRun($run);
+    }
 }

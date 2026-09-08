@@ -66,9 +66,20 @@
                                         <x-dashboard::buttons.primary-action
                                             id="btn-automation-run-{{ $automationRun->id }}-show" tag="button"
                                             wire:click="showRunDetail({{ $automationRun->id }})"
-                                            target="showRunDetail({{ $automationRun->id }})" size="sm">
+                                            target="showRunDetail({{ $automationRun->id }})" size="sm"
+                                            :title="__('core::attributes.show_detail')">
                                             <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}"
                                                 alt="edit-automation-rule" class="w-5" />
+                                        </x-dashboard::buttons.primary-action>
+                                    @endif
+                                    @if ($authUser->level == Modules\User\Enums\UserLevel::ADMIN)
+                                        <x-dashboard::buttons.primary-action
+                                            id="btn-automation-run-{{ $automationRun->id }}-retry" tag="button"
+                                            wire:click="retryRun({{ $automationRun->id }})"
+                                            target="retryRun({{ $automationRun->id }})" size="sm"
+                                            :title="__('instargram::attributes.retry_run')">
+                                            <img src="{{ asset('icons/dashboard/refresh-square.svg') }}"
+                                                alt="retry-automation-run" class="w-5" />
                                         </x-dashboard::buttons.primary-action>
                                     @endif
                                 </div>
@@ -236,10 +247,7 @@
                                     </div>
 
                                     {{-- message text --}}
-                                    @if(
-                                            $actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE ||
-                                            $actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY
-                                        )
+                                    @if($actionRun->automationAction?->action_type === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY)
                                         @if(!empty($actionRun->automationAction?->config['message']))
                                             <div class="mt-4 w-full rounded-lg border border-line bg-surface-muted px-4 py-3">
                                                 <div class="text-xs font-semibold text-ink-faint mb-1.5">
@@ -293,8 +301,8 @@
                                             </summary>
                                             <div class="mt-3 rounded-lg bg-surface-muted p-3">
                                                 <pre class="text-xs leading-6 whitespace-pre-wrap break-words">
-                                                                                                                            {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
-                                                                                                                        </pre>
+                                                                                                                                                    {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+                                                                                                                                                </pre>
                                             </div>
                                         </details>
                                     @endif

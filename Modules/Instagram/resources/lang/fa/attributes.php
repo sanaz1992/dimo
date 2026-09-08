@@ -66,5 +66,6 @@ return [
     'end' => 'پایان',
     'error' => 'خطا',
     'technical_execution_details' => ' جزئیات فنی اجرا',
+    'retry_run' => 'اجرای مجدد',
 
 ];

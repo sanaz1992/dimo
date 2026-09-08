@@ -75,8 +75,7 @@
 
                             @if (in_array($actionForm['action_type'],
                             [
-                                \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value,
-                                \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE->value
+                                \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value
                             ]))
                                 <x-dashboard::forms.textarea
                                     label="instagram::attributes.message"
@@ -136,8 +135,7 @@
                                     <x-dashboard::table.cell :label="__('instagram::attributes.message')">
                                         @if (in_array($action->action_type,
                                         [
-                                            \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY,
-                                            \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE
+                                            \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY
                                         ]))
                                             {{ $action->config['message'] ?? '-' }}
                                         @else
@@ -213,7 +211,7 @@
         </x-dashboard::forms.stepper>
     </form>
 
-      @if($showActionModal)
+      @if(isset($showActionModal) && $showActionModal)
         <div class="modal-backdrop modal-backdrop--show" wire:click="$set('showActionModal', false)">
             <div class="modal modal--show" role="dialog" aria-modal="true" wire:click.stop>
                 <div class="modal-head">
