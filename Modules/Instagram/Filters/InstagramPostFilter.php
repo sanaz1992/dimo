@@ -14,6 +14,13 @@ class InstagramPostFilter extends QueryFilter
         parent::__construct($request);
     }
 
+    public function user($value)
+    {
+        return $this->builder->whereHas('instagramAccount.tenant.users', function ($q) use ($value) {
+            $q->where('unique_code', $value);
+        });
+    }
+
     public function account($value)
     {
         return $this->builder->whereHas('instagramAccount', function ($q) use ($value) {
