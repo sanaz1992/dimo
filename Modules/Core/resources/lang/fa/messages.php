@@ -29,5 +29,6 @@ return [
     'this_page_is_preparing' => 'این صفحه در حال اماده سازی است',
 
     'access_error' => 'شما دسترسی لازم برای ورود به این صفحه را ندارید',
+    'you_do_not_have_permission_to_perform_this_action' => 'شما دسترسی لازم برای انجام این عملیات را ندارید',
 
 ];

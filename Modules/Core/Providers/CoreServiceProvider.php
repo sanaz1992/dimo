@@ -5,6 +5,7 @@ namespace Modules\Core\Providers;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Modules\Core\External\Repositories\BaseRepository;
@@ -38,6 +39,10 @@ class CoreServiceProvider extends ServiceProvider
         // if (app()->environment('local')) {
         //     URL::forceScheme('https');
         // }
+
+        View::composer('*', function ($view) {
+            $view->with('authUser', auth()->user());
+        });
 
         $router->aliasMiddleware(
             'admin.panel',

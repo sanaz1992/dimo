@@ -78,6 +78,12 @@ class AdminAutomationRunsList extends AdminBaseComponent
 
     public function showRunDetail($id)
     {
+        if (! auth()->user()->can('automation_runs_show')) {
+            $this->notify('error', __('core::messages.you_do_not_have_permission_to_perform_this_action'));
+
+            return;
+        }
+
         $this->selectedRun = app(AutomationRunService::class)->findByColumn('id', $id);
         if (! $this->selectedRun) {
             $this->notify('error', __('instagram::messages.the_requested_execution_was_not_found'));

@@ -61,12 +61,14 @@
 
                         <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                             <div class="flex gap-1">
-                                <x-dashboard::buttons.primary-action id="btn-automation-run-{{ $automationRun->id }}-show"
-                                    tag="button" wire:click="showRunDetail({{ $automationRun->id }})"
-                                    target="showRunDetail({{ $automationRun->id }})" size="sm">
-                                    <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}"
-                                        alt="edit-automation-rule" class="w-5" />
-                                </x-dashboard::buttons.primary-action>
+                                @if ($userCanShowDetail)
+                                    <x-dashboard::buttons.primary-action id="btn-automation-run-{{ $automationRun->id }}-show"
+                                        tag="button" wire:click="showRunDetail({{ $automationRun->id }})"
+                                        target="showRunDetail({{ $automationRun->id }})" size="sm">
+                                        <img src="{{ asset('icons/dashboard/vuesax/outline/eye.svg') }}"
+                                            alt="edit-automation-rule" class="w-5" />
+                                    </x-dashboard::buttons.primary-action>
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -150,7 +152,7 @@
                         </div>
 
                         {{-- اطلاعات مخصوص Admin --}}
-                        @if(auth()->user()->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
+                        @if($authUser->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
                             <div class="mt-4 pt-4 border-t border-line">
                                 <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
                                     {{-- Tenant --}}
@@ -278,7 +280,7 @@
 
                                     {{-- show Context just for Admin --}}
                                     @if(
-                                            (auth()->user()->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
+                                            ($authUser->level == Modules\User\Enums\UserLevel::ADMIN ?? false)
                                             && $actionRun->context
                                         )
                                         <details class="mt-4">
@@ -287,8 +289,8 @@
                                             </summary>
                                             <div class="mt-3 rounded-lg bg-surface-muted p-3">
                                                 <pre class="text-xs leading-6 whitespace-pre-wrap break-words">
-                                                                {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
-                                                            </pre>
+                                                                                                    {{ json_encode($actionRun->context, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+                                                                                                </pre>
                                             </div>
                                         </details>
                                     @endif
