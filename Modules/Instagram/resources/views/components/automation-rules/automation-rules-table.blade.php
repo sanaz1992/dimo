@@ -8,14 +8,16 @@
 
         {{-- فیلترها --}}
         {{-- <livewire:instagram::instagram-advanced-filters /> --}}
+        @if (isset($canCreateRule) && $canCreateRule)
+            <x-dashboard::buttons.primary-action id="btn-add-automation-rules" tag="a" class="btn-fill btn-new-tx shrink-0"
+                href="{{ route('user.automation_rules.create') }}">
+                <x-slot:icon>
+                    <img src="{{ asset('icons/header/add.svg') }}" alt="create_automation_rule" />
+                </x-slot:icon>
+                @lang('instagram::attributes.create_automation_rule')
+            </x-dashboard::buttons.primary-action>
+        @endif
 
-        <x-dashboard::buttons.primary-action id="btn-add-automation-rules" tag="a" class="btn-fill btn-new-tx shrink-0"
-            href="{{ route('user.automation_rules.create') }}">
-            <x-slot:icon>
-                <img src="{{ asset('icons/header/add.svg') }}" alt="create_automation_rule" />
-            </x-slot:icon>
-            @lang('instagram::attributes.create_automation_rule')
-        </x-dashboard::buttons.primary-action>
     </x-dashboard::card.card-header>
 
     <div>
@@ -89,12 +91,12 @@
                         <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                             <div class="flex gap-1">
                                 @isset($editRouteName)
-                                <x-dashboard::buttons.primary-action
-                                    id="btn-automation-rule-{{ $automationRule->id }}-edit" tag="a"
-                                    href="{{ route($editRouteName, ['automationRule' => $automationRule]) }}" size="sm">
-                                    <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}" alt="edit-automation-rule"
-                                        class="w-5" />
-                                </x-dashboard::buttons.primary-action>
+                                    <x-dashboard::buttons.primary-action id="btn-automation-rule-{{ $automationRule->id }}-edit"
+                                        tag="a" href="{{ route($editRouteName, ['automationRule' => $automationRule]) }}"
+                                        size="sm">
+                                        <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}"
+                                            alt="edit-automation-rule" class="w-5" />
+                                    </x-dashboard::buttons.primary-action>
                                 @endisset
                             </div>
                         </td>

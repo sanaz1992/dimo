@@ -100,6 +100,17 @@
             </a>
         @endcan
 
+        @can('automation_rules_list')
+            <a href="{{route('admin.automation_rules.index')}}" data-nav="automation_rules"
+                class="nav-link {{request()->routeIs('admin.automation_rules.*') ? 'nav-link-active' : ''}}">
+                <span class="nav-ico">
+                    <img src="{{request()->routeIs('admin.automation_rules.*') ? asset('icons\sidebar\magic-stick-white.svg') : asset('icons\sidebar\magic-stick.svg') }}"
+                        alt="automation_rules" />
+                </span>
+                <span>@lang('dashboard::attributes.automation_rules')</span>
+            </a>
+        @endcan
+
         @can('instagram_posts_list')
             <a href="{{route('admin.instagram_posts.index')}}" data-nav="instagram_posts"
                 class="nav-link {{request()->routeIs('admin.instagram_posts.*') ? 'nav-link-active' : ''}}">

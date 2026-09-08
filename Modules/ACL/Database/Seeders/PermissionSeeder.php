@@ -73,6 +73,11 @@ class PermissionSeeder extends Seeder
             ],
 
             [
+                'name' => 'automation_rules_list',
+                'title' => 'مشاهده لیست قوانین خودکار سازی',
+            ],
+
+            [
                 'name' => 'instagram_posts_list',
                 'title' => 'مشاهده لیست پست ها اینستاگرام',
             ],

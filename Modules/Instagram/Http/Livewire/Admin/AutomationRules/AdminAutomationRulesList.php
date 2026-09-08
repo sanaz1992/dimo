@@ -2,19 +2,20 @@
 
 namespace Modules\Instagram\Http\Livewire\Admin\AutomationRules;
 
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use Modules\Core\Http\Livewire\User\UserBaseComponent;
+use Modules\Core\Http\Livewire\Admin\AdminBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
 use Modules\Instagram\Filters\AutomationRuleFilter;
 use Modules\Instagram\Services\AutomationRuleService;
 
-class AdminAutomationRulesList extends UserBaseComponent
+class AdminAutomationRulesList extends AdminBaseComponent
 {
+    use Authorizable;
     use LivewireNotify;
     use WithPagination;
-    // use Authorizable;
 
     protected $queryString = [];
 
@@ -22,6 +23,7 @@ class AdminAutomationRulesList extends UserBaseComponent
 
     public function mount()
     {
+        $this->authorize('automation_rules_list');
     }
 
     #[On('updateAutomationRuleListFilters')]
@@ -49,18 +51,16 @@ class AdminAutomationRulesList extends UserBaseComponent
     public function render(AutomationRuleService $automationRuleService)
     {
         $this->fillFilterData();
-        $this->filterData['user'] = auth()->user()->unique_code;
         $request = new Request($this->filterData ?? []);
         $filter = new AutomationRuleFilter($request);
 
-        $automationRules = $automationRuleService->list(null, [10, true], with: ['instagramAccount'], filter: $filter);
+        $automationRules = $automationRuleService->list(null, [10, true], with: ['instagramAccount', 'runs'], filter: $filter);
 
         return $this->renderView(
-            'Instagram::livewire.user.automation-rules.automation-rules-list',
+            'Instagram::livewire.admin.automation-rules.automation-rules-list',
             compact('automationRules')
-        )
-            ->layoutData([
-                'title' => __('instagram::attributes.automation_rules_list'),
-            ]);
+        )->layoutData([
+            'title' => __('instagram::attributes.automation_rules_list'),
+        ]);
     }
 }

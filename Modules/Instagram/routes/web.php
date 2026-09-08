@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Http\Controllers\InstagramAuthController;
+use Modules\Instagram\Http\Livewire\Admin\AutomationRules\AdminAutomationRulesList;
 use Modules\Instagram\Http\Livewire\Admin\AutomationRuns\AdminAutomationRunsList;
 use Modules\Instagram\Http\Livewire\Admin\Conversation\AdminConversationList;
 use Modules\Instagram\Http\Livewire\Admin\InstagramAccount\InstagramAccountList;
@@ -42,6 +43,9 @@ Route::name('admin.')->prefix('/admin')
 
         Route::get('/instagram_posts', AdminInstagramPostList::class)
             ->middleware(['can:instagram_posts_list'])->name('instagram_posts.index');
+
+        Route::get('/automation_rules', AdminAutomationRulesList::class)
+            ->middleware(['can:automation_rules_list'])->name('automation_rules.index');
 
         Route::get('/automation_runs', AdminAutomationRunsList::class)
             ->middleware(['can:automation_runs_list'])->name('automation_runs.index');
