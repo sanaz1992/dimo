@@ -47,7 +47,11 @@ class UserAutomationRunsList extends UserBaseComponent
     public function render(AutomationRunService $automationRunService)
     {
         $this->fillFilterData();
-        $this->filterData['user'] = auth()->user()->unique_code;
+        // $this->filterData['user'] = auth()->user()->unique_code;
+        $authUser = auth()->user();
+        $authUser->load('tenants');
+        $tenantsId = $authUser->tenants->pluck('id')->toArray();
+        $this->filterData['tenants'] = $tenantsId;
         $request = new Request($this->filterData ?? []);
         $filter = new AutomationRunFilter($request);
 
