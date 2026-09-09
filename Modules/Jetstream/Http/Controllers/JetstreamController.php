@@ -26,26 +26,31 @@ class JetstreamController
     public function login(LoginRules $request)
     {
         $data = $request->all();
+
         $user = $this->userService->findByColumn('mobile', $data['mobile']);
+
         if (! $user) {
-            return redirect()->route('login')->withErrors(['message' => 'کاربر مورد نظر یافت نشد لطفا از طریق فرم ثبت نام اقدام نمایید.']);
+            return redirect()->route('login')->withErrors([
+                'message' => 'کاربر مورد نظر یافت نشد. لطفاً از طریق فرم ثبت نام اقدام نمایید.',
+            ]);
         }
 
-        // if (Hash::check($data['password'], $user->password)) {
-        //     return redirect()->route('login')->withErrors(['message' => 'رمز عبور وارد شده صحیح نیست.']);
-        // }
+        if (! Hash::check($data['password'], $user->password)) {
+            return redirect()->route('login')->withErrors([
+                'message' => 'رمز عبور وارد شده صحیح نیست.',
+            ]);
+        }
+
         Auth::loginUsingId($user->id);
 
         $user->last_login_at = now();
         $user->save();
 
         if ($user->level == 'admin') {
-            // return redirect()->route('admin.dashboard');
             return redirect()->intended(route('admin.dashboard'));
-        } else {
-            // return redirect()->route('user.dashboard');
-            return redirect()->intended(route('user.dashboard'));
         }
+
+        return redirect()->intended(route('user.dashboard'));
     }
 
     public function loginSendCode(LoginSendCodeRules $request)
