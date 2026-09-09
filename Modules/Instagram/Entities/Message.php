@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\MessageDirection;
+use Modules\Instagram\Enums\MessageSource;
 use Modules\Instagram\Enums\MessageType;
 
 class Message extends Model
@@ -26,10 +27,12 @@ class Message extends Model
         'message_body',
         'payload',
         'sent_at',
+        'source',
     ];
 
     protected $casts = [
         'direction' => MessageDirection::class,
+        'source' => MessageSource::class,
         'type' => MessageType::class,
         'sent_at' => 'datetime',
         'payload' => 'array',

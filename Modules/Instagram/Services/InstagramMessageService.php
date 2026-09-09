@@ -8,6 +8,7 @@ use Modules\Instagram\Entities\InstagramAccount;
 use Modules\Instagram\Entities\Message;
 use Modules\Instagram\Enums\ConversationStatus;
 use Modules\Instagram\Enums\MessageDirection;
+use Modules\Instagram\Enums\MessageSource;
 use Modules\Instagram\Enums\MessageType;
 
 class InstagramMessageService
@@ -20,7 +21,8 @@ class InstagramMessageService
     public function sendTextMessage(
         InstagramAccount $instagramAccount,
         string $recipientIgId,
-        string $message
+        string $message,
+        string $source = MessageSource::AUTOMATION->value
     ): array {
         $response = Http::withToken($instagramAccount->access_token)->post(
             $this->getMessagesEndpoint($instagramAccount),
@@ -42,6 +44,7 @@ class InstagramMessageService
             recipientUsername: null,
             message: $message,
             result: $result,
+            source: $source
         );
 
         Log::info(
@@ -61,7 +64,8 @@ class InstagramMessageService
         string $commentId,
         string $recipientIgId,
         ?string $recipientUsername,
-        string $message
+        string $message,
+        string $source = MessageSource::AUTOMATION->value
     ): array {
         $response = Http::withToken($instagramAccount->access_token)->post(
             $this->getMessagesEndpoint($instagramAccount),
@@ -93,6 +97,7 @@ class InstagramMessageService
             recipientUsername: $recipientUsername,
             message: $message,
             result: $result,
+            source: $source
         );
 
         Log::info(
@@ -113,7 +118,8 @@ class InstagramMessageService
         string $recipientIgId,
         ?string $recipientUsername,
         string $message,
-        array $result
+        array $result,
+        string $source
     ): Message {
         $conversation = $this->findOrCreateConversation(
             instagramAccount: $instagramAccount,
@@ -131,6 +137,7 @@ class InstagramMessageService
             'message_body' => $message,
             'payload' => $result,
             'sent_at' => now(),
+            'source' => $source,
         ]);
 
         $this->conversationService->update($conversation, ['last_message_at' => $messageModel->sent_at]);

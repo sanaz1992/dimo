@@ -7,6 +7,7 @@ use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Modules\Core\Http\Livewire\User\UserBaseComponent;
 use Modules\Core\Traits\LivewireNotify;
+use Modules\Instagram\Enums\MessageSource;
 use Modules\Instagram\Filters\ConversationFilter;
 use Modules\Instagram\Services\ConversationService;
 use Modules\Instagram\Services\InstagramAccountService;
@@ -102,6 +103,7 @@ class UserConversationList extends UserBaseComponent
             instagramAccount: $this->instagramAccount,
             recipientIgId: $this->selectedConversation->customer_ig_id,
             message: $this->messageText,
+            source: MessageSource::MANUAL->value
         );
 
         $this->resetConversationMessages($this->selectedConversation->id);
