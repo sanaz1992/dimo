@@ -48,18 +48,24 @@ class SettingEdit extends AdminBaseComponent
         }
     }
 
-    public function updatedFormImage()
+    public function updatedForm($value, $key)
     {
-        $this->validate(
+        $setting = $this->settings->firstWhere('key', $key);
+        if (! $setting || $setting->type !== SettingType::IMAGE->value) {
+            return;
+        }
+
+        $this->validateOnly(
+            "form.$key",
             [
-                'form.image' => [
+                "form.$key" => [
                     'image',
                     'max:'.config('media.validations.image.max'),
                     'mimes:'.config('media.validations.image.mimes'),
                 ],
             ],
-            trans('product::validation'),
-            trans('product::attributes')
+            trans('core::validation'),
+            trans('core::attributes')
         );
     }
 
@@ -94,8 +100,34 @@ class SettingEdit extends AdminBaseComponent
             : null;
     }
 
+    protected function rules(): array
+    {
+        $rules = [];
+
+        foreach ($this->settings as $setting) {
+            if ($setting->type === SettingType::IMAGE->value) {
+                $rules["form.{$setting->key}"] = [
+                    'nullable',
+                    'image',
+                    'max:'.config('media.validations.image.max'),
+                    'mimes:'.config('media.validations.image.mimes'),
+                ];
+            } elseif ($setting->type === SettingType::TEXT->value) {
+                $rules["form.{$setting->key}"] = ['nullable', 'string', 'max:255'];
+            } elseif ($setting->type == SettingType::TEXTAREA->value) {
+                $rules["form.{$setting->key}"] = ['nullable', 'string'];
+            } elseif ($setting->type == SettingType::BOOL->value) {
+                $rules["form.{$setting->key}"] = ['nullable', 'in:0,1'];
+            }
+        }
+
+        return $rules;
+    }
+
     public function update()
     {
+        $this->validate();
+
         resolve(SettingService::class)->update($this->form);
         $this->notify('success', __('core::messages.edit.success'));
     }

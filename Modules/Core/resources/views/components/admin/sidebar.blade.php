@@ -5,14 +5,24 @@
     <div class="sidebar-head relative z-[1] mb-5 flex items-center justify-between gap-3 sm:mb-6">
         <div class="flex min-w-0 items-center gap-3">
             <div class="logo-box shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                    class="icon-svg shrink-0" aria-hidden="true">
-                    <path d="M12 2 4 6.5 12 11l8-4.5L12 2z" fill="currentColor" fill-opacity="0.25"></path>
-                    <path d="M4 6.5 12 11v10.5L4 17V6.5z" fill="currentColor" fill-opacity="0.15"></path>
-                    <path d="M20 6.5 12 11v10.5l8-4V6.5z" fill="currentColor" fill-opacity="0.12"></path>
-                    <path d="M12 2 4 6.5 12 11l8-4.5L12 2zM4 6.5 12 11v10.5L4 17V6.5M20 6.5 12 11v10.5l8-4V6.5"
-                        stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"></path>
-                </svg>
+                {{-- {{$settingHelper->setting('favicon')?->main_image?->getThumbnailUrl('small') ??
+                asset('build/images/fav2.jpg')}} --}}
+                @php
+                    use Modules\Core\Helpers\SettingHelper;
+                    $settingHelper = app(SettingHelper::class);
+                @endphp
+                @if($settingHelper->setting('logo'))
+                    <img src="{{asset($settingHelper->setting('logo')?->main_image?->getThumbnailUrl('small'))}}" />
+                @else
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        class="icon-svg shrink-0" aria-hidden="true">
+                        <path d="M12 2 4 6.5 12 11l8-4.5L12 2z" fill="currentColor" fill-opacity="0.25"></path>
+                        <path d="M4 6.5 12 11v10.5L4 17V6.5z" fill="currentColor" fill-opacity="0.15"></path>
+                        <path d="M20 6.5 12 11v10.5l8-4V6.5z" fill="currentColor" fill-opacity="0.12"></path>
+                        <path d="M12 2 4 6.5 12 11l8-4.5L12 2zM4 6.5 12 11v10.5L4 17V6.5M20 6.5 12 11v10.5l8-4V6.5"
+                            stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"></path>
+                    </svg>
+                @endif
 
             </div>
             <div class="min-w-0">

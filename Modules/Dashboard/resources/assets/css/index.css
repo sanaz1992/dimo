@@ -714,7 +714,8 @@ body.drawer-open:after {
     box-shadow: 0 0 12px #2563eb99
 }
 
-.logo-box {
+.logo-box,
+.logo-box img {
     --tw-text-opacity: 1;
     width: 3rem;
     height: 3rem;
@@ -727,6 +728,9 @@ body.drawer-open:after {
     justify-content: center;
     align-items: center;
     display: flex
+}
+.logo-box img {
+    border-radius: 0.9rem;
 }
 
 .header-bar {
@@ -983,7 +987,8 @@ body.drawer-open:after {
     box-shadow: 0 8px 24px #2563eb1f
 }
 
-button img,a img {
+button img,
+a img {
     min-width: 15px;
 }
 
