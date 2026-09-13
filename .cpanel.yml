@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/h422794/dimo/
+    - /bin/cp -R . $DEPLOYPATH
+    - cd $DEPLOYPATH && composer install --no-dev --optimize-autoloader
+    - cd $DEPLOYPATH && php artisan migrate --force
+    - cd $DEPLOYPATH && php artisan optimize:clear
+    - cd $DEPLOYPATH && php artisan optimize
