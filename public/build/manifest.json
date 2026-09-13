@@ -1,0 +1,203 @@
+{
+  "Modules/Core/resources/assets/css/tailwind.css": {
+    "file": "assets/tailwind-DcRFNLnX.css",
+    "src": "Modules/Core/resources/assets/css/tailwind.css",
+    "isEntry": true,
+    "name": "tailwind",
+    "names": [
+      "tailwind.css"
+    ]
+  },
+  "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum).woff2": {
+    "file": "assets/IRANSansWeb(FaNum)-BLA2CtIC.woff2",
+    "src": "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum).woff2"
+  },
+  "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Black.woff2": {
+    "file": "assets/IRANSansWeb(FaNum)_Black-BFAfOkt4.woff2",
+    "src": "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Black.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Bold.woff2": {
+    "file": "assets/IRANSansWeb(FaNum)_Bold-C8urhp07.woff2",
+    "src": "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Bold.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Light.woff2": {
+    "file": "assets/IRANSansWeb(FaNum)_Light-B637MNLG.woff2",
+    "src": "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Light.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Medium.woff2": {
+    "file": "assets/IRANSansWeb(FaNum)_Medium-C2CKjrKB.woff2",
+    "src": "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_Medium.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_UltraLight.woff2": {
+    "file": "assets/IRANSansWeb(FaNum)_UltraLight-hW-WDKY9.woff2",
+    "src": "Modules/Core/resources/assets/fonts/IRANSansWeb(FaNum)_UltraLight.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Black.woff2": {
+    "file": "assets/Lahzeh-Black--E-9j5G3.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Black.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Bold.woff2": {
+    "file": "assets/Lahzeh-Bold-CW-XSB5U.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Bold.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-ExtraBold.woff2": {
+    "file": "assets/Lahzeh-ExtraBold-DfNNuMnU.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-ExtraBold.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-ExtraLight.woff2": {
+    "file": "assets/Lahzeh-ExtraLight-Bt6AIbet.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-ExtraLight.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Light.woff2": {
+    "file": "assets/Lahzeh-Light-XeSv6Sv_.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Light.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Medium.woff2": {
+    "file": "assets/Lahzeh-Medium-Bw_bOfJJ.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Medium.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Regular.woff2": {
+    "file": "assets/Lahzeh-Regular-DD9cIEQn.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Regular.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-SemiBold.woff2": {
+    "file": "assets/Lahzeh-SemiBold-CV3Eo7EI.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-SemiBold.woff2"
+  },
+  "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Thin.woff2": {
+    "file": "assets/Lahzeh-Thin-Dj-IwUrK.woff2",
+    "src": "Modules/Core/resources/assets/fonts/lahzeh/Lahzeh-Thin.woff2"
+  },
+  "Modules/Core/resources/assets/js/utils.js": {
+    "file": "assets/utils-ZO9LbmHk.js",
+    "name": "utils",
+    "src": "Modules/Core/resources/assets/js/utils.js",
+    "isEntry": true
+  },
+  "Modules/Dashboard/resources/assets/css/index.css": {
+    "file": "assets/index-BUltpPkI.css",
+    "src": "Modules/Dashboard/resources/assets/css/index.css",
+    "isEntry": true,
+    "name": "index",
+    "names": [
+      "index.css"
+    ]
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-400-normal-DMZFCm7K.woff2": {
+    "file": "assets/vazirmatn-arabic-400-normal-DMZFCm7K-DMZFCm7K.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-400-normal-DMZFCm7K.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-500-normal-C_lbnnKa.woff2": {
+    "file": "assets/vazirmatn-arabic-500-normal-C_lbnnKa-C_lbnnKa.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-500-normal-C_lbnnKa.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-700-normal-Dge_DOjm.woff2": {
+    "file": "assets/vazirmatn-arabic-700-normal-Dge_DOjm-Dge_DOjm.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-700-normal-Dge_DOjm.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-400-normal-BT_DHTc7.woff2": {
+    "file": "assets/vazirmatn-latin-400-normal-BT_DHTc7-BT_DHTc7.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-400-normal-BT_DHTc7.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-500-normal-6zZzgpg4.woff2": {
+    "file": "assets/vazirmatn-latin-500-normal-6zZzgpg4-6zZzgpg4.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-500-normal-6zZzgpg4.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-700-normal-9BlbvDRV.woff2": {
+    "file": "assets/vazirmatn-latin-700-normal-9BlbvDRV-9BlbvDRV.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-700-normal-9BlbvDRV.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-400-normal-BdGhO0lm.woff2": {
+    "file": "assets/vazirmatn-latin-ext-400-normal-BdGhO0lm-BdGhO0lm.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-400-normal-BdGhO0lm.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-500-normal-CgxvvVrG.woff2": {
+    "file": "assets/vazirmatn-latin-ext-500-normal-CgxvvVrG-CgxvvVrG.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-500-normal-CgxvvVrG.woff2"
+  },
+  "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-700-normal-BfoXmNMx.woff2": {
+    "file": "assets/vazirmatn-latin-ext-700-normal-BfoXmNMx-BfoXmNMx.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-700-normal-BfoXmNMx.woff2"
+  },
+  "Modules/Dashboard/resources/assets/js/index.js": {
+    "file": "assets/index-BeiFFkmz.js",
+    "name": "index",
+    "src": "Modules/Dashboard/resources/assets/js/index.js",
+    "isEntry": true
+  },
+  "Modules/Instagram/resources/assets/css/chat.css": {
+    "file": "assets/chat-B7cYbWOB.css",
+    "src": "Modules/Instagram/resources/assets/css/chat.css",
+    "isEntry": true,
+    "name": "chat",
+    "names": [
+      "chat.css"
+    ]
+  },
+  "Modules/Jetstream/resources/assets/css/login.css": {
+    "file": "assets/login-znyE2a1s.css",
+    "src": "Modules/Jetstream/resources/assets/css/login.css",
+    "isEntry": true,
+    "name": "login",
+    "names": [
+      "login.css"
+    ]
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-arabic-400-normal-DMZFCm7K.woff2": {
+    "file": "assets/vazirmatn-arabic-400-normal-DMZFCm7K-DMZFCm7K.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-400-normal-DMZFCm7K.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-arabic-500-normal-C_lbnnKa.woff2": {
+    "file": "assets/vazirmatn-arabic-500-normal-C_lbnnKa-C_lbnnKa.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-500-normal-C_lbnnKa.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-arabic-700-normal-Dge_DOjm.woff2": {
+    "file": "assets/vazirmatn-arabic-700-normal-Dge_DOjm-Dge_DOjm.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-arabic-700-normal-Dge_DOjm.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-latin-400-normal-BT_DHTc7.woff2": {
+    "file": "assets/vazirmatn-latin-400-normal-BT_DHTc7-BT_DHTc7.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-400-normal-BT_DHTc7.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-latin-500-normal-6zZzgpg4.woff2": {
+    "file": "assets/vazirmatn-latin-500-normal-6zZzgpg4-6zZzgpg4.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-500-normal-6zZzgpg4.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-latin-700-normal-9BlbvDRV.woff2": {
+    "file": "assets/vazirmatn-latin-700-normal-9BlbvDRV-9BlbvDRV.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-700-normal-9BlbvDRV.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-latin-ext-400-normal-BdGhO0lm.woff2": {
+    "file": "assets/vazirmatn-latin-ext-400-normal-BdGhO0lm-BdGhO0lm.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-400-normal-BdGhO0lm.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-latin-ext-500-normal-CgxvvVrG.woff2": {
+    "file": "assets/vazirmatn-latin-ext-500-normal-CgxvvVrG-CgxvvVrG.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-500-normal-CgxvvVrG.woff2"
+  },
+  "Modules/Jetstream/resources/assets/fonts/vazirmatn-latin-ext-700-normal-BfoXmNMx.woff2": {
+    "file": "assets/vazirmatn-latin-ext-700-normal-BfoXmNMx-BfoXmNMx.woff2",
+    "src": "Modules/Dashboard/resources/assets/fonts/vazirmatn-latin-ext-700-normal-BfoXmNMx.woff2"
+  },
+  "Modules/Jetstream/resources/assets/js/login.js": {
+    "file": "assets/login-DqNwtlJz.js",
+    "name": "login",
+    "src": "Modules/Jetstream/resources/assets/js/login.js",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-jytO6BRn.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-C3jw88u0.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

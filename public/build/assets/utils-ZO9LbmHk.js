@@ -1,0 +1,1 @@
+window.formatNumberInput=function(e,r){if(!e)return;let t=e.value.replace(/,/g,"").replace(/[^\d]/g,"");e.value=t?new Intl.NumberFormat("en-US").format(t):"";const n=e.parentNode.querySelector(`input[type=hidden][wire\\:model\\.defer="${r}"]`);n&&(n.value=t,n.dispatchEvent(new Event("input",{bubbles:!0})))};

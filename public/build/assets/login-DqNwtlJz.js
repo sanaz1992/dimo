@@ -1,0 +1,1 @@
+const t=document.getElementById("register"),e=document.getElementById("login"),n=document.getElementById("container");t.onclick=function(){n.className="active"};e.onclick=function(){n.className="close"};
