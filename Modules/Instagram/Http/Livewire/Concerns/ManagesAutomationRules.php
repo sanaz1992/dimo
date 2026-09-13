@@ -397,11 +397,11 @@ trait ManagesAutomationRules
                 return;
             }
 
-            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_MESSAGE->value) {
+            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_PRIVATE_REPLY->value) {
                 $existingPrivateReply = $this->automationRule
                     ->actions()
                     ->where('id', '!=', $this->selectedEditingAction->id)
-                    ->where('action_type', AutomationActionType::SEND_MESSAGE->value)
+                    ->where('action_type', AutomationActionType::SEND_PRIVATE_REPLY->value)
                     ->exists();
                 if ($existingPrivateReply) {
                     $this->notify('error', __('instagram::messages.only_one_private_reply_can_be_defined_for_each_automation_rule'));
@@ -417,7 +417,7 @@ trait ManagesAutomationRules
                 'editActionForm.is_active' => ['required', 'boolean'],
             ]);
 
-            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_MESSAGE) {
+            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_PRIVATE_REPLY) {
                 $this->editActionForm['config'] = ['message' => trim($this->editActionForm['message'])];
             }
 
