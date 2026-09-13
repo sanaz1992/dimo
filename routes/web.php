@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+// comment for test
+
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 });
