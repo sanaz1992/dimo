@@ -295,24 +295,31 @@ trait ManagesAutomationRules
 
             $this->validate([
                 'actionForm.action_type' => ['required', new Enum(AutomationActionType::class)],
-                'actionForm.message' => ['required_if:actionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value],
+                'actionForm.message' => [
+                    'required_if:actionForm.action_type,'.AutomationActionType::SEND_PRIVATE_REPLY->value,
+                    'required_if:actionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value,
+                    'nullable',
+                    'string',
+                ],
                 'actionForm.sort_order' => ['nullable', 'integer', 'min:1'],
                 'actionForm.is_active' => ['required', 'boolean'],
             ]);
 
             $nextSortOrder = $this->automationRule->actions()->max('sort_order') + 1;
 
+            $config = [];
+
+            if ($this->actionRequiresMessage($this->actionForm['action_type'])) {
+                $config['message'] = trim($this->actionForm['message']);
+            }
+
             $data = [
                 'automation_rule_id' => $this->automationRule->id,
                 'action_type' => $this->actionForm['action_type'],
                 'sort_order' => $this->actionForm['sort_order'] ?: $nextSortOrder,
                 'is_active' => $this->actionForm['is_active'],
-                'config' => [],
+                'config' => $config,
             ];
-
-            if ($this->actionForm['action_type'] === AutomationActionType::SEND_MESSAGE->value) {
-                $data['config'] = ['message' => trim($this->actionForm['message'])];
-            }
 
             $automationActionService->create($data);
 
@@ -412,14 +419,21 @@ trait ManagesAutomationRules
 
             $this->validate([
                 'editActionForm.action_type' => ['required', new Enum(AutomationActionType::class)],
-                'editActionForm.message' => ['required_if:editActionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value],
+                'editActionForm.message' => [
+                    'required_if:editActionForm.action_type,'.AutomationActionType::SEND_PRIVATE_REPLY->value,
+                    'required_if:editActionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value,
+                    'nullable',
+                    'string',
+                ],
                 'editActionForm.sort_order' => ['nullable', 'integer', 'min:1'],
                 'editActionForm.is_active' => ['required', 'boolean'],
             ]);
 
-            if ($this->editActionForm['action_type'] === AutomationActionType::SEND_PRIVATE_REPLY) {
-                $this->editActionForm['config'] = ['message' => trim($this->editActionForm['message'])];
+            $config = [];
+            if ($this->actionRequiresMessage($this->editActionForm['action_type'])) {
+                $config['message'] = trim($this->editActionForm['message']);
             }
+            $this->editActionForm['config'] = $config;
 
             $automationActionService->update($this->selectedEditingAction, $this->editActionForm);
 
@@ -434,5 +448,17 @@ trait ManagesAutomationRules
             report($e);
             $this->notify('error', __('core::messages.edit.error'));
         }
+    }
+
+    protected function actionRequiresMessage(string $actionType): bool
+    {
+        return in_array(
+            $actionType,
+            [
+                AutomationActionType::SEND_PRIVATE_REPLY->value,
+                AutomationActionType::SEND_MESSAGE->value,
+            ],
+            true
+        );
     }
 }

@@ -76,7 +76,8 @@
 
                                 @if (in_array($actionForm['action_type'],
                                 [
-                                    \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value
+                                    \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value,
+                                    \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE->value
                                 ]))
                                     <x-dashboard::forms.textarea
                                         label="instagram::attributes.message"
@@ -134,7 +135,14 @@
                                         </x-dashboard::table.cell>
 
                                         <x-dashboard::table.cell :label="__('instagram::attributes.message')">
-                                            @if (in_array($action->action_type,[\Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY]))
+                                            @if (in_array(
+                                                $action->action_type,
+                                                [
+                                                    \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY,
+                                                    \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE,
+                                                ],
+                                                true
+                                            ))
                                                 {{ $action->config['message'] ?? '-' }}
                                             @else
                                                 -
@@ -247,8 +255,18 @@
                             ]"
                         />
 
-                        @if ($editActionForm['action_type'] === \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY)
-                            <x-dashboard::forms.textarea label="instagram::attributes.message" wire:model.defer="editActionForm.message"/>
+                        @if (in_array(
+                            $editActionForm['action_type'],
+                            [
+                                \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value,
+                                \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE->value,
+                            ],
+                            true
+                        ))
+                            <x-dashboard::forms.textarea
+                                label="instagram::attributes.message"
+                                wire:model.defer="editActionForm.message"
+                            />
                         @endif
 
                         <x-dashboard::buttons.primary-action id="btn-update-item-status" tag="button"
