@@ -38,4 +38,29 @@ enum AutomationActionType: string
             self::SEND_EMAIL => 'rose',
         };
     }
+
+    public static function forTrigger(AutomationTriggerType $triggerType): array
+    {
+        return match ($triggerType) {
+            AutomationTriggerType::COMMENT => [
+                self::SEND_PRIVATE_REPLY,
+                // self::SEND_MESSAGE,
+                self::ADD_TAG,
+                self::SEND_EMAIL,
+            ],
+
+            AutomationTriggerType::MESSAGE => [
+                self::SEND_MESSAGE,
+                self::ADD_TAG,
+                self::SEND_EMAIL,
+            ],
+
+            AutomationTriggerType::MENTION => [
+                self::SEND_PRIVATE_REPLY,
+                self::SEND_MESSAGE,
+                self::ADD_TAG,
+                self::SEND_EMAIL,
+            ],
+        };
+    }
 }

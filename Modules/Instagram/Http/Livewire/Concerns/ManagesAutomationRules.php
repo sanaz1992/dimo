@@ -103,8 +103,10 @@ trait ManagesAutomationRules
 
         $this->tenants = $this->getAvailableTenants();
 
-        if ($this->isEditMode) {
-            $this->actionTypes = AutomationActionType::labels();
+        if ($this->isEditMode && $this->automationRule->trigger_type) {
+            $this->actionTypes = collect(AutomationActionType::forTrigger($this->automationRule->trigger_type))
+                ->mapWithKeys(fn (AutomationActionType $action) => [$action->value => $action->label()])
+                ->toArray();
         }
     }
 

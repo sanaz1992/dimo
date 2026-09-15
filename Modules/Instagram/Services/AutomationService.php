@@ -3,6 +3,7 @@
 namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\Log;
+use Modules\Core\Helpers\ConvertDatesHelper;
 use Modules\Instagram\Entities\AutomationAction;
 use Modules\Instagram\Entities\AutomationActionRun;
 use Modules\Instagram\Entities\AutomationRule;
@@ -88,7 +89,8 @@ class AutomationService
 
     private function matches(AutomationRule $rule, InstagramComment $comment): bool
     {
-        $commentText = trim(mb_strtolower($comment->comment_text ?? ''));
+        $commentText = ConvertDatesHelper::convertPersianNumbersToEnglish($comment->comment_text ?? '');
+        $commentText = trim(mb_strtolower($commentText ?? ''));
         $matchValue = trim(mb_strtolower($rule->match_value ?? ''));
 
         return match ($rule->match_type) {
