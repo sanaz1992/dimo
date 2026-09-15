@@ -32,4 +32,6 @@ return [
 
     'conversations' => 'مکالمات',
     'automation_runs_history' => 'تاریخچه اجراها',
+
+    'tags' => 'برچسب ها',
 ];

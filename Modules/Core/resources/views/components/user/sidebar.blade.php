@@ -94,6 +94,16 @@
             </span>
             <span>@lang('dashboard::attributes.automation_runs_history')</span>
         </a>
+
+
+        <a href="{{route('user.tags.index')}}" data-nav="tags"
+            class="nav-link {{request()->routeIs('user.tags.*') ? 'nav-link-active' : ''}}">
+            <span class="nav-ico">
+                <img src="{{request()->routeIs('user.tags.*') ? asset('icons\sidebar\tag-white.svg') : asset('icons\sidebar\tag.svg') }}"
+                    alt="tags" />
+            </span>
+            <span>@lang('dashboard::attributes.tags')</span>
+        </a>
     </nav>
 
 

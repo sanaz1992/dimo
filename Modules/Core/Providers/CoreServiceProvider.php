@@ -12,10 +12,13 @@ use Modules\Core\External\Repositories\BaseRepository;
 use Modules\Core\External\Repositories\Contract\BaseRepositoryInterface;
 use Modules\Core\External\Repositories\Contract\SettingRepositoryInterface;
 use Modules\Core\External\Repositories\Contract\SyncRunRepositoryInterface;
+use Modules\Core\External\Repositories\Contract\TagRepositoryInterface;
 use Modules\Core\External\Repositories\SettingRepository;
 use Modules\Core\External\Repositories\SyncRunRepository;
+use Modules\Core\External\Repositories\TagRepository;
 use Modules\Core\Http\Livewire\Admin\SearchNavbar;
 use Modules\Core\Http\Livewire\Admin\SettingEdit;
+use Modules\Core\Http\Livewire\User\UserTagList;
 use Modules\Core\Http\Middlewares\SetApiLocale;
 use Modules\User\Http\Middleware\EnsureAdminPanelAccess;
 use Nwidart\Modules\Traits\PathNamespace;
@@ -36,9 +39,9 @@ class CoreServiceProvider extends ServiceProvider
     public function boot(Router $router): void
     {
 
-        if (app()->environment('local')) {
-            URL::forceScheme('https');
-        }
+        // if (app()->environment('local')) {
+        //     URL::forceScheme('https');
+        // }
 
         View::composer('*', function ($view) {
             $view->with('authUser', auth()->user());
@@ -70,6 +73,8 @@ class CoreServiceProvider extends ServiceProvider
 
         Livewire::component('setting::edit', SettingEdit::class);
         Livewire::component('core.admin.search-navbar', SearchNavbar::class);
+
+        Livewire::component('core::user-tag-list', UserTagList::class);
     }
 
     /**
@@ -83,6 +88,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->bind(BaseRepositoryInterface::class, BaseRepository::class);
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(SyncRunRepositoryInterface::class, SyncRunRepository::class);
+        $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
     }
 
     /**

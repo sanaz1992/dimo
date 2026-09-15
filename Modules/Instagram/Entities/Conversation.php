@@ -4,6 +4,8 @@ namespace Modules\Instagram\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Modules\Core\Entities\Tag;
 use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\ConversationStatus;
 use Modules\Tenant\Entities\Tenant;
@@ -85,5 +87,10 @@ class Conversation extends Model
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggables');
     }
 }
