@@ -78,6 +78,19 @@ class PermissionSeeder extends Seeder
             ],
 
             [
+                'name' => 'tags_list',
+                'title' => 'مشاهده لیست برچسب ها',
+            ],
+            [
+                'name' => 'tags_create',
+                'title' => 'افزودن برچسب',
+            ],
+            [
+                'name' => 'tags_edit',
+                'title' => 'ویرایش برچسب',
+            ],
+
+            [
                 'name' => 'instagram_posts_list',
                 'title' => 'مشاهده لیست پست ها اینستاگرام',
             ],

@@ -49,7 +49,11 @@
                             </x-dashboard::table.cell>
 
                             <x-dashboard::table.cell :label="__('core::attributes.color')">
-                                {{$tag->color}}
+                                <div class="flex items-center gap-2">
+                                    <span>{{ $tag->color }}</span>
+                                    <span class="inline-block w-5 h-5 rounded-full border"
+                                        style="background-color: {{ $tag->color }};"></span>
+                                </div>
                             </x-dashboard::table.cell>
 
                             <x-dashboard::table.cell :label="__('core::attributes.status')">
@@ -65,8 +69,8 @@
                             <td class="data-cell px-4 py-3.5 col-actions" data-label="__('core::attributes.actions')">
                                 <div class="flex gap-1">
                                     <x-dashboard::buttons.primary-action id="btn-tag-{{ $tag->slug }}-edit" tag="button"
-                                        wire:click="editTag('{{ $tag->slug }}')" target="editTag('{{ $tag->slug }}')" size="sm"
-                                        :title="__('core::attributes.edit')">
+                                        wire:click="editTag('{{ $tag->slug }}')" target="editTag('{{ $tag->slug }}')"
+                                        size="sm" color="blue" :title="__('core::attributes.edit')">
                                         <img src="{{ asset('icons/dashboard/vuesax/outline/edit-2.svg') }}"
                                             alt="retry-automation-run" class="w-5" />
                                     </x-dashboard::buttons.primary-action>
@@ -95,7 +99,7 @@
     @if($showTagCreateModal)
         @teleport('body')
         <div class="modal-backdrop modal-backdrop--show" wire:click="$set('showTagCreateModal', false)">
-            <div class="modal modal--show max-w-lg " role="dialog" aria-modal="true" wire:click.stop>
+            <div class="modal modal--show max-w-lg " role="dialog" aria-modal="true" @click.stop>
                 <div class="modal-head">
                     <h2 class="text-lg font-bold text-ink">
                         @lang('core::attributes.create_tag')

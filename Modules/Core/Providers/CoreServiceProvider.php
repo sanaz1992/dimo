@@ -16,6 +16,7 @@ use Modules\Core\External\Repositories\Contract\TagRepositoryInterface;
 use Modules\Core\External\Repositories\SettingRepository;
 use Modules\Core\External\Repositories\SyncRunRepository;
 use Modules\Core\External\Repositories\TagRepository;
+use Modules\Core\Http\Livewire\Admin\AdminTagList;
 use Modules\Core\Http\Livewire\Admin\SearchNavbar;
 use Modules\Core\Http\Livewire\Admin\SettingEdit;
 use Modules\Core\Http\Livewire\User\UserTagList;
@@ -75,6 +76,7 @@ class CoreServiceProvider extends ServiceProvider
         Livewire::component('core.admin.search-navbar', SearchNavbar::class);
 
         Livewire::component('core::user-tag-list', UserTagList::class);
+        Livewire::component('core::admin-tag-list', AdminTagList::class);
     }
 
     /**

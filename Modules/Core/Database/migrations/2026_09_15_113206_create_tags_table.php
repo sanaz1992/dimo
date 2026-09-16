@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
+            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
             $table->string('name', 100);
             $table->string('slug', 120);
             $table->string('color', 7)->default('#cccccc');
@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['tenant_id', 'slug']);
-            $table->index(['tenant_id', 'is_active']);
         });
     }
 

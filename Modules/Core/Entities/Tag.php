@@ -5,11 +5,14 @@ namespace Modules\Core\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Entities\Conversation;
 use Modules\Tenant\Entities\Tenant;
 
 class Tag extends Model
 {
+    use Filterable;
+
     protected $fillable = [
         'tenant_id',
         'name',

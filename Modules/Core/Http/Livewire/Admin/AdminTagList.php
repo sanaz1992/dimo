@@ -2,141 +2,68 @@
 
 namespace Modules\Core\Http\Livewire\Admin;
 
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\Features\SupportFileUploads\WithFileUploads;
-use Modules\Core\Enums\SettingType;
-use Modules\Core\Services\SettingService;
-use Modules\Core\Traits\LivewireNotify;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Http\Request;
+use Livewire\Attributes\On;
+use Livewire\WithPagination;
+use Modules\Core\Filters\TagFilter;
+use Modules\Core\Http\Livewire\Concerns\ManagesTags;
+use Modules\Core\Services\TagService;
+use Modules\Tenant\Entities\Tenant;
 
 class AdminTagList extends AdminBaseComponent
 {
-    use LivewireNotify;
+    use Authorizable;
+    use ManagesTags;
+    use WithPagination;
 
-    // use AuthorizesRequests;
-    use WithFileUploads;
+    protected $queryString = [
+        'tenant',
+    ];
 
-    public array $form = [];
+    public $tenant = null;
 
-    public $settings;
+    public $filterData = [];
 
-    public array $initialImage = [];
-
-    public $imageConfig;
+    public $tenants;
 
     public function mount()
     {
-        // $this->authorize('settings_edit');
+        $this->authorize('tags_list');
 
-        $this->imageConfig = config('media.validations.image');
-
-        $settingService = resolve(SettingService::class);
-        $this->settings = $settingService->list('created_at:asc', [], ['mainImageRelation']);
-
-        foreach ($this->settings as $setting) {
-
-            // مقدار اولیه text / number / image
-            $this->form[$setting->key] =
-                $setting->type == SettingType::IMAGE->value
-                ? null
-                : $setting->value;
-
-            // تصویر اولیه
-            $this->initialImage[$setting->key] =
-                $setting->medias->isNotEmpty()
-                ? $setting->main_image?->getThumbnailUrl('original')
-                : null;
-        }
+        $this->tenants = Tenant::query()->orderBy('name')->get();
     }
 
-    public function updatedForm($value, $key)
+    #[On('updateTagListFilters')]
+    public function handleFilters($filters)
     {
-        $setting = $this->settings->firstWhere('key', $key);
-        if (! $setting || $setting->type !== SettingType::IMAGE->value) {
-            return;
-        }
-
-        $this->validateOnly(
-            "form.$key",
-            [
-                "form.$key" => [
-                    'image',
-                    'max:'.config('media.validations.image.max'),
-                    'mimes:'.config('media.validations.image.mimes'),
-                ],
-            ],
-            trans('core::validation'),
-            trans('core::attributes')
-        );
+        $this->filterData = $filters;
+        $this->resetPage();
     }
 
-    public function removeImage(string $key)
+    public function fillFilterData()
     {
-
-        $deleteMedia = resolve(SettingService::class)->deleteMedia($key);
-        if ($deleteMedia) {
-            $this->form[$key] = null;
-            $this->initialImage[$key] = null;
-            $this->notify('success', __('core::messages.destroy.success'));
-        } else {
-            $this->notify('error', __('core::messages.destroy.error'));
-        }
-    }
-
-    public function getImagePreview(string $key)
-    {
-        return $this->form[$key] instanceof TemporaryUploadedFile
-            ? $this->form[$key]->temporaryUrl()
-            : $this->initialImage[$key];
-    }
-
-    public function getClientOriginalName(string $key)
-    {
-        if ($this->form[$key] instanceof TemporaryUploadedFile) {
-            return $this->form[$key]->getClientOriginalName();
-        }
-
-        return $this->initialImage[$key]
-            ? basename(parse_url($this->initialImage[$key], PHP_URL_PATH))
-            : null;
-    }
-
-    protected function rules(): array
-    {
-        $rules = [];
-
-        foreach ($this->settings as $setting) {
-            if ($setting->type === SettingType::IMAGE->value) {
-                $rules["form.{$setting->key}"] = [
-                    'nullable',
-                    'image',
-                    'max:'.config('media.validations.image.max'),
-                    'mimes:'.config('media.validations.image.mimes'),
-                ];
-            } elseif ($setting->type === SettingType::TEXT->value) {
-                $rules["form.{$setting->key}"] = ['nullable', 'string', 'max:255'];
-            } elseif ($setting->type == SettingType::TEXTAREA->value) {
-                $rules["form.{$setting->key}"] = ['nullable', 'string'];
-            } elseif ($setting->type == SettingType::BOOL->value) {
-                $rules["form.{$setting->key}"] = ['nullable', 'in:0,1'];
+        $queryFilters = $this->queryString;
+        foreach ($queryFilters as $filter) {
+            if (! empty($this->{$filter})) {
+                $this->filterData[$filter] ??= $this->{$filter};
             }
         }
-
-        return $rules;
     }
 
-    public function update()
+    public function render(TagService $tagService)
     {
-        $this->validate();
+        $this->fillFilterData();
+        $request = new Request($this->filterData ?? []);
+        $filter = new TagFilter($request);
 
-        resolve(SettingService::class)->update($this->form);
-        $this->notify('success', __('core::messages.edit.success'));
-    }
+        $tags = $tagService->list(
+            null,
+            [10, true],
+            filter: $filter
+        );
 
-    public function render()
-    {
-        return $this->renderView('Core::livewire.admin.setting-edit')
-            ->layoutData([
-                'title' => __('core::attributes.settings'),
-            ]);
+        return $this->renderView('Core::livewire.admin.tag.tag-list', compact('tags'))
+            ->layoutData(['title' => __('core::attributes.tag_list')]);
     }
 }

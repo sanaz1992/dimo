@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('taggables', function (Blueprint $table) {
-            $table->foreignId('tag_id')->constrained('tags')->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
             $table->morphs('taggable');
             $table->timestamps();
 
             $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
-            $table->index(['taggable_type', 'taggable_id']);
         });
     }
 

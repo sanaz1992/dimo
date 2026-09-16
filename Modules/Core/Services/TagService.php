@@ -17,7 +17,7 @@ class TagService
 
     public function list(?string $orderBy = null, array $limit = [], array $with = [], array $conditions = [], ?QueryFilter $filter = null)
     {
-        return $this->tagRepository->all($orderBy, $limit, $with, $conditions);
+        return $this->tagRepository->all($orderBy, $limit, $with, $conditions, $filter);
     }
 
     public function find($id)

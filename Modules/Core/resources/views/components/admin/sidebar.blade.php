@@ -142,18 +142,22 @@
                 <span>@lang('dashboard::attributes.automation_runs_history')</span>
             </a>
         @endcan
+        @can('tags_list')
+            <a href="{{route('admin.tags.index')}}" data-nav="tags"
+                class="nav-link {{request()->routeIs('admin.tags.*') ? 'nav-link-active' : ''}}">
+                <span class="nav-ico">
+                    <img src="{{request()->routeIs('admin.tags.*') ? asset('icons\sidebar\tag-white.svg') : asset('icons\sidebar\tag.svg') }}"
+                        alt="tags" />
+                </span>
+                <span>@lang('dashboard::attributes.tags')</span>
+            </a>
+        @endcan
         @can('settings_edit')
             <a href="{{route('admin.settings.edit')}}" data-nav="settings"
                 class="nav-link {{request()->routeIs('admin.settings.*') ? 'nav-link-active' : ''}}">
                 <span class="nav-ico">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                        class="icon-svg shrink-0" aria-hidden="true">
-                        <circle cx="12" cy="12" r="3" fill="currentColor" fill-opacity="0.2"></circle>
-                        <path
-                            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"></circle>
-                    </svg>
+                    <img src="{{request()->routeIs('admin.settings.*') ? asset('icons\sidebar\setting-white.svg') : asset('icons\sidebar\setting.svg') }}"
+                        alt="tags" />
                 </span>
                 <span>@lang('dashboard::attributes.setting')</span>
             </a>
