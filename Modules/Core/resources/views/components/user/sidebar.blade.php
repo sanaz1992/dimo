@@ -55,7 +55,8 @@
         <a href="{{route('user.tenants.index')}}" data-nav="tenants"
             class="nav-link {{request()->routeIs('user.tenants.*') ? 'nav-link-active' : ''}}">
             <span class="nav-ico">
-                <img src="{{ asset('icons\sidebar\manager.svg') }}" alt="tenants" />
+                <img src="{{request()->routeIs('user.tenants.*') ? asset('icons\sidebar\manager-white.svg') : asset('icons\sidebar\manager.svg') }}"
+                    alt="tenants" />
             </span>
             <span>@lang('dashboard::attributes.my_tenants')</span>
         </a>
@@ -63,7 +64,8 @@
         <a href="{{route('user.instagram_accounts.index')}}" data-nav="instagram_accounts"
             class="nav-link {{request()->routeIs('user.instagram_accounts.*') ? 'nav-link-active' : ''}}">
             <span class="nav-ico">
-                <img src="{{ asset('icons\sidebar\instagram-white.svg') }}" alt="instagram_accounts" />
+                <img src="{{request()->routeIs('user.instagram_accounts.*') ? asset('icons\sidebar\instagram-white.svg') : asset('icons\sidebar\instagram.svg') }}"
+                    alt="instagram_accounts" />
             </span>
             <span>@lang('dashboard::attributes.my_instagram_accounts')</span>
         </a>
