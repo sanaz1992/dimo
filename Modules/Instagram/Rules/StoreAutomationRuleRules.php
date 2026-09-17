@@ -20,6 +20,7 @@ class StoreAutomationRuleRules
             'form.match_value' => ['required', 'string', 'max:255'],
             'form.is_active' => ['required', 'string', 'in:0,1'],
             'form.priority' => ['required', 'numeric'],
+
         ];
     }
 }

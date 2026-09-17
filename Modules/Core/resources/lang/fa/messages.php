@@ -33,4 +33,5 @@ return [
     'you_do_not_have_permission_to_perform_this_action' => 'شما دسترسی لازم برای انجام این عملیات را ندارید',
 
     'select_tenant' => 'کسب و کار را انتخاب کنید',
+    'select_tag' => 'برچسب را انتخاب کنید',
 ];

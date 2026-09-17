@@ -79,9 +79,16 @@
                                     \Modules\Instagram\Enums\AutomationActionType::SEND_PRIVATE_REPLY->value,
                                     \Modules\Instagram\Enums\AutomationActionType::SEND_MESSAGE->value
                                 ]))
-                                    <x-dashboard::forms.textarea
-                                        label="instagram::attributes.message"
-                                        wire:model.defer="actionForm.message"
+                                    <x-dashboard::forms.textarea label="instagram::attributes.message" wire:model.defer="actionForm.message"/>
+                                @endif
+
+                                @if ($actionForm['action_type']=== \Modules\Instagram\Enums\AutomationActionType::ADD_TAG->value)
+                                    <x-dashboard::forms.select
+                                        label="core::attributes.tag"
+                                        wire:model.live="actionForm.tag"
+                                        :options="$tags"
+                                        :option-value="'slug'"
+                                        placeholder="core::messages.select_tag"
                                     />
                                 @endif
                             </div>
@@ -117,7 +124,7 @@
                                 <tr>
                                     <th>@lang('core::attributes.row')</th>
                                     <th>@lang('instagram::attributes.action_type')</th>
-                                    <th>@lang('instagram::attributes.message')</th>
+                                    <th>@lang('instagram::attributes.message')/@lang('instagram::attributes.tag')</th>
                                     <th>@lang('instagram::attributes.sort_order')</th>
                                     <th>@lang('instagram::attributes.is_active')</th>
                                     <th class="col-actions"></th>
@@ -144,6 +151,10 @@
                                                 true
                                             ))
                                                 {{ $action->config['message'] ?? '-' }}
+                                            @elseif ($action->action_type === \Modules\Instagram\Enums\AutomationActionType::ADD_TAG)
+                                                <x-dashboard::badge :color="$action->tag?->color">
+                                                   {{ $action->tag?->name ?? '—' }}
+                                                </x-dashboard::badge>
                                             @else
                                                 -
                                             @endif
@@ -266,6 +277,19 @@
                             <x-dashboard::forms.textarea
                                 label="instagram::attributes.message"
                                 wire:model.defer="editActionForm.message"
+                            />
+                        @endif
+
+                        @if (
+                            $editActionForm['action_type']
+                            === \Modules\Instagram\Enums\AutomationActionType::ADD_TAG->value
+                        )
+                            <x-dashboard::forms.select
+                                label="core::attributes.tag"
+                                wire:model.live="editActionForm.tag"
+                                :options="$tags"
+                                :option-value="'slug'"
+                                placeholder="core::messages.select_tag"
                             />
                         @endif
 

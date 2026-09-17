@@ -2,4 +2,4 @@
     :automation-rule="$automationRule" :tenants="$tenants" :instagram-accounts="$instagramAccounts"
     :instagram-posts="$instagramPosts" :match-types="$matchTypes" :trigger-types="$triggerTypes"
     :action-types="$actionTypes" :action-form="$actionForm" :show-action-modal="$showActionModal"
-    :edit-action-form="$editActionForm" :selected-editing-action="$selectedEditingAction" />
+    :edit-action-form="$editActionForm" :selected-editing-action="$selectedEditingAction" :tags="$tags" />

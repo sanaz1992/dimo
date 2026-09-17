@@ -5,6 +5,7 @@ namespace Modules\Instagram\Http\Livewire\Concerns;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use Livewire\WithFileUploads;
+use Modules\Core\Services\TagService;
 use Modules\Instagram\Entities\AutomationRule;
 use Modules\Instagram\Enums\AutomationActionType;
 use Modules\Instagram\Enums\AutomationMatchType;
@@ -39,12 +40,19 @@ trait ManagesAutomationRules
 
     public array $actionForm = [
         'action_type' => '',
+        'tag' => '',
         'message' => '',
         'sort_order' => 1,
         'is_active' => true,
     ];
 
-    public array $editActionForm = [];
+    public array $editActionForm = [
+        'action_type' => '',
+        'tag' => '',
+        'message' => '',
+        'sort_order' => 1,
+        'is_active' => true,
+    ];
 
     public array $actionTypes = [];
 
@@ -53,6 +61,8 @@ trait ManagesAutomationRules
     public array $triggerTypes = [];
 
     public $tenants = [];
+
+    public $tags = [];
 
     public $instagramAccounts = [];
 
@@ -103,11 +113,53 @@ trait ManagesAutomationRules
 
         $this->tenants = $this->getAvailableTenants();
 
-        if ($this->isEditMode && $this->automationRule->trigger_type) {
-            $this->actionTypes = collect(AutomationActionType::forTrigger($this->automationRule->trigger_type))
+        // if ($this->isEditMode && $this->automationRule->trigger_type) {
+        //     $this->actionTypes = collect(AutomationActionType::forTrigger($this->automationRule->trigger_type))
+        //         ->mapWithKeys(fn(AutomationActionType $action) => [$action->value => $action->label()])
+        //         ->toArray();
+        // }
+        if ($this->automationRule?->trigger_type) {
+            $triggerType = $this->automationRule->trigger_type instanceof AutomationTriggerType
+                ? $this->automationRule->trigger_type
+                : AutomationTriggerType::from($this->automationRule->trigger_type);
+
+            $this->actionTypes = collect(AutomationActionType::forTrigger($triggerType))
                 ->mapWithKeys(fn (AutomationActionType $action) => [$action->value => $action->label()])
                 ->toArray();
+
+            $this->loadTags();
         }
+    }
+
+    public function updatedFormTriggerType($triggerType): void
+    {
+        $this->actionTypes = [];
+        $this->actionForm['action_type'] = '';
+        $this->actionForm['tag'] = '';
+        if (! $triggerType) {
+            return;
+        }
+
+        $triggerType = AutomationTriggerType::from($triggerType);
+        $this->actionTypes = collect(AutomationActionType::forTrigger($triggerType))
+            ->mapWithKeys(fn (AutomationActionType $action) => [$action->value => $action->label()])
+            ->toArray();
+    }
+
+    protected function loadTags(): void
+    {
+        if (! $this->automationRule) {
+            $this->tags = [];
+
+            return;
+        }
+
+        $this->tags = app(TagService::class)->list('name', conditions: [
+            'where' => [
+                'tenant_id' => ['=', $this->automationRule->tenant_id],
+                'is_active' => ['=', true],
+            ],
+        ]);
     }
 
     protected function automationRuleRules(): array
@@ -244,6 +296,7 @@ trait ManagesAutomationRules
 
             $this->automationRule = $this->createAutomationRule($automationRuleService);
 
+            $this->loadTags();
             $this->notify('success', __('core::messages.create.success'));
         } catch (ValidationException $e) {
             throw $e;
@@ -297,6 +350,7 @@ trait ManagesAutomationRules
 
             $this->validate([
                 'actionForm.action_type' => ['required', new Enum(AutomationActionType::class)],
+                'actionForm.tag' => ['required_if:actionForm.action_type,'.AutomationActionType::ADD_TAG->value, 'nullable', 'string', 'exists:tags,slug'],
                 'actionForm.message' => [
                     'required_if:actionForm.action_type,'.AutomationActionType::SEND_PRIVATE_REPLY->value,
                     'required_if:actionForm.action_type,'.AutomationActionType::SEND_MESSAGE->value,
@@ -313,6 +367,10 @@ trait ManagesAutomationRules
 
             if ($this->actionRequiresMessage($this->actionForm['action_type'])) {
                 $config['message'] = trim($this->actionForm['message']);
+            }
+
+            if ($this->actionForm['action_type'] === AutomationActionType::ADD_TAG->value) {
+                $config['tag_id'] = app(TagService::class)->findByColumn('slug', $this->actionForm['tag'])?->id;
             }
 
             $data = [
@@ -341,6 +399,7 @@ trait ManagesAutomationRules
     {
         $this->actionForm = [
             'action_type' => '',
+            'tag' => '',
             'message' => '',
             'sort_order' => 1,
             'is_active' => true,
@@ -389,11 +448,11 @@ trait ManagesAutomationRules
             return;
         }
         // fill actionForm
-        $this->editActionForm['action_type'] = $this->selectedEditingAction->action_type;
+        $this->editActionForm['action_type'] = $this->selectedEditingAction->action_type?->value ?? $this->selectedEditingAction->action_type;
         $this->editActionForm['message'] = $this->selectedEditingAction->config['message'] ?? '';
         $this->editActionForm['sort_order'] = $this->selectedEditingAction->sort_order;
         $this->editActionForm['is_active'] = $this->selectedEditingAction->is_active;
-
+        $this->editActionForm['tag'] = isset($this->selectedEditingAction->config['tag_id']) ? app(TagService::class)->find($this->selectedEditingAction->config['tag_id'])?->slug : '';
         $this->showActionModal = true;
     }
 
@@ -435,6 +494,11 @@ trait ManagesAutomationRules
             if ($this->actionRequiresMessage($this->editActionForm['action_type'])) {
                 $config['message'] = trim($this->editActionForm['message']);
             }
+
+            if ($this->editActionForm['action_type'] === AutomationActionType::ADD_TAG->value) {
+                $config['tag_id'] = app(TagService::class)->findByColumn('slug', $this->editActionForm['tag'])?->id;
+            }
+
             $this->editActionForm['config'] = $config;
 
             $automationActionService->update($this->selectedEditingAction, $this->editActionForm);

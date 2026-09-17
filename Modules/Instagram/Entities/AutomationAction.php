@@ -4,6 +4,7 @@ namespace Modules\Instagram\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Entities\Tag;
 use Modules\Core\Traits\Filterable;
 use Modules\Instagram\Enums\AutomationActionType;
 
@@ -33,6 +34,16 @@ class AutomationAction extends Model
     public function getCreatedAtJalaliAttribute()
     {
         return verta($this->created_at)->format('Y/m/d H:i');
+    }
+
+    public function getTagAttribute()
+    {
+        $tagId = $this->config['tag_id'] ?? null;
+        if (! $tagId) {
+            return null;
+        }
+
+        return Tag::find($tagId);
     }
 
     public function automationRule()

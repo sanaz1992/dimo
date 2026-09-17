@@ -56,8 +56,8 @@ enum AutomationActionType: string
             ],
 
             AutomationTriggerType::MENTION => [
-                self::SEND_PRIVATE_REPLY,
-                self::SEND_MESSAGE,
+                // self::SEND_PRIVATE_REPLY,
+                // self::SEND_MESSAGE,
                 self::ADD_TAG,
                 self::SEND_EMAIL,
             ],
