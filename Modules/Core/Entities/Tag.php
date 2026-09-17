@@ -37,6 +37,6 @@ class Tag extends Model
 
     public function conversations(): MorphToMany
     {
-        return $this->morphedByMany(Conversation::class, 'taggables');
+        return $this->morphedByMany(Conversation::class, 'taggable');
     }
 }

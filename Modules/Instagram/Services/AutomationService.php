@@ -4,10 +4,12 @@ namespace Modules\Instagram\Services;
 
 use Illuminate\Support\Facades\Log;
 use Modules\Core\Helpers\ConvertDatesHelper;
+use Modules\Core\Services\TagService;
 use Modules\Instagram\Entities\AutomationAction;
 use Modules\Instagram\Entities\AutomationActionRun;
 use Modules\Instagram\Entities\AutomationRule;
 use Modules\Instagram\Entities\AutomationRun;
+use Modules\Instagram\Entities\Conversation;
 use Modules\Instagram\Entities\InstagramComment;
 use Modules\Instagram\Enums\AutomationActionRunStatus;
 use Modules\Instagram\Enums\AutomationActionType;
@@ -185,8 +187,56 @@ class AutomationService
         return match ($action->action_type) {
             AutomationActionType::SEND_PRIVATE_REPLY => $this->executePrivateReply($run, $action),
             AutomationActionType::SEND_MESSAGE => $this->executeSendMessage($run, $action),
+            AutomationActionType::ADD_TAG => $this->executeAddTag($action, $run),
             default => $this->logUnsupportedAction($run, $action),
         };
+    }
+
+    protected function executeAddTag(AutomationAction $action, AutomationRun $run): array
+    {
+        $tagId = $action->config['tag_id'] ?? null;
+        if (! $tagId) {
+            throw new \RuntimeException('Automation tag is not configured.');
+        }
+
+        $tag = app(TagService::class)->find($tagId);
+        if (! $tag) {
+            throw new \RuntimeException('Automation tag could not be found.');
+        }
+
+        $instagramAccount = $this->getInstagramAccount($run);
+        if ((int) $tag->tenant_id !== (int) $instagramAccount->tenant_id || ! $tag->is_active) {
+            throw new \RuntimeException('The selected tag could not be found or does not belong to the tenant.');
+        }
+
+        $conversation = $this->findConversationForRun($run);
+        if (! $conversation) {
+            throw new \RuntimeException('Conversation for the automation run could not be found.');
+        }
+
+        $conversation->tags()->syncWithoutDetaching([$tag->id]);
+
+        return [
+            'tag_id' => $tag->id,
+            'tag_name' => $tag->name,
+            'conversation_id' => $conversation->id,
+        ];
+    }
+
+    private function findConversationForRun(AutomationRun $run): ?Conversation
+    {
+        $comment = $this->getComment($run);
+        $instagramAccount = $this->getInstagramAccount($run);
+
+        if (! $comment->commenter_ig_id) {
+            throw new \RuntimeException('Instagram commenter ID is missing.');
+        }
+
+        return Conversation::query()
+            ->where('tenant_id', $instagramAccount->tenant_id)
+            ->where('instagram_account_id', $instagramAccount->id)
+            ->where('customer_ig_id', $comment->commenter_ig_id)
+            ->first();
     }
 
     private function executePrivateReply(AutomationRun $run, AutomationAction $action): array
