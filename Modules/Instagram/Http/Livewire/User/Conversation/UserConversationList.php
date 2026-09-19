@@ -66,7 +66,7 @@ class UserConversationList extends UserBaseComponent
     public function selectConversation($id)
     {
         $this->selectedConversation = app(ConversationService::class)->findByColumn('id', $id);
-        $this->selectedConversation->load('instagramAccount');
+        $this->selectedConversation->load('instagramAccount', 'tags');
         $this->resetConversationMessages($id);
         $this->dispatch('conversation-selected');
     }
@@ -126,7 +126,7 @@ class UserConversationList extends UserBaseComponent
         $conversations = $conversationService->list(
             'created_at:desc',
             [10, true],
-            with: ['instagramAccount'],
+            with: ['instagramAccount', 'tags'],
             conditions: $conditions,
             filter: $filter
         );

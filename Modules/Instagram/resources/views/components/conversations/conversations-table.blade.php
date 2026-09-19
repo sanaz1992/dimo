@@ -24,15 +24,12 @@
                     <h3 class="font-bold text-sm text-[var(--text)]">
                         گفتگوها
                     </h3>
-
                     @isset($instagramAccount)
                         <p class="text-xs text-[var(--text-muted)] mt-1">
                             {{$instagramAccount->username}}
                         </p>
                     @endisset
-
                 </div>
-
                 @if($conversations->count())
                     <span class="chat-count">
                         {{ $conversations->count() }}
@@ -40,13 +37,9 @@
                 @endif
             </div>
 
-
             {{-- Conversations --}}
             <div class="chat-conversations-list">
-
-
                 @forelse ($conversations as $conversation)
-
                     <button type="button"
                         class="conversation-item {{ $selectedConversation?->id === $conversation->id ? 'is-active' : '' }}"
                         wire:click="selectConversation({{ $conversation->id }})"
@@ -67,8 +60,9 @@
 
                         {{-- Content --}}
                         <span class="min-w-0 flex-1 text-right">
+                            {{-- Username + Time --}}
                             <span class="flex items-center justify-between gap-2">
-                                <span class="block truncate font-bold text-sm">
+                                <span class="block min-w-0 truncate font-bold text-sm">
                                     {{ $conversation->customer_username }}
                                 </span>
                                 <span class="shrink-0 text-[10px] text-[var(--text-muted)]">
@@ -76,13 +70,34 @@
                                 </span>
                             </span>
 
-                            <span class="mt-1 flex items-center justify-between gap-2">
-                                @if(!isset($instagramAccount))
-                                    <span class="block truncate text-xs text-[var(--text-muted)]">
-                                        {{ $conversation->instagramAccount->username }}
-                                    </span>
-                                @endif
-                            </span>
+                            {{-- Tags --}}
+                            @if($conversation->tags->isNotEmpty())
+                                <span class="mt-1.5 flex min-w-0 items-center gap-2">
+                                    @foreach($conversation->tags->take(2) as $tag)
+                                        <span class="inline-flex min-w-0 items-center gap-1.5 text-[10px] text-[var(--text-muted)]"
+                                            title="{{ $tag->name }}">
+                                            <span class="h-2 w-2 shrink-0 rounded-full" style="background-color: {{ $tag->color }}">
+                                            </span>
+                                            <span class="truncate">
+                                                {{ $tag->name }}
+                                            </span>
+                                        </span>
+                                    @endforeach
+                                    @if($conversation->tags->count() > 2)
+                                        <span class="shrink-0 text-[10px] text-[var(--text-muted)]"
+                                            title="{{ $conversation->tags->skip(2)->pluck('name')->implode(', ') }}">
+                                            +{{ toPersianNumber($conversation->tags->count() - 2) }}
+                                        </span>
+                                    @endif
+                                </span>
+                            @endif
+
+                            {{-- Instagram Account --}}
+                            @if(!isset($instagramAccount))
+                                <span class="mt-1 block truncate text-[10px] text-[var(--text-muted)]">
+                                    {{ $conversation->instagramAccount->username }}
+                                </span>
+                            @endif
                         </span>
                     </button>
                 @empty
@@ -115,11 +130,8 @@
                 Chat Header
                 ================================================== --}}
                 <div class="chat-header">
-
                     <div class="flex min-w-0 items-center gap-3">
-
                         <span class="avatar shrink-0">
-
                             {{-- @if($selectedConversation->customer_profile_picture_url)
                             <img src="{{ $selectedConversation->customer_profile_picture_url }}"
                                 alt="{{ $selectedConversation->customer_username }}"
@@ -130,26 +142,36 @@
                                 {{ mb_substr($selectedConversation->customer_username, 0, 1) }}
                             </span>
                             {{-- @endif --}}
-
                         </span>
 
-
                         <div class="min-w-0">
-
+                            {{-- Username --}}
                             <p class="truncate font-bold text-sm">
                                 {{ $selectedConversation->customer_username }}
                             </p>
-
+                            {{-- Instagram --}}
                             <p class="mt-0.5 text-xs text-[var(--text-muted)]">
                                 گفتگوهای اینستاگرام
                             </p>
 
+                            {{-- Tags --}}
+                            @if($selectedConversation->tags->isNotEmpty())
+                                <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                                    @foreach($selectedConversation->tags as $tag)
+                                        <span class="inline-flex min-w-0 items-center gap-1.5 text-[11px] text-[var(--text-muted)]"
+                                            title="{{ $tag->name }}">
+                                            <span class="h-2 w-2 shrink-0 rounded-full"
+                                                style="background-color: {{ $tag->color }}"></span>
+                                            <span class="truncate">
+                                                {{ $tag->name }}
+                                            </span>
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
-
                     </div>
-
                 </div>
-
 
                 {{-- =================================================
                 Messages
@@ -203,11 +225,11 @@
                         <div class="chat-composer-input-wrapper">
                             <textarea wire:model="messageText" class="chat-composer-input" rows="1"
                                 placeholder="پیام خود را بنویسید..." x-data x-on:keydown.enter="
-                                            if (!$event.shiftKey) {
-                                                $event.preventDefault();
-                                                $wire.sendMessage();
-                                            }
-                                        "></textarea>
+                                                                        if (!$event.shiftKey) {
+                                                                            $event.preventDefault();
+                                                                            $wire.sendMessage();
+                                                                        }
+                                                                    "></textarea>
                         </div>
 
                         <button type="submit" class="chat-send-button" wire:loading.attr="disabled"

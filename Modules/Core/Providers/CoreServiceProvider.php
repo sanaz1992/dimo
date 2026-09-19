@@ -41,7 +41,7 @@ class CoreServiceProvider extends ServiceProvider
     {
 
         if (app()->environment('local')) {
-            URL::forceScheme('https');
+            // URL::forceScheme('https');
         }
 
         View::composer('*', function ($view) {

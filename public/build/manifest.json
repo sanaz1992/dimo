@@ -1,6 +1,6 @@
 {
   "Modules/Core/resources/assets/css/tailwind.css": {
-    "file": "assets/tailwind-DcRFNLnX.css",
+    "file": "assets/tailwind-BSRDnaPp.css",
     "src": "Modules/Core/resources/assets/css/tailwind.css",
     "isEntry": true,
     "name": "tailwind",
@@ -186,7 +186,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-jytO6BRn.css",
+    "file": "assets/app-BwY4YaYt.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
