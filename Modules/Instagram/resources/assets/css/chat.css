@@ -260,6 +260,18 @@
     justify-content: flex-end;
 }
 
+.message-source {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-source img {
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+}
+
 /* ========================================================= Message Bubble ========================================================= */
 .bubble {
     max-width: 80%;
@@ -293,7 +305,7 @@
     margin-top: .2rem;
     font-size: 9px;
     line-height: 1;
-    opacity: .65;
+    opacity: .85;
     direction: ltr;
 }
 

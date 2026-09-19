@@ -2,6 +2,11 @@
     @vite('Modules/Instagram/resources/assets/css/chat.css')
 @endpush
 
+@php
+    use Modules\Instagram\Enums\MessageDirection;
+    use Modules\Instagram\Enums\MessageSource;
+@endphp
+
 <section class="table-panel anim-fade-up">
 
     <x-dashboard::card.card-header :title="$title">
@@ -180,56 +185,59 @@
 
                     @forelse ($messages as $message)
 
-                        <div class="message-row {{ $message->direction == Modules\Instagram\Enums\MessageDirection::INCOMING ? 'message-row-in' : 'message-row-out' }}"
+                        <div class="message-row {{ $message->direction == MessageDirection::INCOMING ? 'message-row-in' : 'message-row-out' }}"
                             wire:key="message-{{ $message->id }}">
 
                             <div
-                                class="bubble {{ $message->direction == Modules\Instagram\Enums\MessageDirection::INCOMING ? 'bubble-in' : 'bubble-out' }}">
+                                class="bubble {{ $message->direction == MessageDirection::INCOMING ? 'bubble-in' : 'bubble-out' }}">
                                 <div class="message-text">
                                     {{ $message->message_body }}
                                 </div>
-
-                                <div class="message-time">
-                                    {{ toPersianNumber($message->sent_at_jalali) }}
+                                <div class="message-time flex items-center gap-2">
+                                    <div class="message-time flex items-center gap-2">
+                                        @if($message->direction === MessageDirection::OUTGOING)
+                                            @if($message->source === MessageSource::AUTOMATION)
+                                                <span class="message-source" title="پیام خودکار">
+                                                    <img src="{{ asset('icons/dashboard/ghost-white.svg') }}" alt="پیام خودکار">
+                                                </span>
+                                            @elseif($message->source === MessageSource::MANUAL)
+                                                <span class="message-source" title="پیام دستی">
+                                                    <img src="{{ asset('icons/dashboard/user-white.svg') }}" alt="پیام دستی">
+                                                </span>
+                                            @endif
+                                        @endif
+                                        <span>
+                                            {{ toPersianNumber($message->sent_at_jalali) }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
-
                     @empty
-
                         <div class="chat-messages-empty">
-
                             <div class="chat-empty-icon">
                                 <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="">
                             </div>
-
                             <h4 class="font-bold text-sm">
                                 هنوز پیامی وجود ندارد
                             </h4>
-
                             <p class="mt-1 text-xs text-[var(--text-muted)]">
                                 این گفتگو هنوز پیامی ندارد.
                             </p>
-
                         </div>
-
                     @endforelse
-
                 </div>
 
-
                 <div class="chat-composer">
-
                     <form wire:submit="sendMessage" class="chat-composer-form">
                         <div class="chat-composer-input-wrapper">
                             <textarea wire:model="messageText" class="chat-composer-input" rows="1"
                                 placeholder="پیام خود را بنویسید..." x-data x-on:keydown.enter="
-                                                                        if (!$event.shiftKey) {
-                                                                            $event.preventDefault();
-                                                                            $wire.sendMessage();
-                                                                        }
-                                                                    "></textarea>
+                                                                                    if (!$event.shiftKey) {
+                                                                                        $event.preventDefault();
+                                                                                        $wire.sendMessage();
+                                                                                    }
+                                                                                "></textarea>
                         </div>
 
                         <button type="submit" class="chat-send-button" wire:loading.attr="disabled"
@@ -237,15 +245,12 @@
                             <span wire:loading.remove wire:target="sendMessage">
                                 <img src=" {{ asset('icons/dashboard/send-white.svg') }}" alt="ارسال">
                             </span>
-
                             <span wire:loading wire:target="sendMessage" class="chat-send-loading">
                                 <span></span>
                                 <span></span>
                                 <span></span>
                             </span>
-
                         </button>
-
                     </form>
 
                     {{-- خطای Validation --}}
@@ -254,35 +259,24 @@
                             {{ $message }}
                         </p>
                     @enderror
-
                 </div>
-
             @else
-
                 {{-- =================================================
                 No Conversation Selected
                 ================================================== --}}
                 <div class="chat-no-selection">
-
                     <div class="chat-no-selection-icon">
                         <img src="{{ asset('icons/dashboard/messages.svg') }}" alt="">
                     </div>
-
-
                     <h3 class="mt-4 font-bold text-base">
                         یک گفتگو را انتخاب کنید
                     </h3>
-
                     <p class="mt-2 max-w-sm text-center text-xs leading-6 text-[var(--text-muted)]">
                         برای مشاهده پیام‌ها، یکی از گفتگوهای سمت راست را انتخاب کنید.
                     </p>
-
                 </div>
-
             @endif
-
         </section>
-
     </div>
 
     {{-- اگر slot واقعاً برای این کامپوننت لازم است نگه دار --}}
